@@ -21,4 +21,6 @@ module com.example.dsa_visual_lab {
 
     // This line matches your new folder structure:
     opens com.example.dsa_visual_lab.controller.home to javafx.fxml;
+
+    opens com.example.dsa_visual_lab.controller.visualizer to javafx.fxml;
 }

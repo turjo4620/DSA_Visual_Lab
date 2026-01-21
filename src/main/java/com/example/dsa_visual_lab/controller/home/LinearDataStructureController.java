@@ -63,9 +63,26 @@ public class LinearDataStructureController implements Initializable {
 
     @FXML
     void onArrayClick(ActionEvent event) throws IOException {
-        // TODO: Create array-view.fxml
-        System.out.println("Navigating to Array Visualization...");
-        // switchScene(event, "/com/example/dsa_visual_lab/visualizers/array-view.fxml");
+        // MATCHING YOUR SCREENSHOT EXACTLY:
+        // Note: Check if 'view' is at the root of resources or inside 'com/example...'
+
+        // TRY THIS PATH FIRST (If 'view' is directly in resources):
+        String fxmlPath = "/com/example/dsa_visual_lab/view/Linear-DataStructure/array-view.fxml";
+
+        // IF THAT FAILS, TRY THIS (If 'view' is inside your package):
+        // String fxmlPath = "/com/example/dsa_visual_lab/view/Linear-DataStructure/array-view.fxml";
+
+        FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
+
+        // Debugging line: Check if it found the file
+        if (loader.getLocation() == null) {
+            System.err.println("CRITICAL ERROR: Could not find file at: " + fxmlPath);
+        }
+
+        Parent root = loader.load();
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        stage.setScene(new Scene(root));
+        stage.show();
     }
 
     @FXML
