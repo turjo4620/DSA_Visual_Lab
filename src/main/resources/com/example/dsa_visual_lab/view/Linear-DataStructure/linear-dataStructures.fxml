@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.FlowPane?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Rectangle?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane fx:id="linearContainer" prefHeight="700.0" prefWidth="1100.0"
+            style="-fx-background-color: #0F172A;"
+            xmlns="http://javafx.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.example.dsa_visual_lab.controller.home.LinearDataStructureController">
+
+    <top>
+        <VBox alignment="CENTER_LEFT" prefHeight="100.0" spacing="10.0"
+              style="-fx-background-color: linear-gradient(to bottom right, #1E293B, #0F172A); -fx-border-color: #818CF8; -fx-border-width: 0 0 2 0;">
+            <padding>
+                <Insets bottom="20.0" left="40.0" right="40.0" top="20.0" />
+            </padding>
+            <children>
+                <Label text="Linear Structures" textFill="#818CF8">
+                    <font>
+                        <Font name="System Bold" size="36.0" />
+                    </font>
+                    <style>-fx-effect: dropshadow(three-pass-box, rgba(129, 140, 248, 0.4), 15, 0.2, 0, 0);</style>
+                </Label>
+                <Label text="Select a structure to watch a preview or start visualizing." textFill="#94A3B8">
+                    <font>
+                        <Font size="16.0" />
+                    </font>
+                </Label>
+            </children>
+        </VBox>
+    </top>
+
+    <center>
+        <ScrollPane fitToWidth="true" style="-fx-background-color: transparent; -fx-background: transparent;" hbarPolicy="NEVER">
+            <content>
+                <FlowPane alignment="TOP_CENTER" hgap="30.0" vgap="30.0" prefWrapLength="900.0">
+                    <padding>
+                        <Insets bottom="40.0" left="40.0" right="40.0" top="40.0" />
+                    </padding>
+                    <children>
+
+                        <VBox prefHeight="380.0" prefWidth="420.0" spacing="0.0"
+                              style="-fx-background-color: #1E293B; -fx-background-radius: 15; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.4), 10, 0, 0, 5); -fx-border-color: #F472B6; -fx-border-radius: 15; -fx-border-width: 1;">
+                            <children>
+                                <StackPane prefHeight="200.0" prefWidth="420.0" style="-fx-background-color: #000; -fx-background-radius: 14 14 0 0;">
+                                    <children>
+                                        <Label text="[ ANIMATION VIDEO HERE ]" textFill="#555555">
+                                            <font><Font name="System Bold" size="14.0"/></font>
+                                        </Label>
+                                        <Rectangle width="50" height="50" fill="transparent" stroke="white" strokeWidth="3" arcWidth="50" arcHeight="50"/>
+                                        <Label text="▶" textFill="white" translateX="3">
+                                            <font><Font size="20"/></font>
+                                        </Label>
+                                    </children>
+                                </StackPane>
+
+                                <VBox spacing="10.0" VBox.vgrow="ALWAYS">
+                                    <padding>
+                                        <Insets bottom="20.0" left="20.0" right="20.0" top="15.0" />
+                                    </padding>
+                                    <children>
+                                        <Label text="Dynamic Array" textFill="WHITE">
+                                            <font>
+                                                <Font name="System Bold" size="22.0" />
+                                            </font>
+                                        </Label>
+                                        <Label text="Contiguous memory blocks that resize automatically. Great for random access."
+                                               textFill="#94A3B8" wrapText="true" VBox.vgrow="ALWAYS">
+                                            <font>
+                                                <Font size="14.0" />
+                                            </font>
+                                        </Label>
+                                        <Button fx:id="btnArray" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#onArrayClick"
+                                                prefHeight="40.0"
+                                                style="-fx-background-color: #F472B6; -fx-text-fill: white; -fx-background-radius: 8; -fx-cursor: hand; -fx-font-weight: bold;"
+                                                text="VISUALIZE ARRAY">
+                                        </Button>
+                                    </children>
+                                </VBox>
+                            </children>
+                        </VBox>
+
+                        <VBox prefHeight="380.0" prefWidth="420.0" spacing="0.0"
+                              style="-fx-background-color: #1E293B; -fx-background-radius: 15; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.4), 10, 0, 0, 5); -fx-border-color: #34D399; -fx-border-radius: 15; -fx-border-width: 1;">
+                            <children>
+                                <StackPane prefHeight="200.0" prefWidth="420.0" style="-fx-background-color: #000; -fx-background-radius: 14 14 0 0;">
+                                    <children>
+                                        <Label text="[ ANIMATION VIDEO HERE ]" textFill="#555555">
+                                            <font><Font name="System Bold" size="14.0"/></font>
+                                        </Label>
+                                        <Rectangle width="50" height="50" fill="transparent" stroke="white" strokeWidth="3" arcWidth="50" arcHeight="50"/>
+                                        <Label text="▶" textFill="white" translateX="3">
+                                            <font><Font size="20"/></font>
+                                        </Label>
+                                    </children>
+                                </StackPane>
+
+                                <VBox spacing="10.0" VBox.vgrow="ALWAYS">
+                                    <padding>
+                                        <Insets bottom="20.0" left="20.0" right="20.0" top="15.0" />
+                                    </padding>
+                                    <children>
+                                        <Label text="Queue (FIFO)" textFill="WHITE">
+                                            <font>
+                                                <Font name="System Bold" size="22.0" />
+                                            </font>
+                                        </Label>
+                                        <Label text="First-In, First-Out. Essential for BFS algorithms and printer tasks."
+                                               textFill="#94A3B8" wrapText="true" VBox.vgrow="ALWAYS">
+                                            <font>
+                                                <Font size="14.0" />
+                                            </font>
+                                        </Label>
+                                        <Button fx:id="btnQueue" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#onQueueClick"
+                                                prefHeight="40.0"
+                                                style="-fx-background-color: #34D399; -fx-text-fill: white; -fx-background-radius: 8; -fx-cursor: hand; -fx-font-weight: bold;"
+                                                text="VISUALIZE QUEUE">
+                                        </Button>
+                                    </children>
+                                </VBox>
+                            </children>
+                        </VBox>
+
+                    </children>
+                </FlowPane>
+            </content>
+        </ScrollPane>
+    </center>
+</BorderPane>
