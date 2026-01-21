@@ -2,6 +2,8 @@ module com.example.dsa_visual_lab {
     requires javafx.controls;
     requires javafx.fxml;
     requires javafx.web;
+    requires javafx.swing;
+    requires javafx.media;
 
     requires org.controlsfx.controls;
     requires com.dlsc.formsfx;
@@ -11,6 +13,12 @@ module com.example.dsa_visual_lab {
     requires eu.hansolo.tilesfx;
     requires com.almasb.fxgl.all;
 
-    opens com.example.dsa_visual_lab to javafx.fxml;
+    // Exports
     exports com.example.dsa_visual_lab;
+
+    // Opens - Allowing JavaFX to see your files
+    opens com.example.dsa_visual_lab to javafx.fxml;
+
+    // This line matches your new folder structure:
+    opens com.example.dsa_visual_lab.controller.home to javafx.fxml;
 }

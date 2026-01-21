@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.FlowPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane fx:id="mainContainer" prefHeight="650.0" prefWidth="1000.0"
+            style="-fx-background-color: #0F172A;"
+            xmlns="http://javafx.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.example.dsa_visual_lab.controller.home.HomeController">
+
+    <top>
+        <VBox alignment="CENTER" prefHeight="200.0" spacing="10.0"
+              style="-fx-background-color: linear-gradient(to bottom right, #1E293B, #0F172A); -fx-border-color: #38BDF8; -fx-border-width: 0 0 2 0;">
+            <Label text="DSA VISUAL LAB" textFill="#38BDF8">
+                <font>
+                    <Font name="System Bold" size="56.0" />
+                </font>
+                <style>-fx-effect: dropshadow(three-pass-box, #38BDF8, 15, 0.5, 0, 0);</style>
+            </Label>
+            <Label text="Master Data Structures &amp; Algorithms Through Visualization" textFill="#94A3B8">
+                <font>
+                    <Font name="System Italic" size="18.0" />
+                </font>
+            </Label>
+        </VBox>
+    </top>
+
+    <center>
+        <ScrollPane fitToWidth="true" style="-fx-background-color: transparent; -fx-background: transparent;">
+            <content>
+                <FlowPane alignment="CENTER" hgap="30.0" vgap="30.0" prefWrapLength="950.0">
+                    <padding>
+                        <Insets top="40.0" bottom="40.0" left="20.0" right="20.0" />
+                    </padding>
+
+                    <Button onAction="#openSorting" prefHeight="150.0" prefWidth="280.0"
+                            text="SORTING&#10;ALGORITHMS" textAlignment="CENTER"
+                            styleClass="algo-button" style="-fx-border-color: #38BDF8;" />
+
+                    <Button onAction="#openDataStructures" prefHeight="150.0" prefWidth="280.0"
+                            text="LINEAR&#10;STRUCTURES" textAlignment="CENTER"
+                            styleClass="algo-button" style="-fx-border-color: #818CF8;" />
+
+                    <Button onAction="#openTrees" prefHeight="150.0" prefWidth="280.0"
+                            text="TREE&#10;STRUCTURES" textAlignment="CENTER"
+                            styleClass="algo-button" style="-fx-border-color: #34D399;" />
+
+                    <Button onAction="#openGraphs" prefHeight="150.0" prefWidth="280.0"
+                            text="GRAPH&#10;THEORY" textAlignment="CENTER"
+                            styleClass="algo-button" style="-fx-border-color: #F472B6;" />
+
+                    <Button onAction="#openMST" prefHeight="150.0" prefWidth="280.0"
+                            text="GREEDY &amp; MST" textAlignment="CENTER"
+                            styleClass="algo-button" style="-fx-border-color: #FB923C;" />
+
+                    <Button onAction="#openDP" prefHeight="150.0" prefWidth="280.0"
+                            text="DYNAMIC&#10;PROGRAMMING" textAlignment="CENTER"
+                            styleClass="algo-button" style="-fx-border-color: #A78BFA;" />
+
+                </FlowPane>
+            </content>
+        </ScrollPane>
+    </center>
+</BorderPane>
