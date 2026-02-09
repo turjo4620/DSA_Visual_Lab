@@ -32,3 +32,8 @@
 .btn-queue {
     -fx-border-color: #34D399; /* Green Border */
 }
+
+/* Linked List Button (Indigo/Purple Border) */
+.btn-linkedlist {
+    -fx-border-color: #818CF8; /* Indigo Color */
+}

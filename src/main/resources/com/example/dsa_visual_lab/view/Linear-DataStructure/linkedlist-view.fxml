@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane fx:id="rootPane" prefHeight="800.0" prefWidth="1280.0"
+            style="-fx-background-color: #0F172A;"
+            xmlns="http://javafx.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.example.dsa_visual_lab.controller.linear.LinkedListController">
+
+    <top>
+        <HBox alignment="CENTER_LEFT" prefHeight="80.0" spacing="20.0" style="-fx-border-color: #334155; -fx-border-width: 0 0 1 0; -fx-padding: 0 30;">
+            <Button onAction="#onBackClick" text="← Back"
+                    style="-fx-background-color: transparent; -fx-text-fill: #94A3B8; -fx-font-size: 14px; -fx-cursor: hand; -fx-border-color: #94A3B8; -fx-border-radius: 5;"/>
+
+            <Label text="Singly Linked List" textFill="#818CF8">
+                <font><Font name="System Bold" size="28.0" /></font>
+                <style>-fx-effect: dropshadow(three-pass-box, rgba(129, 140, 248, 0.3), 10, 0, 0, 0);</style>
+            </Label>
+        </HBox>
+    </top>
+
+    <center>
+        <VBox alignment="CENTER" spacing="20">
+            <padding><Insets top="20" right="20" bottom="20" left="20"/></padding>
+
+            <Label fx:id="statusLabel" text="Ready" textFill="#94A3B8">
+                <font><Font size="18.0"/></font>
+            </Label>
+
+            <ScrollPane fitToHeight="true" fitToWidth="true" vbarPolicy="NEVER"
+                        style="-fx-background: #0F172A; -fx-background-color: #0F172A; -fx-border-color: transparent;">
+                <content>
+                    <Pane fx:id="visualPane" prefHeight="400.0" minWidth="1000.0"
+                          style="-fx-background-color: #1E293B; -fx-background-radius: 20; -fx-border-color: #334155; -fx-border-radius: 20; -fx-border-width: 2;">
+                    </Pane>
+                </content>
+            </ScrollPane>
+        </VBox>
+    </center>
+
+    <bottom>
+        <HBox alignment="CENTER" spacing="20" prefHeight="120.0" style="-fx-background-color: #1E293B; -fx-border-color: #334155; -fx-border-width: 1 0 0 0;">
+            <padding><Insets bottom="20" top="20"/></padding>
+
+            <VBox spacing="10" alignment="CENTER_LEFT">
+                <TextField fx:id="valueField" promptText="Value" prefWidth="80" style="-fx-background-color: #0F172A; -fx-text-fill: white; -fx-border-color: #475569; -fx-border-radius: 5;"/>
+                <TextField fx:id="indexField" promptText="Index" prefWidth="80" style="-fx-background-color: #0F172A; -fx-text-fill: white; -fx-border-color: #475569; -fx-border-radius: 5;"/>
+            </VBox>
+
+            <Region prefWidth="20" /> <VBox spacing="8" alignment="CENTER">
+            <Label text="Insert" textFill="#34D399" style="-fx-font-weight: bold;"/>
+            <HBox spacing="10">
+                <Button text="Head" onAction="#onInsertHead" style="-fx-background-color: #34D399; -fx-text-fill: #0F172A; -fx-font-weight: bold; -fx-cursor: hand;"/>
+                <Button text="Tail" onAction="#onInsertTail" style="-fx-background-color: #34D399; -fx-text-fill: #0F172A; -fx-font-weight: bold; -fx-cursor: hand;"/>
+                <Button text="At Index" onAction="#onInsertIndex" style="-fx-background-color: transparent; -fx-text-fill: #34D399; -fx-border-color: #34D399; -fx-border-radius: 5; -fx-cursor: hand;"/>
+            </HBox>
+        </VBox>
+
+            <Region prefWidth="20" /> <VBox spacing="8" alignment="CENTER">
+            <Label text="Delete" textFill="#F87171" style="-fx-font-weight: bold;"/>
+            <HBox spacing="10">
+                <Button text="Head" onAction="#onDeleteHead" style="-fx-background-color: rgba(248, 113, 113, 0.2); -fx-text-fill: #F87171; -fx-border-color: #F87171; -fx-border-radius: 5; -fx-cursor: hand;"/>
+                <Button text="Tail" onAction="#onDeleteTail" style="-fx-background-color: rgba(248, 113, 113, 0.2); -fx-text-fill: #F87171; -fx-border-color: #F87171; -fx-border-radius: 5; -fx-cursor: hand;"/>
+                <Button text="At Index" onAction="#onDeleteIndex" style="-fx-background-color: transparent; -fx-text-fill: #F87171; -fx-border-color: #F87171; -fx-border-radius: 5; -fx-cursor: hand;"/>
+            </HBox>
+        </VBox>
+
+            <Region prefWidth="20" />
+
+            <Button text="Search" onAction="#onSearch" style="-fx-background-color: transparent; -fx-text-fill: #60A5FA; -fx-border-color: #60A5FA; -fx-border-radius: 5; -fx-cursor: hand;"/>
+
+        </HBox>
+    </bottom>
+
+</BorderPane>

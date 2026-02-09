@@ -78,6 +78,13 @@
                 </font>
             </Button>
 
+            <Button fx:id="btnLinkedList" onAction="#onLinkedListClick"
+                    text="Singly Linked List"
+                    styleClass="algo-button, btn-linkedlist"
+                    prefWidth="300.0" prefHeight="180.0">
+            </Button>
+
+
         </FlowPane>
     </center>
 

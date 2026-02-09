@@ -84,6 +84,22 @@ public class LinearDataStructureController implements Initializable {
         navigateTo(event, "/com/example/dsa_visual_lab/view/Linear-DataStructure/queue-view.fxml");
     }
 
+    @FXML
+    void onLinkedListClick(ActionEvent event) {
+        // Make sure this path matches exactly where you saved the LinkedList file!
+        try {
+            String path = "/com/example/dsa_visual_lab/view/Linear-DataStructure/linkedlist-view.fxml";
+            FXMLLoader loader = new FXMLLoader(getClass().getResource(path));
+            Parent root = loader.load();
+
+            Stage stage = (Stage)((Node)event.getSource()).getScene().getWindow();
+            stage.getScene().setRoot(root);
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.out.println("Error: Could not find linkedlist-view.fxml");
+        }
+    }
+
     // ================== HELPER METHOD ==================
     // This single method handles all navigation without shrinking the window
     private void navigateTo(ActionEvent event, String fxmlPath) {
