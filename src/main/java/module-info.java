@@ -12,6 +12,7 @@ module com.example.dsa_visual_lab {
     requires org.kordamp.bootstrapfx.core;
     requires eu.hansolo.tilesfx;
     requires com.almasb.fxgl.all;
+    requires annotations;
 
     // Exports
     exports com.example.dsa_visual_lab;

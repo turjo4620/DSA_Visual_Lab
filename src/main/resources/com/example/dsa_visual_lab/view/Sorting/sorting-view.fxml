@@ -1,14 +1,91 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.text.Font?>
 
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="com.example.dsa_visual_lab.controller.home.sortingController"
-            prefHeight="400.0" prefWidth="600.0">
+<BorderPane xmlns="http://javafx.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.example.dsa_visual_lab.controller.home.SortingController"
+            prefWidth="1000" prefHeight="650"
+            style="-fx-background-color: #0F172A;">
 
-</AnchorPane>
+    <!-- Top section: Back button + Titles -->
+    <top>
+        <VBox spacing="5.0"> <!-- Reduced spacing between back button and titles -->
+            <!-- Back Button aligned left -->
+            <HBox alignment="TOP_LEFT">
+                <padding>
+                    <Insets top="10" left="10" right="10" bottom="0"/>
+                </padding>
+                <children>
+                    <Button text="← BACK" prefWidth="120" prefHeight="40"
+                            onAction="#handleBack"
+                            styleClass="algo-button"
+                            style="-fx-border-color: #F87171;"/>
+                </children>
+            </HBox>
+
+            <!-- Titles centered -->
+            <VBox alignment="CENTER" spacing="5.0"> <!-- Reduced spacing between labels -->
+                <padding>
+                    <Insets top="5" right="20" bottom="10" left="20"/> <!-- Lifted top by reducing from 10 to 5 -->
+                </padding>
+                <Label text="Sorting Algorithms" textFill="#818CF8">
+                    <font>
+                        <Font size="48"/>
+                    </font>
+                </Label>
+                <Label text="Select a sorting algorithm to visualize" textFill="#94A3B8">
+                    <font>
+                        <Font size="18"/>
+                    </font>
+                </Label>
+            </VBox>
+        </VBox>
+    </top>
+
+
+    <!-- Center section: Sorting Buttons -->
+    <center>
+        <VBox spacing="30" alignment="CENTER">
+            <!-- First row: Bubble Sort and Merge Sort -->
+            <HBox spacing="30" alignment="CENTER">
+                <Button text="Bubble Sort" prefWidth="250" prefHeight="150"
+                        onAction="#handleBubbleSort"
+                        styleClass="algo-button"
+                        style="-fx-border-color: #38BDF8;"/>
+                <Button text="Merge Sort" prefWidth="250" prefHeight="150"
+                        onAction="#handleMergeSort"
+                        styleClass="algo-button"
+                        style="-fx-border-color: #818CF8;"/>
+            </HBox>
+
+            <!-- Second row: Quick Sort and Insertion Sort -->
+            <HBox spacing="30" alignment="CENTER">
+                <Button text="Quick Sort" prefWidth="250" prefHeight="150"
+                        onAction="#handleQuickSort"
+                        styleClass="algo-button"
+                        style="-fx-border-color: #34D399;"/>
+                <Button text="Insertion Sort" prefWidth="250" prefHeight="150"
+                        onAction="#handleInsertionSort"
+                        styleClass="algo-button"
+                        style="-fx-border-color: #FB923C;"/>
+            </HBox>
+
+            <!-- Third row: Selection Sort (centered) -->
+            <Button text="Selection Sort" prefWidth="250" prefHeight="150"
+                    onAction="#handleSelectionSort"
+                    styleClass="algo-button"
+                    style="-fx-border-color: #FBBF24;"/>
+        </VBox>
+    </center>
+
+
+
+
+</BorderPane>
