@@ -18,86 +18,93 @@ import java.util.ResourceBundle;
 
 public class LinearDataStructureController implements Initializable {
 
-    // These link to the ImageViews in your FXML
     @FXML private ImageView gifArray;
     @FXML private ImageView gifQueue;
-    @FXML private ImageView gifStack;
-    @FXML private ImageView gifLinkedList;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        // Load GIFs safely
         loadGif(gifArray, "/images/array_demo.gif");
         loadGif(gifQueue, "/images/queue_demo.gif");
-        // loadGif(gifStack, "/images/stack_demo.gif"); // Uncomment when you add the Stack card
-        // loadGif(gifLinkedList, "/images/linkedlist_demo.gif"); // Uncomment when you add LL card
     }
 
-    /**
-     * Helper method to safely load GIFs.
-     * Prevents the app from crashing if a file is missing.
-     */
     private void loadGif(ImageView view, String path) {
         try {
-            // Check if file exists in resources
             if (getClass().getResource(path) != null) {
-                Image image = new Image(Objects.requireNonNull(getClass().getResourceAsStream(path)));
-                view.setImage(image);
-            } else {
-                System.err.println("Warning: GIF not found at " + path);
+                view.setImage(new Image(Objects.requireNonNull(getClass().getResourceAsStream(path))));
             }
         } catch (Exception e) {
             System.err.println("Error loading GIF: " + e.getMessage());
         }
     }
 
-    // ================= NAVIGATION LOGIC =================
+    // ================== FIXED NAVIGATION (PRESERVES WINDOW SIZE) ==================
 
     @FXML
-    void onBackClick(ActionEvent event) throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/dsa_visual_lab/view/home/home-view.fxml"));
-        Parent root = loader.load();
-        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        stage.setScene(new Scene(root));
-        stage.show();
-    }
+    protected void onBackClick(ActionEvent event) {
+        try {
+            // 1. THIS IS THE TARGET FILE.
+            // Make sure "home-view.fxml" is the correct name of your Dashboard file!
+            // If your dashboard file is named "main-menu.fxml", change it here.
+            String fxmlPath = "/com/example/dsa_visual_lab/view/home/home-view.fxml";
 
-    @FXML
-    void onArrayClick(ActionEvent event) throws IOException {
-        // MATCHING YOUR SCREENSHOT EXACTLY:
-        // Note: Check if 'view' is at the root of resources or inside 'com/example...'
+            // 2. Load the file
+            FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
+            Parent homeRoot = loader.load();
 
-        // TRY THIS PATH FIRST (If 'view' is directly in resources):
-        String fxmlPath = "/com/example/dsa_visual_lab/view/Linear-DataStructure/array-view.fxml";
+            // 3. Get current Stage and replace the content
+            Stage stage = (Stage)((Node)event.getSource()).getScene().getWindow();
+            stage.getScene().setRoot(homeRoot);
 
-        // IF THAT FAILS, TRY THIS (If 'view' is inside your package):
-        // String fxmlPath = "/com/example/dsa_visual_lab/view/Linear-DataStructure/array-view.fxml";
+            // 4. Re-apply CSS (Optional, keeps it pretty)
+            try {
+                stage.getScene().getStylesheets().add(getClass().getResource("/com/example/dsa_visual_lab/view/styles/home.css").toExternalForm());
+            } catch (Exception e) {
+                // Ignore CSS errors for now
+            }
 
-        FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
-
-        // Debugging line: Check if it found the file
-        if (loader.getLocation() == null) {
-            System.err.println("CRITICAL ERROR: Could not find file at: " + fxmlPath);
+        } catch (IOException | NullPointerException e) {
+            // This will print the error if the file is still not found
+            System.err.println("CRITICAL ERROR: Could not find the file!");
+            System.err.println("Please check the file name in your project folder.");
+            e.printStackTrace();
         }
-
-        Parent root = loader.load();
-        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        stage.setScene(new Scene(root));
-        stage.show();
     }
 
     @FXML
-    void onQueueClick(ActionEvent event) throws IOException {
-        // TODO: Create queue-view.fxml
-        System.out.println("Navigating to Queue Visualization...");
-        // switchScene(event, "/com/example/dsa_visual_lab/visualizers/queue-view.fxml");
+    void onArrayClick(ActionEvent event) {
+        // Go TO Array Visualization
+        // Note: Ensure this FXML path is correct!
+        navigateTo(event, "/com/example/dsa_visual_lab/view/Linear-DataStructure/array-view.fxml");
     }
 
-    // Helper to switch scenes cleanly
-    private void switchScene(ActionEvent event, String fxmlPath) throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
-        Parent root = loader.load();
-        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        stage.setScene(new Scene(root));
-        stage.show();
+    @FXML
+    void onQueueClick(ActionEvent event) {
+        // Go TO Queue Visualization (Update path when you have the file)
+        System.out.println("Queue FXML not linked yet.");
+        // navigateTo(event, "/com/example/dsa_visual_lab/view/Linear-DataStructure/queue-view.fxml");
+    }
+
+    // ================== HELPER METHOD ==================
+    // This single method handles all navigation without shrinking the window
+    private void navigateTo(ActionEvent event, String fxmlPath) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
+            Parent newRoot = loader.load();
+
+            // Get current Stage and Scene
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            Scene scene = stage.getScene();
+
+            // Swap the content (Root) instead of the whole Scene
+            scene.setRoot(newRoot);
+
+            // Re-apply CSS if needed (Optional, but good for consistent button styling)
+            // scene.getStylesheets().add(getClass().getResource("/com/example/dsa_visual_lab/view/styles/home.css").toExternalForm());
+
+        } catch (IOException e) {
+            System.err.println("Failed to load FXML: " + fxmlPath);
+            e.printStackTrace();
+        }
     }
 }

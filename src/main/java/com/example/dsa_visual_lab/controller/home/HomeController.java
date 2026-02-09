@@ -67,14 +67,31 @@ public class HomeController {
 
     // ================= Linear Data Structures =================
     @FXML
-    void openDataStructures(@NotNull ActionEvent event) throws IOException {
-// 1. Load the FXML file for the Linear Data Structures page
-// MAKE SURE THIS FILE NAME MATCHES WHAT YOU SAVED
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/dsa_visual_lab/view/Linear-dataStructure/linear-dataStructures.fxml")); Parent root = loader.load();
-// 2. Get the current stage (window) from the button that was clicked
+    protected void openDataStructures(ActionEvent event) throws IOException {
+        // 1. Get the current stage (window) from the button click
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        // 3. Set the new scene
-        Scene scene = new Scene(root); stage.setScene(scene); stage.show(); }
+
+        // 2. Capture the current size and maximized state BEFORE switching
+        double width = stage.getWidth();
+        double height = stage.getHeight();
+        boolean isMaximized = stage.isMaximized();
+
+        // 3. Load the new FXML (Make sure the path matches your linear structure file!)
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/com/example/dsa_visual_lab/view/Linear-DataStructure/linear-dataStructures.fxml"));
+        // ^ Note: adjust this path if your file is in a different folder like "view/home"
+
+        Scene scene = new Scene(fxmlLoader.load());
+
+        // 4. Set the new scene
+        stage.setScene(scene);
+
+        // 5. Restore the size and maximized state immediately
+        stage.setWidth(width);
+        stage.setHeight(height);
+        stage.setMaximized(isMaximized);
+
+        stage.show();
+    }
     // ================= Other Features =================
     @FXML
     public void openTrees() {
