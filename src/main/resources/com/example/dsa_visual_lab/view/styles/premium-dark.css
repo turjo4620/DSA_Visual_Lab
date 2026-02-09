@@ -1,0 +1,169 @@
+/* root: The main dark theme variables */
+.root {
+    -fx-background-color: #0B1120; /* Deep Navy (Almost Black) */
+    -fx-font-family: 'Inter', 'Segoe UI', sans-serif;
+    -fx-text-fill: #E2E8F0;
+}
+
+/* ================= TOP BAR ================= */
+.top-bar {
+    -fx-background-color: #1E293B;
+    -fx-border-color: #334155;
+    -fx-border-width: 0 0 1 0;
+    -fx-padding: 10 20;
+}
+.app-title {
+    -fx-font-family: 'Poppins', 'Segoe UI', sans-serif;
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #E2E8F0;
+}
+
+/* ================= BUTTONS ================= */
+.btn-back {
+    -fx-background-color: transparent;
+    -fx-text-fill: #94A3B8;
+    -fx-font-size: 14px;
+    -fx-cursor: hand;
+}
+.btn-back:hover { -fx-text-fill: white; }
+
+/* Primary Action (Blue) */
+.btn-primary {
+    -fx-background-color: #3B82F6;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-background-radius: 6;
+    -fx-cursor: hand;
+}
+.btn-primary:hover { -fx-background-color: #2563EB; }
+
+/* Destructive Action (Red) */
+.btn-danger {
+    -fx-background-color: rgba(239, 68, 68, 0.15);
+    -fx-text-fill: #EF4444;
+    -fx-border-color: #EF4444;
+    -fx-border-radius: 6;
+    -fx-background-radius: 6;
+    -fx-cursor: hand;
+}
+.btn-danger:hover { -fx-background-color: rgba(239, 68, 68, 0.25); }
+
+/* Secondary Action (Purple/Ghost) */
+.btn-secondary {
+    -fx-background-color: transparent;
+    -fx-text-fill: #A78BFA;
+    -fx-border-color: #A78BFA;
+    -fx-border-radius: 6;
+    -fx-cursor: hand;
+}
+.btn-secondary:hover { -fx-background-color: rgba(167, 139, 250, 0.1); }
+
+/* ================= INPUTS & PANELS ================= */
+.panel-bg {
+    -fx-background-color: #1E293B; /* Lighter Navy Surface */
+    -fx-border-color: #334155;
+    -fx-border-width: 0 1 0 0; /* Right border only for separation */
+}
+
+.text-field {
+    -fx-background-color: #0F172A;
+    -fx-text-fill: white;
+    -fx-border-color: #475569;
+    -fx-border-radius: 4;
+    -fx-background-radius: 4;
+}
+.text-field:focused { -fx-border-color: #3B82F6; }
+
+/* Error Label */
+.error-msg {
+    -fx-text-fill: #F87171;
+    -fx-font-size: 11px;
+    -fx-padding: 2 0 0 0;
+}
+
+/* ================= ACCORDION (CONTROLS) ================= */
+.accordion .titled-pane {
+    -fx-text-fill: #E2E8F0;
+}
+.accordion .titled-pane > .title {
+    -fx-background-color: #1E293B;
+    -fx-border-color: #334155;
+    -fx-border-width: 0 0 1 0;
+}
+.accordion .titled-pane > .content {
+    -fx-background-color: #0F172A;
+    -fx-border-color: transparent;
+}
+
+/* ================= TABS (LEARNING) ================= */
+.tab-pane .tab-header-area .tab-header-background {
+    -fx-background-color: #1E293B;
+}
+.tab-pane .tab {
+    -fx-background-color: transparent;
+    -fx-text-fill: #94A3B8;
+}
+.tab-pane .tab:selected {
+    -fx-background-color: #0F172A;
+    -fx-border-color: #3B82F6;
+    -fx-border-width: 0 0 2 0; /* Bottom highlight */
+}
+.tab-pane .tab-label {
+    -fx-text-fill: #94A3B8;
+    -fx-font-size: 12px;
+}
+.tab-pane .tab:selected .tab-label { -fx-text-fill: white; }
+
+/* ================= VISUALIZATION AREA ================= */
+.vis-container {
+    -fx-background-color: #0B1120;
+}
+
+/* Capacity Bar (Progress Bar Styling) */
+.capacity-bar .track {
+    -fx-background-color: #1E293B;
+    -fx-background-radius: 4;
+}
+.capacity-bar .bar {
+    -fx-background-color: linear-gradient(to right, #3B82F6, #60A5FA);
+    -fx-background-radius: 4;
+}
+
+/* The Array Box */
+.array-box {
+    -fx-fill: #1E293B;
+    -fx-stroke: #475569;
+    -fx-stroke-width: 2;
+    -fx-arc-width: 8;
+    -fx-arc-height: 8;
+}
+.array-text {
+    -fx-fill: white;
+    -fx-font-family: 'JetBrains Mono', monospace;
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+}
+.index-label {
+    -fx-fill: #64748B;
+    -fx-font-family: 'JetBrains Mono', monospace;
+    -fx-font-size: 12px;
+}
+
+/* Lists (Code & Logs) */
+.list-view {
+    -fx-background-color: transparent;
+    -fx-padding: 5;
+}
+.list-cell {
+    -fx-background-color: transparent;
+    -fx-text-fill: #CBD5E1;
+    -fx-font-family: 'JetBrains Mono', monospace;
+    -fx-font-size: 12px;
+}
+.list-cell:filled:selected {
+    -fx-background-color: #1E293B;
+    -fx-text-fill: #FACC15; /* Yellow highlight for active code */
+    -fx-border-color: #FACC15;
+    -fx-border-width: 0 0 0 2;
+}

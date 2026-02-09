@@ -12,17 +12,14 @@ module com.example.dsa_visual_lab {
     requires org.kordamp.bootstrapfx.core;
     requires eu.hansolo.tilesfx;
     requires com.almasb.fxgl.all;
-    requires annotations;
 
     // Exports
     exports com.example.dsa_visual_lab;
 
     // Opens - Allowing JavaFX to see your files
     opens com.example.dsa_visual_lab to javafx.fxml;
-
-    // This line matches your new folder structure:
     opens com.example.dsa_visual_lab.controller.home to javafx.fxml;
 
-    opens com.example.dsa_visual_lab.controller.visualizer to javafx.fxml;
-
+    // This SINGLE line now handles both QueueController and ArrayController
+    opens com.example.dsa_visual_lab.controller.linear to javafx.fxml;
 }

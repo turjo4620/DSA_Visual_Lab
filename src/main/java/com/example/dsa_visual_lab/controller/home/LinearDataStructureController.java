@@ -80,9 +80,8 @@ public class LinearDataStructureController implements Initializable {
 
     @FXML
     void onQueueClick(ActionEvent event) {
-        // Go TO Queue Visualization (Update path when you have the file)
-        System.out.println("Queue FXML not linked yet.");
-        // navigateTo(event, "/com/example/dsa_visual_lab/view/Linear-DataStructure/queue-view.fxml");
+        // Make sure this path matches where you saved the file above!
+        navigateTo(event, "/com/example/dsa_visual_lab/view/Linear-DataStructure/queue-view.fxml");
     }
 
     // ================== HELPER METHOD ==================

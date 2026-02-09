@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane fx:id="queueContainer" prefHeight="700.0" prefWidth="1100.0"
+            style="-fx-background-color: #0F172A;"
+            xmlns="http://javafx.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.example.dsa_visual_lab.controller.linear.QueueController">
+
+    <top>
+        <StackPane alignment="CENTER_LEFT" prefHeight="100.0">
+            <padding>
+                <Insets left="30" right="30" top="20" bottom="20"/>
+            </padding>
+
+            <Button text="← BACK" onAction="#onBackClick"
+                    style="-fx-background-color: transparent; -fx-border-color: #34D399; -fx-border-radius: 20; -fx-border-width: 2; -fx-text-fill: #34D399; -fx-font-weight: bold; -fx-cursor: hand;"
+                    StackPane.alignment="TOP_LEFT">
+                <font><Font size="14.0"/></font>
+                <padding><Insets top="8" right="20" bottom="8" left="20"/></padding>
+            </Button>
+
+            <Label text="Queue Visualization (FIFO)" textFill="#34D399" StackPane.alignment="CENTER">
+                <font>
+                    <Font name="System Bold" size="36.0" />
+                </font>
+                <style>-fx-effect: dropshadow(three-pass-box, rgba(52, 211, 153, 0.4), 15, 0.2, 0, 0);</style>
+            </Label>
+        </StackPane>
+    </top>
+
+    <center>
+        <VBox alignment="CENTER" spacing="20">
+            <padding><Insets top="20" right="20" bottom="20" left="20"/></padding>
+
+            <Pane fx:id="visualPane" prefHeight="400.0" prefWidth="800.0"
+                  style="-fx-background-color: #1E293B; -fx-background-radius: 20; -fx-border-color: #334155; -fx-border-radius: 20; -fx-border-width: 2;">
+            </Pane>
+
+            <Label fx:id="statusLabel" text="Ready" textFill="#94A3B8">
+                <font><Font size="18.0"/></font>
+            </Label>
+        </VBox>
+    </center>
+
+    <bottom>
+        <VBox spacing="15" alignment="CENTER">
+            <padding><Insets bottom="30" top="10"/></padding>
+
+            <HBox alignment="CENTER" spacing="15.0">
+                <TextField fx:id="inputField" promptText="Value" prefWidth="100" prefHeight="40"
+                           style="-fx-background-color: #1E293B; -fx-text-fill: white; -fx-border-color: #34D399; -fx-border-radius: 8; -fx-background-radius: 8;"/>
+
+                <Button text="Enqueue" onAction="#onEnqueue" prefHeight="40" prefWidth="100"
+                        style="-fx-background-color: #34D399; -fx-text-fill: #0F172A; -fx-font-weight: bold; -fx-background-radius: 8; -fx-cursor: hand;"/>
+
+                <Button text="Dequeue" onAction="#onDequeue" prefHeight="40" prefWidth="100"
+                        style="-fx-background-color: transparent; -fx-border-color: #F87171; -fx-text-fill: #F87171; -fx-border-width: 2; -fx-border-radius: 8; -fx-font-weight: bold; -fx-cursor: hand;"/>
+
+                <Pane prefWidth="20" />
+
+                <Button text="Peek Front" onAction="#onPeekFront" prefHeight="40" prefWidth="110"
+                        style="-fx-background-color: #1E293B; -fx-border-color: #60A5FA; -fx-text-fill: #60A5FA; -fx-border-width: 2; -fx-border-radius: 8; -fx-font-weight: bold; -fx-cursor: hand;"/>
+
+                <Button text="Peek Back" onAction="#onPeekBack" prefHeight="40" prefWidth="110"
+                        style="-fx-background-color: #1E293B; -fx-border-color: #60A5FA; -fx-text-fill: #60A5FA; -fx-border-width: 2; -fx-border-radius: 8; -fx-font-weight: bold; -fx-cursor: hand;"/>
+            </HBox>
+
+            <HBox alignment="CENTER" spacing="15.0">
+                <Label text="User Defined List:" textFill="#94A3B8">
+                    <font><Font size="14.0"/></font>
+                </Label>
+
+                <TextField fx:id="listInputField" promptText="e.g. 10, 20, 30" prefWidth="300" prefHeight="40"
+                           style="-fx-background-color: #1E293B; -fx-text-fill: white; -fx-border-color: #A78BFA; -fx-border-radius: 8; -fx-background-radius: 8;"/>
+
+                <Button text="Create Queue" onAction="#onCreateList" prefHeight="40" prefWidth="120"
+                        style="-fx-background-color: #A78BFA; -fx-text-fill: #0F172A; -fx-font-weight: bold; -fx-background-radius: 8; -fx-cursor: hand;"/>
+
+                <Pane prefWidth="50" />
+
+                <Button text="Clear All" onAction="#onClear" prefHeight="40" prefWidth="100"
+                        style="-fx-background-color: transparent; -fx-text-fill: #94A3B8; -fx-font-weight: bold; -fx-cursor: hand;"/>
+            </HBox>
+
+        </VBox>
+    </bottom>
+
+</BorderPane>
