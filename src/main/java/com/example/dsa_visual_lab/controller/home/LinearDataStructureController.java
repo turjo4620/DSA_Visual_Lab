@@ -106,9 +106,24 @@ public class LinearDataStructureController implements Initializable {
 
     @FXML
     protected void onStackClick(ActionEvent event) {
-        // Logic to load the Stack View (e.g., stack-view.fxml)
-        System.out.println("Stack button clicked!");
-        // Example: sceneSwitch.switchTo(event, "stack-view.fxml");
+        try {
+            // 1. Load the FXML file
+            // NOTE: Check that "stack-view.fxml" is in the correct folder.
+            // If it's in a subfolder, use "/com/example/dsa_visual_lab/views/linear/stack-view.fxml"
+            String path = "/com/example/dsa_visual_lab/view/Linear-DataStructure/stack-view.fxml";
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(path));
+            Scene scene = new Scene(fxmlLoader.load());
+
+            // 2. Get the current stage (window) from the button click event
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+
+            // 3. Set the new scene and show it
+            stage.setScene(scene);
+            stage.show();
+
+        } catch (IOException e) {
+            e.printStackTrace(); // This will print the specific error if the file path is wrong
+        }
     }
     // ================== HELPER METHOD ==================
     // This single method handles all navigation without shrinking the window
