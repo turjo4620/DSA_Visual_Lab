@@ -10,6 +10,8 @@ import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
+import javafx.scene.control.Button;
+
 
 import java.io.IOException;
 import java.net.URL;
@@ -100,6 +102,14 @@ public class LinearDataStructureController implements Initializable {
         }
     }
 
+    @FXML private Button btnStack;
+
+    @FXML
+    protected void onStackClick(ActionEvent event) {
+        // Logic to load the Stack View (e.g., stack-view.fxml)
+        System.out.println("Stack button clicked!");
+        // Example: sceneSwitch.switchTo(event, "stack-view.fxml");
+    }
     // ================== HELPER METHOD ==================
     // This single method handles all navigation without shrinking the window
     private void navigateTo(ActionEvent event, String fxmlPath) {

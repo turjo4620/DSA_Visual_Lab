@@ -51,7 +51,6 @@
                     <Insets top="8" right="20" bottom="8" left="20"/>
                 </padding>
             </Button>
-
         </StackPane>
     </top>
 
@@ -78,12 +77,25 @@
                 </font>
             </Button>
 
+            <Button fx:id="btnStack" onAction="#onStackClick"
+                    text="Stack (LIFO)"
+                    styleClass="algo-button, btn-stack"
+                    prefWidth="300.0" prefHeight="180.0"
+                    style="-fx-background-color: #1E293B; -fx-background-radius: 15; -fx-border-color: #A78BFA; -fx-border-radius: 15; -fx-border-width: 2; -fx-text-fill: white; -fx-cursor: hand;">
+                <font>
+                    <Font name="System Bold" size="24.0" />
+                </font>
+            </Button>
+
             <Button fx:id="btnLinkedList" onAction="#onLinkedListClick"
                     text="Singly Linked List"
                     styleClass="algo-button, btn-linkedlist"
-                    prefWidth="300.0" prefHeight="180.0">
+                    prefWidth="300.0" prefHeight="180.0"
+                    style="-fx-background-color: #1E293B; -fx-background-radius: 15; -fx-border-color: #60A5FA; -fx-border-radius: 15; -fx-border-width: 2; -fx-text-fill: white; -fx-cursor: hand;">
+                <font>
+                    <Font name="System Bold" size="24.0" />
+                </font>
             </Button>
-
 
         </FlowPane>
     </center>
