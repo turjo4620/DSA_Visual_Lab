@@ -94,8 +94,18 @@ public class HomeController {
     }
     // ================= Other Features =================
     @FXML
-    public void openTrees() {
-        showFeatureAlert("Tree Algorithms (BST, AVL)");
+    public void openTrees(ActionEvent event) {
+        try {
+            // Ensure this path matches exactly where you created bst-view.fxml
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/com/example/dsa_visual_lab/view/BST/bst-view.fxml"));
+            Scene scene = new Scene(fxmlLoader.load());
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            stage.setScene(scene);
+            stage.show();
+        } catch (IOException e) {
+            System.out.println("Error loading BST View:");
+            e.printStackTrace();
+        }
     }
 
     @FXML

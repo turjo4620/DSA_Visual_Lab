@@ -22,4 +22,5 @@ module com.example.dsa_visual_lab {
 
     // This SINGLE line now handles both QueueController and ArrayController
     opens com.example.dsa_visual_lab.controller.linear to javafx.fxml;
+    opens com.example.dsa_visual_lab.controller.BSTController to javafx.fxml;
 }

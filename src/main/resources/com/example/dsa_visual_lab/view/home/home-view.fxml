@@ -49,7 +49,7 @@
                             styleClass="algo-button" style="-fx-border-color: #818CF8;" />
 
                     <Button onAction="#openTrees" prefHeight="150.0" prefWidth="280.0"
-                            text="TREE&#10;STRUCTURES" textAlignment="CENTER"
+                            text="BINARY SEARCH&#10;TREE" textAlignment="CENTER"
                             styleClass="algo-button" style="-fx-border-color: #34D399;" />
 
                     <Button onAction="#openGraphs" prefHeight="150.0" prefWidth="280.0"
