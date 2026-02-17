@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.layout.Pane?>
+
+
+<BorderPane xmlns="http://javafx.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.example.dsa_visual_lab.controller.sorting.MergeSortController"
+            style="-fx-background-color: #0F172A;">
+
+    <top>
+        <Pane prefHeight="80">
+            <Button text="← BACK" prefWidth="120" prefHeight="40"
+                    layoutX="10" layoutY="10"
+                    onAction="#handleBack"
+                    styleClass="algo-button"
+                    style="-fx-border-color: #F87171;"/>
+
+            <!-- New Start Button -->
+            <Button text="Start Merge Sort" prefWidth="150" prefHeight="40"
+                    layoutX="150" layoutY="10"
+                    onAction="#handleStart"
+                    styleClass="algo-button"
+                    style="-fx-border-color: #22C55E;"/>
+
+            <Button text="Visualize Merge" prefWidth="150" prefHeight="40"
+                    layoutX="320" layoutY="10"
+                    onAction="#handleMergeSort"
+                    fx:id="mergeButton"
+                    style="-fx-border-color: #F59E0B;"
+                    disable="true"/> <!-- enable only after Start -->
+
+        </Pane>
+    </top>
+
+
+    <center>
+        <Pane fx:id="visualPane"/>
+    </center>
+
+</BorderPane>

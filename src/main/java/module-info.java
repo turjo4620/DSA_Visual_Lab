@@ -22,4 +22,7 @@ module com.example.dsa_visual_lab {
 
     // This SINGLE line now handles both QueueController and ArrayController
     opens com.example.dsa_visual_lab.controller.linear to javafx.fxml;
+   // for MergeSortController and other sorting controller
+    opens com.example.dsa_visual_lab.controller.sorting to javafx.fxml;
+
 }

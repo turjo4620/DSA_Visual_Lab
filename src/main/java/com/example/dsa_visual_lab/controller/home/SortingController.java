@@ -25,8 +25,24 @@ public class SortingController {
 
     @FXML
     private void handleMergeSort(ActionEvent event) {
-        showAlert("Visualizing Merge Sort");
+        try {
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(getClass().getResource(
+                    "/com/example/dsa_visual_lab/view/Sorting/merge-sort-view.fxml"));
+            Parent mergeRoot = loader.load();
+
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            Scene scene = stage.getScene();
+
+            // Replace root instead of creating a new Scene
+            scene.setRoot(mergeRoot);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            showAlert("Failed to load Merge Sort Visualization!");
+        }
     }
+
 
     @FXML
     private void handleQuickSort(ActionEvent event) {
@@ -72,4 +88,5 @@ public class SortingController {
         alert.setContentText(message + "\n\n(Here you can implement actual visualization!)");
         alert.showAndWait();
     }
+
 }
