@@ -59,8 +59,8 @@
                         onAction="#handleBubbleSort"
                         styleClass="algo-button"
                         style="-fx-border-color: #38BDF8;"/>
-                <Button text="Merge Sort" prefWidth="250" prefHeight="150"
-                        onAction="#handleMergeSort"
+                <Button text="Selection Sort" prefWidth="250" prefHeight="150"
+                        onAction="#handleSelectionSort"
                         styleClass="algo-button"
                         style="-fx-border-color: #818CF8;"/>
             </HBox>
@@ -78,10 +78,10 @@
             </HBox>
 
             <!-- Third row: Selection Sort (centered) -->
-            <Button text="Selection Sort" prefWidth="250" prefHeight="150"
-                    onAction="#handleSelectionSort"
-                    styleClass="algo-button"
-                    style="-fx-border-color: #FBBF24;"/>
+<!--            <Button text="Selection Sort" prefWidth="250" prefHeight="150"-->
+<!--                    onAction="#handleSelectionSort"-->
+<!--                    styleClass="algo-button"-->
+<!--                    style="-fx-border-color: #FBBF24;"/>-->
         </VBox>
     </center>
 

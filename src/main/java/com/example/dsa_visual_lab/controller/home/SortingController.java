@@ -18,31 +18,13 @@ public class SortingController {
     }
 
     // ================= Sorting Buttons =================
+
     @FXML
+
     private void handleBubbleSort(ActionEvent event) {
-        showAlert("Visualizing Bubble Sort");
+        navigateTo(event,
+                "/com/example/dsa_visual_lab/view/Sorting/bubble-sort-view.fxml");
     }
-
-    @FXML
-    private void handleMergeSort(ActionEvent event) {
-        try {
-            FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(getClass().getResource(
-                    "/com/example/dsa_visual_lab/view/Sorting/merge-sort-view.fxml"));
-            Parent mergeRoot = loader.load();
-
-            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            Scene scene = stage.getScene();
-
-            // Replace root instead of creating a new Scene
-            scene.setRoot(mergeRoot);
-
-        } catch (IOException e) {
-            e.printStackTrace();
-            showAlert("Failed to load Merge Sort Visualization!");
-        }
-    }
-
 
     @FXML
     private void handleQuickSort(ActionEvent event) {
@@ -87,6 +69,21 @@ public class SortingController {
         alert.setHeaderText(null);
         alert.setContentText(message + "\n\n(Here you can implement actual visualization!)");
         alert.showAndWait();
+    }
+    private void navigateTo(ActionEvent event, String fxmlPath) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
+            Parent root = loader.load();
+
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            Scene scene = stage.getScene();
+
+            scene.setRoot(root);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            showAlert("Failed to load page: " + fxmlPath);
+        }
     }
 
 }

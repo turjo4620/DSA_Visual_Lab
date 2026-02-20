@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.Pane?>
+
+<VBox xmlns="http://javafx.com/javafx/21.0.6"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.example.dsa_visual_lab.controller.sorting.BubbleSortController"
+      alignment="TOP_CENTER"
+      spacing="20"
+      style="-fx-background-color: #0f172a; -fx-padding: 20;">
+
+    <!-- Top HBox for back button -->
+    <HBox alignment="TOP_LEFT" prefWidth="600">
+        <Button text="← BACK"
+                prefWidth="120" prefHeight="40"
+                onAction="#handleBack"
+                styleClass="algo-button"
+                style="-fx-border-color: #F87171;"/>
+    </HBox>
+
+    <!-- StackPane to slightly shift the visualization pane left -->
+    <StackPane alignment="CENTER_LEFT">
+        <Pane fx:id="visualizationPane"
+              prefWidth="800"
+              maxWidth="600"
+              minWidth="800"
+              prefHeight="350"
+              style="-fx-background-color: linear-gradient(to bottom, #111827, #1E293B);
+                     -fx-background-radius: 20;
+                     -fx-border-color: #374151;
+                     -fx-border-radius: 20;
+                     -fx-border-width: 2;"/>
+    </StackPane>
+
+    <!-- Buttons below the visualization pane -->
+    <HBox spacing="20" alignment="CENTER">
+        <Button text="Start" onAction="#startSort" prefWidth="100" prefHeight="50" styleClass="algo-button" style="-fx-border-color: #FB923C;"/>
+        <Button text="Reset" onAction="#resetArray" prefWidth="100" prefHeight="50" styleClass="algo-button" style="-fx-border-color: #FB923C;"/>
+    </HBox>
+
+</VBox>

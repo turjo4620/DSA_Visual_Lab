@@ -47,6 +47,9 @@
                     <panes>
                         <TitledPane fx:id="paneModify" text="Modify Array" animated="true" style="-fx-text-fill: #E2E8F0;">
                             <VBox spacing="10.0" style="-fx-background-color: #0F172A; -fx-padding: 10;">
+                                <Button text="Randomize" onAction="#onRandomize"
+                                        style="-fx-background-color: transparent; -fx-text-fill: #60A5FA; -fx-border-color: #60A5FA;"/>
+
                                 <TextField fx:id="insertValueField" promptText="Value" style="-fx-background-color: #1E293B; -fx-text-fill: white; -fx-border-color: #475569; -fx-border-radius: 5;"/>
                                 <Label fx:id="lblErrValue" text="⚠ Invalid Value" textFill="#F87171" visible="false" managed="false"/>
 

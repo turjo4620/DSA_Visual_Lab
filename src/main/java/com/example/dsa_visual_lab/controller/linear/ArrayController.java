@@ -17,6 +17,7 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.Random;
 import java.util.ResourceBundle;
 
 public class ArrayController implements Initializable {
@@ -60,6 +61,29 @@ public class ArrayController implements Initializable {
         addToLog("System Initialized. Capacity: " + capacity);
         setPseudocode(INSERT_CODE);
     }
+    @FXML
+    public void onRandomize(ActionEvent event) {
+        Random random = new Random();
+        int nodesToCreate = 6 + random.nextInt(3); // 6,7,8 nodes
+
+        // Ensure capacity can hold nodes
+        while (nodesToCreate > capacity) {
+            growArray();
+        }
+
+        size = nodesToCreate;
+
+        for (int i = 0; i < size; i++) {
+            arrayData[i] = random.nextInt(199) - 99; // Fill arrayData
+        }
+
+        render(); // Render the boxes
+        updateCapacityBar(); // Update size/capacity indicator
+
+        addToLog("Generated Random Array with " + size + " elements");
+    }
+
+
 
     // ================= ACTIONS =================
 
