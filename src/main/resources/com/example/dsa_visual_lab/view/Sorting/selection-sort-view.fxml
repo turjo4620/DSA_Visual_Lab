@@ -5,11 +5,11 @@
 
 <VBox xmlns="http://javafx.com/javafx/21.0.6"
       xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="com.example.dsa_visual_lab.controller.sorting.BubbleSortController"
+      fx:controller="com.example.dsa_visual_lab.controller.sorting.SelectionSortController"
       spacing="20"
       style="-fx-background-color: #0f172a; -fx-padding: 20;">
 
-    <!-- Back Button -->
+    <!-- BACK BUTTON -->
     <HBox alignment="TOP_LEFT">
         <Button text="← BACK"
                 prefWidth="120"
@@ -19,12 +19,14 @@
                 style="-fx-border-color: #F87171;"/>
     </HBox>
 
-    <!-- Main Content -->
+    <!-- MAIN CONTENT -->
     <HBox spacing="30">
 
-        <!-- LEFT: Visualization -->
+        <!-- VISUALIZATION AREA -->
         <StackPane alignment="CENTER">
-            <Pane fx:id="visualizationPane"
+            <HBox fx:id="arrayContainer"
+                  alignment="BOTTOM_CENTER"
+                  spacing="5"
                   prefWidth="600"
                   prefHeight="350"
                   style="-fx-background-color: linear-gradient(to bottom, #111827, #1E293B);
@@ -34,14 +36,12 @@
                          -fx-border-width: 2;"/>
         </StackPane>
 
-        <!-- RIGHT: Pseudocode Section -->
+        <!-- PSEUDOCODE AREA -->
         <VBox spacing="15" prefWidth="350">
 
-            <!-- Title -->
             <Label text="Pseudocode"
                    style="-fx-text-fill: #FACC15; -fx-font-size: 18px; -fx-font-weight: bold;"/>
 
-            <!-- Rectangular Code Box -->
             <VBox spacing="10"
                   style="-fx-background-color: #111827;
                          -fx-border-color: #374151;
@@ -55,15 +55,23 @@
                        style="-fx-text-fill: white; -fx-font-size: 14px;"/>
 
                 <Label fx:id="line2"
-                       text="   for j = 0 to n-i-1"
+                       text="   minIndex = i"
                        style="-fx-text-fill: white; -fx-font-size: 14px;"/>
 
                 <Label fx:id="line3"
-                       text="      if arr[j] > arr[j+1]"
+                       text="   for j = i+1 to n"
                        style="-fx-text-fill: white; -fx-font-size: 14px;"/>
 
                 <Label fx:id="line4"
-                       text="         swap(arr[j], arr[j+1])"
+                       text="      if arr[j] &lt; arr[minIndex]"
+                       style="-fx-text-fill: white; -fx-font-size: 14px;"/>
+
+                <Label fx:id="line5"
+                       text="     minIndex = j "
+                       style="-fx-text-fill: white; -fx-font-size: 14px;"/>
+
+                <Label fx:id="line6"
+                       text=" swap(arr[i], arr[minIndex])"
                        style="-fx-text-fill: white; -fx-font-size: 14px;"/>
 
             </VBox>
@@ -72,21 +80,23 @@
 
     </HBox>
 
-    <!-- Buttons -->
+    <!-- CONTROL BUTTONS -->
     <HBox spacing="20" alignment="CENTER">
+
         <Button text="Start"
-                onAction="#startSort"
+                onAction="#handleStart"
                 prefWidth="200"
                 prefHeight="50"
                 styleClass="algo-button"
                 style="-fx-border-color: #FB923C;"/>
 
         <Button text="Reset"
-                onAction="#resetArray"
+                onAction="#handleReset"
                 prefWidth="200"
                 prefHeight="50"
                 styleClass="algo-button"
                 style="-fx-border-color: #FB923C;"/>
+
     </HBox>
 
 </VBox>

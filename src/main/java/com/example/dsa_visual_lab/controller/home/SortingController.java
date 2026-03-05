@@ -10,6 +10,8 @@ import javafx.scene.Node;
 import javafx.stage.Stage;
 import java.io.IOException;
 
+
+
 public class SortingController {
 
     @FXML
@@ -37,7 +39,8 @@ public class SortingController {
     }
     @FXML
     private void handleSelectionSort(ActionEvent event) {
-        showAlert("Visualizing Selection Sort");
+        navigateTo(event,
+                "/com/example/dsa_visual_lab/view/Sorting/selection-sort-view.fxml");
     }
     // ================= Back Button =================
     @FXML

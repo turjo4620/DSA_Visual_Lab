@@ -10,6 +10,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
+import javafx.scene.control.Label;
 import javafx.util.Duration;
 
 import java.io.IOException;
@@ -23,10 +24,23 @@ public class BubbleSortController {
     private int[] array;
     private Rectangle[] bars;
 
-    private final int SIZE = 12;
+    private final int SIZE = 11;
     private final double BAR_WIDTH = 40;
     private final double SPACING = 10;
     private final double PANE_HEIGHT = 350;
+    @FXML private Label line1;
+    @FXML private Label line2;
+    @FXML private Label line3;
+    @FXML private Label line4;
+
+    private void highlight(Label label) {
+        line1.setStyle("-fx-text-fill: white;");
+        line2.setStyle("-fx-text-fill: white;");
+        line3.setStyle("-fx-text-fill: white;");
+        line4.setStyle("-fx-text-fill: white;");
+
+        label.setStyle("-fx-text-fill: #22C55E; -fx-font-weight: bold;");
+    }
 
     @FXML
     public void initialize() {
@@ -61,19 +75,32 @@ public class BubbleSortController {
         new Thread(() -> {
             try {
                 for (int i = 0; i < SIZE - 1; i++) {
+
+                    final int outer = i;
+                    javafx.application.Platform.runLater(() -> highlight(line1));
+                    Thread.sleep(500);
+
                     for (int j = 0; j < SIZE - i - 1; j++) {
+
                         final int a = j;
                         final int b = j + 1;
 
-                        // Highlight bars
+                        javafx.application.Platform.runLater(() -> highlight(line2));
+                        Thread.sleep(500);
+
                         javafx.application.Platform.runLater(() -> {
                             bars[a].setFill(Color.ORANGE);
                             bars[b].setFill(Color.ORANGE);
+                            highlight(line3);
                         });
-                        Thread.sleep(400);
 
-                        // Swap if needed
+                        Thread.sleep(500);
+
                         if (array[a] > array[b]) {
+
+                            javafx.application.Platform.runLater(() -> highlight(line4));
+                            Thread.sleep(500);
+
                             int temp = array[a];
                             array[a] = array[b];
                             array[b] = temp;
@@ -89,24 +116,27 @@ public class BubbleSortController {
                                 bars[a] = bars[b];
                                 bars[b] = tempRect;
                             });
-                            Thread.sleep(400);
+
+                            Thread.sleep(500);
                         }
 
-                        // Reset color
                         javafx.application.Platform.runLater(() -> {
                             bars[a].setFill(Color.CORNFLOWERBLUE);
                             bars[b].setFill(Color.CORNFLOWERBLUE);
                         });
-                        Thread.sleep(50);
+
+                        Thread.sleep(200);
                     }
 
-                    // Mark last element of pass as sorted
                     final int sortedIndex = SIZE - i - 1;
-                    javafx.application.Platform.runLater(() -> bars[sortedIndex].setFill(Color.LIMEGREEN));
+                    javafx.application.Platform.runLater(() ->
+                            bars[sortedIndex].setFill(Color.LIMEGREEN)
+                    );
                 }
 
-                // First element sorted at the end
-                javafx.application.Platform.runLater(() -> bars[0].setFill(Color.LIMEGREEN));
+                javafx.application.Platform.runLater(() ->
+                        bars[0].setFill(Color.LIMEGREEN)
+                );
 
             } catch (InterruptedException e) {
                 e.printStackTrace();
