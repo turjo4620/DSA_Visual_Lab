@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox xmlns="http://javafx.com/javafx/21.0.6"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.example.dsa_visual_lab.controller.sorting.QuickSortController"
+      spacing="20"
+      style="-fx-background-color: #0f172a; -fx-padding: 20;">
+
+    <!-- BACK BUTTON -->
+    <HBox alignment="TOP_LEFT">
+        <Button text="← BACK"
+                prefWidth="120"
+                prefHeight="40"
+                onAction="#handleBack"
+                styleClass="algo-button"
+                style="-fx-border-color: #F87171;"/>
+    </HBox>
+
+    <!-- MAIN CONTENT -->
+    <HBox spacing="30">
+
+        <!-- VISUALIZATION AREA -->
+        <StackPane alignment="CENTER">
+            <HBox fx:id="arrayContainer"
+                  alignment="BOTTOM_CENTER"
+                  spacing="5"
+                  prefWidth="600"
+                  prefHeight="350"
+                  style="-fx-background-color: linear-gradient(to bottom, #111827, #1E293B);
+                         -fx-background-radius: 20;
+                         -fx-border-color: #374151;
+                         -fx-border-radius: 20;
+                         -fx-border-width: 2;"/>
+        </StackPane>
+
+        <!-- PSEUDOCODE AREA -->
+        <VBox spacing="15" prefWidth="350">
+
+            <Label text="Pseudocode"
+                   style="-fx-text-fill: #FACC15; -fx-font-size: 18px; -fx-font-weight: bold;"/>
+
+            <VBox spacing="10"
+                  style="-fx-background-color: #111827;
+                         -fx-border-color: #374151;
+                         -fx-border-width: 2;
+                         -fx-background-radius: 10;
+                         -fx-border-radius: 10;
+                         -fx-padding: 20;">
+
+                <Label fx:id="line1"
+                       text="quicksort(arr, low, high)"
+                       style="-fx-text-fill: white; -fx-font-size: 14px;"/>
+
+                <Label fx:id="line2"
+                       text="   if low &lt; high"
+                       style="-fx-text-fill: white; -fx-font-size: 14px;"/>
+
+                <Label fx:id="line3"
+                       text="      pivotIndex = partition(arr, low, high)"
+                       style="-fx-text-fill: white; -fx-font-size: 14px;"/>
+
+                <Label fx:id="line4"
+                       text="      quicksort(arr, low, pivotIndex-1)"
+                       style="-fx-text-fill: white; -fx-font-size: 14px;"/>
+
+                <Label fx:id="line5"
+                       text="      quicksort(arr, pivotIndex+1, high)"
+                       style="-fx-text-fill: white; -fx-font-size: 14px;"/>
+
+                <Label fx:id="line6"
+                       text="partition(arr, low, high)"
+                       style="-fx-text-fill: white; -fx-font-size: 14px;"/>
+                <Label fx:id="line7"
+                       text="   pivot = arr[high]"
+                       style="-fx-text-fill: white; -fx-font-size: 14px;"/>
+                <Label fx:id="line8"
+                       text="   i = low - 1"
+                       style="-fx-text-fill: white; -fx-font-size: 14px;"/>
+                <Label fx:id="line9"
+                       text="   for j = low to high-1"
+                       style="-fx-text-fill: white; -fx-font-size: 14px;"/>
+                <Label fx:id="line10"
+                       text="      if arr[j] &lt; pivot"
+                       style="-fx-text-fill: white; -fx-font-size: 14px;"/>
+                <Label fx:id="line11"
+                       text="         i++ ; swap arr[i] and arr[j]"
+                       style="-fx-text-fill: white; -fx-font-size: 14px;"/>
+                <Label fx:id="line12"
+                       text="   swap arr[i+1] and arr[high]; return i+1"
+                       style="-fx-text-fill: white; -fx-font-size: 14px;"/>
+
+            </VBox>
+
+        </VBox>
+
+    </HBox>
+
+    <!-- CONTROL BUTTONS -->
+    <HBox spacing="20" alignment="CENTER">
+
+        <Button text="Start"
+                onAction="#handleStart"
+                prefWidth="200"
+                prefHeight="50"
+                styleClass="algo-button"
+                style="-fx-border-color: #FB923C;"/>
+
+        <Button text="Reset"
+                onAction="#handleReset"
+                prefWidth="200"
+                prefHeight="50"
+                styleClass="algo-button"
+                style="-fx-border-color: #FB923C;"/>
+
+    </HBox>
+
+</VBox>

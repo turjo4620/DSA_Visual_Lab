@@ -30,7 +30,8 @@ public class SortingController {
 
     @FXML
     private void handleQuickSort(ActionEvent event) {
-        showAlert("Visualizing Quick Sort");
+        navigateTo(event,
+                "/com/example/dsa_visual_lab/view/Sorting/quick-sort-view.fxml");
     }
 
     @FXML
