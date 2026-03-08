@@ -40,33 +40,24 @@ public class LinearDataStructureController implements Initializable {
         }
     }
 
-    // ================== FIXED NAVIGATION (PRESERVES WINDOW SIZE) ==================
 
     @FXML
     protected void onBackClick(ActionEvent event) {
         try {
-            // 1. THIS IS THE TARGET FILE.
-            // Make sure "home-view.fxml" is the correct name of your Dashboard file!
-            // If your dashboard file is named "main-menu.fxml", change it here.
             String fxmlPath = "/com/example/dsa_visual_lab/view/home/home-view.fxml";
 
-            // 2. Load the file
             FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
             Parent homeRoot = loader.load();
 
-            // 3. Get current Stage and replace the content
             Stage stage = (Stage)((Node)event.getSource()).getScene().getWindow();
             stage.getScene().setRoot(homeRoot);
 
-            // 4. Re-apply CSS (Optional, keeps it pretty)
             try {
                 stage.getScene().getStylesheets().add(getClass().getResource("/com/example/dsa_visual_lab/view/styles/home.css").toExternalForm());
             } catch (Exception e) {
-                // Ignore CSS errors for now
             }
 
         } catch (IOException | NullPointerException e) {
-            // This will print the error if the file is still not found
             System.err.println("CRITICAL ERROR: Could not find the file!");
             System.err.println("Please check the file name in your project folder.");
             e.printStackTrace();

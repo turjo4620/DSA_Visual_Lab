@@ -63,7 +63,6 @@ public class BSTController {
         );
     }
 
-    // ================= Animation & Insertion =================
 
     @FXML
     public void onInsert(ActionEvent event) {
@@ -90,7 +89,7 @@ public class BSTController {
         final TreeNode[] current = {root};
 
         KeyFrame keyFrame = new KeyFrame(Duration.seconds(1.2), e -> {
-            drawTree(current[0]); // Highlight current node being compared
+            drawTree(current[0]);
 
             if (val < current[0].value) {
                 highlightPseudo(2);
@@ -136,7 +135,6 @@ public class BSTController {
         pseudoCodeList.getSelectionModel().select(index);
     }
 
-    // ================= Randomization =================
 
     @FXML
     public void onRandomize(ActionEvent event) {
@@ -144,7 +142,7 @@ public class BSTController {
         Random random = new Random();
         int nodesToCreate = 6 + random.nextInt(3);
         for (int i = 0; i < nodesToCreate; i++) {
-            // Generate value and insert without animation for bulk creation
+
             int val = random.nextInt(199) - 99;
             root = silentInsert(root, val);
         }
@@ -160,7 +158,7 @@ public class BSTController {
         return node;
     }
 
-    // ================= Visualization Logic =================
+
 
     private void drawTree(TreeNode activeNode) {
         visualPane.getChildren().clear();
@@ -185,17 +183,16 @@ public class BSTController {
             renderRecursive(node.right, x + hGap, y + VERTICAL_GAP, hGap / 2, activeNode);
         }
 
-        // Draw the vertex
+
         Circle circle = new Circle(x, y, RADIUS);
         circle.setStroke(Color.WHITE);
         circle.setStrokeWidth(2);
 
-        // Highlight logic
         if (node == activeNode) {
-            circle.setFill(Color.web("#38BDF8")); // Cyan highlight for traversal
+            circle.setFill(Color.web("#38BDF8"));
             circle.setStrokeWidth(4);
         } else {
-            circle.setFill(Color.web("#F59E0B")); // Amber default
+            circle.setFill(Color.web("#F59E0B"));
         }
 
         Text valText = new Text(String.valueOf(node.value));
@@ -207,7 +204,7 @@ public class BSTController {
         nodeStack.setLayoutY(y - RADIUS);
         visualPane.getChildren().add(nodeStack);
 
-        // Duplicate badge
+
         if (node.count > 1) {
             drawBadge(x, y, node.count);
         }
@@ -236,7 +233,7 @@ public class BSTController {
         statusLabel.setText("Tree Cleared");
     }
 
-    // ================= Back Navigation =================
+    //
 
     @FXML
     public void onBackClick(ActionEvent event) {

@@ -23,7 +23,6 @@ public class HomeController {
         System.out.println("Home Page Loaded Successfully!");
     }
 
-    // ================= Sorting Page =================
     @FXML
     private void openSorting(ActionEvent event) {
         try {
@@ -32,10 +31,10 @@ public class HomeController {
             Stage stage = (Stage)((Node)event.getSource()).getScene().getWindow();
             Scene scene = stage.getScene();
 
-            // Replace root
+
             scene.setRoot(sortingRoot);
 
-            // Reapply CSS so buttons keep style
+
             scene.getStylesheets().clear();
             scene.getStylesheets().add(getClass().getResource(CSS_PATH).toExternalForm());
 
@@ -44,7 +43,7 @@ public class HomeController {
         }
     }
 
-    // ================= Back Button =================
+
     @FXML
     private void handleBack(ActionEvent event) {
         try {
@@ -53,10 +52,10 @@ public class HomeController {
             Stage stage = (Stage)((Node)event.getSource()).getScene().getWindow();
             Scene scene = stage.getScene();
 
-            // Replace root
+
             scene.setRoot(homeRoot);
 
-            // Reapply CSS
+
             scene.getStylesheets().clear();
             scene.getStylesheets().add(getClass().getResource(CSS_PATH).toExternalForm());
 
@@ -65,38 +64,36 @@ public class HomeController {
         }
     }
 
-    // ================= Linear Data Structures =================
+
     @FXML
     protected void openDataStructures(ActionEvent event) throws IOException {
-        // 1. Get the current stage (window) from the button click
+
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
 
-        // 2. Capture the current size and maximized state BEFORE switching
+
         double width = stage.getWidth();
         double height = stage.getHeight();
         boolean isMaximized = stage.isMaximized();
 
-        // 3. Load the new FXML (Make sure the path matches your linear structure file!)
+
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/com/example/dsa_visual_lab/view/Linear-DataStructure/linear-dataStructures.fxml"));
-        // ^ Note: adjust this path if your file is in a different folder like "view/home"
 
         Scene scene = new Scene(fxmlLoader.load());
 
-        // 4. Set the new scene
+
         stage.setScene(scene);
 
-        // 5. Restore the size and maximized state immediately
+
         stage.setWidth(width);
         stage.setHeight(height);
         stage.setMaximized(isMaximized);
 
         stage.show();
     }
-    // ================= Other Features =================
+
     @FXML
     public void openTrees(ActionEvent event) {
         try {
-            // Ensure this path matches exactly where you created bst-view.fxml
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/com/example/dsa_visual_lab/view/BST/bst-view.fxml"));
             Scene scene = new Scene(fxmlLoader.load());
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
