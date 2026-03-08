@@ -1,292 +1,402 @@
 package com.example.dsa_visual_lab.controller.linear;
 
-import javafx.collections.FXCollections;
+import javafx.animation.PauseTransition;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
-import javafx.scene.control.*;
+import javafx.scene.control.Label;
+import javafx.scene.control.ProgressBar;
+import javafx.scene.control.Slider;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
-import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import javafx.util.Duration;
+import javafx.scene.layout.StackPane;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.Random;
-import java.util.ResourceBundle;
 
-public class ArrayController implements Initializable {
+public class ArrayController {
 
-    // --- UI COMPONENTS ---
     @FXML private Pane visualPane;
-    @FXML private Label statusLabel, lblSizeCap;
+    @FXML private Label statusLabel, lblSizeCap, complexityLabel;
     @FXML private ProgressBar capacityBar;
     @FXML private Slider speedSlider;
+    @FXML private TextField insertValueField, insertIndexField, searchValField, capacityField;
+    @FXML private VBox pseudoCodeBox, controlsBox;
 
-    // --- LEARNING TABS ---
-    @FXML private ListView<String> pseudoCodeList;
-    @FXML private ListView<String> messageLogList;
-    @FXML private TextArea explanationArea;
-
-    // --- INPUTS & ERRORS ---
-    @FXML private TextField insertValueField, insertIndexField;
-    @FXML private TextField searchValField, capacityField;
-    @FXML private Label lblErrValue, lblErrIndex; // The new error labels
-
-    // --- DATA ---
     private int[] arrayData;
     private int size = 0;
     private int capacity = 8;
 
-    // PSEUDOCODE
-    private final String[] INSERT_CODE = {
-            "if (size == capacity) resize();",
-            "for (int i = size-1; i >= index; i--) {",
-            "    array[i+1] = array[i];",
-            "}",
-            "array[index] = value;",
-            "size++;"
-    };
+    private static final double BOX_SIZE = 65;
+    private static final double SPACING = 15;
+    private static final String CODE_COLOR = "#34D399";
+    private static final String HIGHLIGHT_BG = "#374151";
+    private static final String HIGHLIGHT_TEXT = "#FCD34D";
 
-    @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) {
-        arrayData = new int[capacity];
-        updateCapacityBar();
-        render();
-        addToLog("System Initialized. Capacity: " + capacity);
-        setPseudocode(INSERT_CODE);
-    }
     @FXML
-    public void onRandomize(ActionEvent event) {
-        Random random = new Random();
-        int nodesToCreate = 6 + random.nextInt(3); // 6,7,8 nodes
-
-        // Ensure capacity can hold nodes
-        while (nodesToCreate > capacity) {
-            growArray();
-        }
-
-        size = nodesToCreate;
-
-        for (int i = 0; i < size; i++) {
-            arrayData[i] = random.nextInt(199) - 99; // Fill arrayData
-        }
-
-        render(); // Render the boxes
-        updateCapacityBar(); // Update size/capacity indicator
-
-        addToLog("Generated Random Array with " + size + " elements");
+    public void initialize() {
+        arrayData = new int[capacity];
+        render();
+        updateCapacityBar();
     }
 
-
-
-    // ================= ACTIONS =================
+    private Duration getStepDuration() {
+        double multiplier = 100.0 / speedSlider.getValue();
+        return Duration.millis(500 * multiplier);
+    }
 
     @FXML
     void btnAppend(ActionEvent event) {
-        clearErrors();
         String valStr = insertValueField.getText().trim();
+        if (valStr.isEmpty()) { setStatus("Enter a value", true); return; }
 
-        if (!validateInput(valStr, lblErrValue)) return; // Validation check
+        int val = Integer.parseInt(valStr);
+        insertValueField.clear();
 
-        insertAtIndexLogic(size, valStr); // Append is just insert at end
+        complexityLabel.setText("O(1) Amortized\nAppending to end is fast, unless resize is needed (O(N)).");
+        String[] codeLines = {
+                "append(val):",
+                "  if size == capacity:",
+                "    resizeArray()",
+                "  array[size] = val",
+                "  size++"
+        };
+        setupPseudoCode(codeLines);
+        controlsBox.setDisable(true);
+        setStatus("Animating Append...", false);
+
+        PauseTransition step1 = new PauseTransition(getStepDuration());
+        step1.setOnFinished(e -> highlightLine(1));
+
+        PauseTransition step2 = new PauseTransition(getStepDuration().multiply(2));
+        step2.setOnFinished(e -> {
+            if (size >= capacity) {
+                highlightLine(2);
+                growArray();
+            } else {
+                highlightLine(3);
+            }
+        });
+
+        PauseTransition step3 = new PauseTransition(getStepDuration().multiply(3));
+        step3.setOnFinished(e -> {
+            highlightLine(4);
+            arrayData[size] = val;
+            size++;
+            render();
+            highlightNode(size - 1, Color.web("#4ADE80"));
+            updateCapacityBar();
+            setStatus("Appended " + val, false);
+        });
+
+        PauseTransition step4 = new PauseTransition(getStepDuration().multiply(4));
+        step4.setOnFinished(e -> {
+            highlightLine(-1);
+            controlsBox.setDisable(false);
+        });
+
+        step1.play(); step2.play(); step3.play(); step4.play();
     }
 
     @FXML
     void btnInsertAtIndex(ActionEvent event) {
-        clearErrors();
         String valStr = insertValueField.getText().trim();
         String idxStr = insertIndexField.getText().trim();
+        if (valStr.isEmpty() || idxStr.isEmpty()) { setStatus("Enter value and index", true); return; }
 
-        boolean valOk = validateInput(valStr, lblErrValue);
+        int val = Integer.parseInt(valStr);
+        int idx = Integer.parseInt(idxStr);
+        if (idx < 0 || idx > size) { setStatus("Index out of bounds", true); return; }
 
-        // Custom index validation
-        int idx = -1;
-        try {
-            idx = Integer.parseInt(idxStr);
-            if (idx < 0 || idx > size) throw new NumberFormatException();
-        } catch (NumberFormatException e) {
-            showError(lblErrIndex, "Index must be 0 to " + size);
+        insertValueField.clear();
+        insertIndexField.clear();
+
+        complexityLabel.setText("O(N) - Linear Time\nRequires shifting all subsequent elements right.");
+        String[] codeLines = {
+                "insert(idx, val):",
+                "  if size == capacity: resize()",
+                "  for i = size - 1 down to idx:",
+                "    array[i + 1] = array[i]",
+                "  array[idx] = val",
+                "  size++"
+        };
+        setupPseudoCode(codeLines);
+        controlsBox.setDisable(true);
+        setStatus("Animating Insert...", false);
+
+        if (size >= capacity) growArray();
+        highlightLine(2);
+
+        PauseTransition delay = new PauseTransition(getStepDuration());
+        delay.setOnFinished(e -> animateShiftRight(size - 1, idx, val));
+        delay.play();
+    }
+
+    private void animateShiftRight(int i, int targetIndex, int value) {
+        if (i < targetIndex) {
+            highlightLine(4);
+            arrayData[targetIndex] = value;
+            size++;
+            render();
+            updateCapacityBar();
+            highlightNode(targetIndex, Color.web("#4ADE80"));
+            setStatus("Inserted " + value + " at index " + targetIndex, false);
+
+            PauseTransition end = new PauseTransition(getStepDuration());
+            end.setOnFinished(ev -> {
+                highlightLine(-1);
+                controlsBox.setDisable(false);
+            });
+            end.play();
             return;
         }
 
-        if (valOk) insertAtIndexLogic(idx, valStr);
+        highlightLine(3);
+        arrayData[i + 1] = arrayData[i];
+        render();
+        highlightNode(i + 1, Color.web("#FCD34D"));
+
+        PauseTransition pause = new PauseTransition(getStepDuration());
+        pause.setOnFinished(e -> animateShiftRight(i - 1, targetIndex, value));
+        pause.play();
     }
 
     @FXML
     void btnRemoveLast(ActionEvent event) {
-        if (size == 0) {
-            setStatus("Array is empty!", true);
-            return;
-        }
-        removeAtIndexLogic(size - 1);
+        if (size == 0) { setStatus("Array is empty", true); return; }
+
+        complexityLabel.setText("O(1) - Constant Time\nSimply updates the size counter.");
+        String[] codeLines = {
+                "removeLast():",
+                "  if size == 0: return",
+                "  array[size - 1] = 0",
+                "  size--"
+        };
+        setupPseudoCode(codeLines);
+        controlsBox.setDisable(true);
+        setStatus("Animating Remove Last...", false);
+
+        PauseTransition step1 = new PauseTransition(getStepDuration());
+        step1.setOnFinished(e -> highlightLine(2));
+
+        PauseTransition step2 = new PauseTransition(getStepDuration().multiply(2));
+        step2.setOnFinished(e -> {
+            highlightLine(3);
+            arrayData[size - 1] = 0;
+            size--;
+            render();
+            updateCapacityBar();
+            setStatus("Removed last element", false);
+        });
+
+        PauseTransition step3 = new PauseTransition(getStepDuration().multiply(3));
+        step3.setOnFinished(e -> {
+            highlightLine(-1);
+            controlsBox.setDisable(false);
+        });
+
+        step1.play(); step2.play(); step3.play();
     }
 
     @FXML
     void btnRemoveAtIndex(ActionEvent event) {
-        // reuse the insertIndexField for simplicity, or add a dedicated remove field
         String idxStr = insertIndexField.getText().trim();
-        try {
-            int idx = Integer.parseInt(idxStr);
-            if (idx < 0 || idx >= size) {
-                showError(lblErrIndex, "Invalid Index");
-                return;
-            }
-            removeAtIndexLogic(idx);
-        } catch (NumberFormatException e) {
-            showError(lblErrIndex, "Enter valid index");
-        }
+        if (idxStr.isEmpty()) { setStatus("Enter index to remove", true); return; }
+
+        int idx = Integer.parseInt(idxStr);
+        if (idx < 0 || idx >= size) { setStatus("Index out of bounds", true); return; }
+
+        insertIndexField.clear();
+
+        complexityLabel.setText("O(N) - Linear Time\nRequires shifting subsequent elements left.");
+        String[] codeLines = {
+                "remove(idx):",
+                "  if size == 0: return",
+                "  for i = idx to size - 2:",
+                "    array[i] = array[i + 1]",
+                "  array[size - 1] = 0",
+                "  size--"
+        };
+        setupPseudoCode(codeLines);
+        controlsBox.setDisable(true);
+        setStatus("Animating Remove...", false);
+
+        PauseTransition delay = new PauseTransition(getStepDuration());
+        delay.setOnFinished(e -> animateShiftLeft(idx));
+        delay.play();
     }
 
-    // ================= LOGIC & ANIMATION =================
-
-    private void insertAtIndexLogic(int index, String valueStr) {
-        int value = Integer.parseInt(valueStr);
-
-        if (size >= capacity) {
-            growArray(); // For simplicity, grow instantly then animate insert
-        }
-
-        if (index == size) {
-            // Instant append visual
-            arrayData[size] = value;
-            size++;
+    private void animateShiftLeft(int i) {
+        if (i >= size - 1) {
+            highlightLine(4);
+            arrayData[size - 1] = 0;
+            size--;
             render();
-            highlightNode(size - 1, Color.web("#10B981")); // Success Green
-            addToLog("Appended " + value);
-        } else {
-            // Animated shift
-            animateRightShift(index, value);
-        }
-        updateCapacityBar();
-    }
+            updateCapacityBar();
+            setStatus("Removed element and shifted", false);
 
-    private void removeAtIndexLogic(int index) {
-        // Shift logic (simplified for brevity)
-        for (int i = index; i < size - 1; i++) {
-            arrayData[i] = arrayData[i+1];
+            PauseTransition end = new PauseTransition(getStepDuration());
+            end.setOnFinished(ev -> {
+                highlightLine(-1);
+                controlsBox.setDisable(false);
+            });
+            end.play();
+            return;
         }
-        arrayData[size - 1] = 0;
-        size--;
+
+        highlightLine(3);
+        arrayData[i] = arrayData[i + 1];
         render();
-        addToLog("Removed element at index " + index);
-        updateCapacityBar();
+        highlightNode(i, Color.web("#F87171"));
+
+        PauseTransition pause = new PauseTransition(getStepDuration());
+        pause.setOnFinished(e -> animateShiftLeft(i + 1));
+        pause.play();
     }
 
-    private void animateRightShift(int targetIndex, int newValue) {
-        setPseudocode(INSERT_CODE);
-        // ... (Keep your existing animation logic here) ...
-        // Just make sure to call render() and updateCapacityBar() at the end
+    @FXML
+    void btnLinearSearch(ActionEvent event) {
+        String valStr = searchValField.getText().trim();
+        if (valStr.isEmpty()) { setStatus("Enter a value to search", true); return; }
 
-        // Placeholder for the animation logic provided previously:
-        finalizeInsert(targetIndex, newValue);
+        int target = Integer.parseInt(valStr);
+
+        complexityLabel.setText("O(N) - Linear Time\nChecks every element sequentially.");
+        String[] codeLines = {
+                "linearSearch(target):",
+                "  for i = 0 to size - 1:",
+                "    if array[i] == target:",
+                "      return i",
+                "  return -1"
+        };
+        setupPseudoCode(codeLines);
+        controlsBox.setDisable(true);
+        setStatus("Searching for " + target + "...", false);
+
+        animateSearchLoop(0, target);
     }
 
-    private void finalizeInsert(int index, int value) {
-        // Shift data
-        for (int i = size; i > index; i--) {
-            arrayData[i] = arrayData[i-1];
+    private void animateSearchLoop(int i, int target) {
+        if (i >= size) {
+            highlightLine(4);
+            setStatus("Value " + target + " not found", true);
+
+            PauseTransition end = new PauseTransition(getStepDuration());
+            end.setOnFinished(e -> {
+                highlightLine(-1);
+                controlsBox.setDisable(false);
+            });
+            end.play();
+            return;
         }
-        arrayData[index] = value;
-        size++;
-        render();
-        updateCapacityBar();
-        addToLog("Inserted " + value + " at index " + index);
-    }
 
-    // ================= VISUALS =================
+        highlightLine(2);
+        highlightNode(i, Color.web("#FCD34D"));
 
-    private void render() {
-        visualPane.getChildren().clear();
+        PauseTransition check = new PauseTransition(getStepDuration());
+        check.setOnFinished(e -> {
+            if (arrayData[i] == target) {
+                highlightLine(3);
+                highlightNode(i, Color.web("#4ADE80"));
+                setStatus("Found " + target + " at index " + i, false);
 
-        // Dynamic centering logic
-        double boxSize = 60;
-        double spacing = 10;
-        double totalWidth = capacity * (boxSize + spacing);
-        double startX = (visualPane.getWidth() - totalWidth) / 2;
-        if (startX < 20) startX = 20; // Padding
-        double startY = 150;
-
-        for (int i = 0; i < capacity; i++) {
-            StackPane stack = new StackPane();
-            stack.setLayoutX(startX + i * (boxSize + spacing));
-            stack.setLayoutY(startY);
-
-            Rectangle rect = new Rectangle(boxSize, boxSize);
-            rect.setArcWidth(8); rect.setArcHeight(8);
-            rect.getStyleClass().add("array-box"); // Use CSS class
-
-            Text valText = new Text();
-            valText.getStyleClass().add("array-text"); // Use CSS class
-
-            Text idxText = new Text(String.valueOf(i));
-            idxText.getStyleClass().add("index-label");
-            idxText.setLayoutX(startX + i * (boxSize + spacing) + 25);
-            idxText.setLayoutY(startY + boxSize + 20);
-
-            if (i < size) {
-                rect.setFill(Color.web("#1E293B"));
-                rect.setStroke(Color.web("#3B82F6")); // Blue border for active
-                valText.setText(String.valueOf(arrayData[i]));
+                PauseTransition end = new PauseTransition(getStepDuration());
+                end.setOnFinished(ev -> {
+                    highlightLine(-1);
+                    controlsBox.setDisable(false);
+                });
+                end.play();
             } else {
-                rect.setFill(Color.TRANSPARENT);
-                rect.setStroke(Color.web("#334155")); // Dim border for empty
-                valText.setText("");
+                render();
+                animateSearchLoop(i + 1, target);
             }
-
-            stack.getChildren().addAll(rect, valText);
-            stack.setId("box-" + i);
-            visualPane.getChildren().addAll(stack, idxText);
-        }
+        });
+        check.play();
     }
 
-    private void updateCapacityBar() {
-        lblSizeCap.setText("Size: " + size + " / Capacity: " + capacity);
-        double progress = (double) size / capacity;
-        capacityBar.setProgress(progress);
+    @FXML
+    void btnFindMax(ActionEvent event) {
+        if (size == 0) { setStatus("Array is empty", true); return; }
 
-        // Change color based on fullness
-        if (progress > 0.8) capacityBar.setStyle("-fx-accent: #F59E0B;"); // Warning Yellow
-        if (progress == 1.0) capacityBar.setStyle("-fx-accent: #EF4444;"); // Full Red
-        else capacityBar.setStyle(""); // Default Blue
+        complexityLabel.setText("O(N) - Linear Time\nMust check every element to find maximum.");
+        String[] codeLines = {
+                "findMax():",
+                "  maxVal = array[0]",
+                "  for i = 1 to size - 1:",
+                "    if array[i] > maxVal:",
+                "      maxVal = array[i]",
+                "  return maxVal"
+        };
+        setupPseudoCode(codeLines);
+        controlsBox.setDisable(true);
+        setStatus("Finding Max...", false);
+
+        int[] maxData = { arrayData[0], 0 };
+        highlightLine(1);
+        highlightNode(0, Color.web("#A78BFA"));
+
+        PauseTransition delay = new PauseTransition(getStepDuration());
+        delay.setOnFinished(e -> animateMaxLoop(1, maxData));
+        delay.play();
     }
 
-    // ================= HELPERS =================
+    private void animateMaxLoop(int i, int[] maxData) {
+        if (i >= size) {
+            highlightLine(5);
+            highlightNode(maxData[1], Color.web("#38BDF8"));
+            setStatus("Maximum value is " + maxData[0] + " at index " + maxData[1], false);
 
-    private boolean validateInput(String input, Label errorLabel) {
-        if (input.isEmpty()) {
-            showError(errorLabel, "Value required");
-            return false;
+            PauseTransition end = new PauseTransition(getStepDuration());
+            end.setOnFinished(e -> {
+                highlightLine(-1);
+                controlsBox.setDisable(false);
+            });
+            end.play();
+            return;
         }
+
+        highlightLine(3);
+        highlightNode(i, Color.web("#FCD34D"));
+
+        PauseTransition check = new PauseTransition(getStepDuration());
+        check.setOnFinished(e -> {
+            if (arrayData[i] > maxData[0]) {
+                highlightLine(4);
+                maxData[0] = arrayData[i];
+                maxData[1] = i;
+            }
+            render();
+            highlightNode(maxData[1], Color.web("#A78BFA"));
+            animateMaxLoop(i + 1, maxData);
+        });
+        check.play();
+    }
+
+    @FXML
+    void btnCreateArray(ActionEvent event) {
         try {
-            Integer.parseInt(input);
-            return true;
+            capacity = Integer.parseInt(capacityField.getText().trim());
+            if (capacity <= 0) capacity = 8;
+            arrayData = new int[capacity];
+            size = 0;
+            render();
+            updateCapacityBar();
+            pseudoCodeBox.getChildren().clear();
+            complexityLabel.setText("Cleared");
+            setStatus("Array created with capacity " + capacity, false);
         } catch (NumberFormatException e) {
-            showError(errorLabel, "Must be a number");
-            return false;
+            setStatus("Invalid capacity", true);
         }
-    }
-
-    private void showError(Label label, String msg) {
-        label.setText("⚠ " + msg);
-        label.setVisible(true);
-        label.setManaged(true);
-    }
-
-    private void clearErrors() {
-        lblErrValue.setVisible(false);
-        lblErrValue.setManaged(false);
-        lblErrIndex.setVisible(false);
-        lblErrIndex.setManaged(false);
-    }
-
-    private void highlightNode(int index, Color color) {
-        // ... (Your existing flashNode logic, updated to use stroke color)
     }
 
     private void growArray() {
@@ -296,56 +406,120 @@ public class ArrayController implements Initializable {
         arrayData = newArr;
         render();
         updateCapacityBar();
-        addToLog("Array resized to " + capacity);
     }
 
-    private void setPseudocode(String[] lines) {
-        pseudoCodeList.setItems(FXCollections.observableArrayList(lines));
+    private void render() {
+        visualPane.getChildren().clear();
+        double startX = 20;
+        double startY = 150;
+
+        for (int i = 0; i < capacity; i++) {
+            StackPane stack = new StackPane();
+            stack.setLayoutX(startX + i * (BOX_SIZE + SPACING));
+            stack.setLayoutY(startY);
+
+            Rectangle rect = new Rectangle(BOX_SIZE, BOX_SIZE);
+            rect.setArcWidth(8);
+            rect.setArcHeight(8);
+            rect.setStrokeWidth(2);
+
+            Text valText = new Text();
+            valText.setFill(Color.WHITE);
+            valText.setFont(Font.font("System", javafx.scene.text.FontWeight.BOLD, 18));
+
+            Text idxText = new Text(String.valueOf(i));
+            idxText.setFill(Color.web("#94A3B8"));
+            idxText.setFont(Font.font("System", 14));
+            idxText.setLayoutX(startX + i * (BOX_SIZE + SPACING) + (BOX_SIZE / 2) - 5);
+            idxText.setLayoutY(startY + BOX_SIZE + 25);
+
+            if (i < size) {
+                rect.setFill(Color.web("#1E293B"));
+                rect.setStroke(Color.web("#38BDF8"));
+                valText.setText(String.valueOf(arrayData[i]));
+            } else {
+                rect.setFill(Color.TRANSPARENT);
+                rect.setStroke(Color.web("#334155"));
+                rect.getStrokeDashArray().addAll(5d, 5d);
+                valText.setText("");
+            }
+
+            stack.getChildren().addAll(rect, valText);
+            visualPane.getChildren().addAll(stack, idxText);
+        }
+        visualPane.setMinWidth((capacity * (BOX_SIZE + SPACING)) + 40);
     }
 
-    private void addToLog(String msg) {
-        messageLogList.getItems().add(java.time.LocalTime.now().toString().substring(0,8) + " - " + msg);
-        messageLogList.scrollTo(messageLogList.getItems().size() - 1);
-        statusLabel.setText(msg);
+    private void highlightNode(int index, Color color) {
+        int targetNodeIndex = index * 2;
+        if (targetNodeIndex < visualPane.getChildren().size()) {
+            Node n = visualPane.getChildren().get(targetNodeIndex);
+            if (n instanceof StackPane) {
+                StackPane node = (StackPane) n;
+                Rectangle box = (Rectangle) node.getChildren().get(0);
+                box.setStroke(color);
+                box.setStrokeWidth(4);
+                box.getStrokeDashArray().clear();
+            }
+        }
+    }
+
+    private void updateCapacityBar() {
+        lblSizeCap.setText("Size: " + size + " / Capacity: " + capacity);
+        double progress = (double) size / capacity;
+        capacityBar.setProgress(progress);
+
+        if (progress > 0.8) capacityBar.setStyle("-fx-accent: #F59E0B; -fx-control-inner-background: #1E293B; -fx-background-radius: 10; -fx-border-radius: 10;");
+        if (progress == 1.0) capacityBar.setStyle("-fx-accent: #EF4444; -fx-control-inner-background: #1E293B; -fx-background-radius: 10; -fx-border-radius: 10;");
+        else capacityBar.setStyle("-fx-accent: #38BDF8; -fx-control-inner-background: #1E293B; -fx-background-radius: 10; -fx-border-radius: 10;");
     }
 
     private void setStatus(String msg, boolean isError) {
         statusLabel.setText(msg);
-        statusLabel.setTextFill(isError ? Color.web("#EF4444") : Color.web("#34D399"));
+        if (isError) statusLabel.setStyle("-fx-text-fill: #F87171; -fx-background-color: #334155; -fx-padding: 10 25; -fx-background-radius: 12; -fx-border-color: #475569; -fx-border-radius: 12;");
+        else statusLabel.setStyle("-fx-text-fill: #FCD34D; -fx-background-color: #334155; -fx-padding: 10 25; -fx-background-radius: 12; -fx-border-color: #475569; -fx-border-radius: 12;");
+    }
+
+    private void setupPseudoCode(String[] lines) {
+        pseudoCodeBox.getChildren().clear();
+        for (String line : lines) {
+            Label lbl = new Label(line);
+            lbl.setTextFill(Color.web(CODE_COLOR));
+            lbl.setFont(Font.font("Consolas", 14));
+            lbl.setMaxWidth(Double.MAX_VALUE);
+            lbl.setStyle("-fx-padding: 4; -fx-background-radius: 4;");
+            pseudoCodeBox.getChildren().add(lbl);
+        }
+    }
+
+    private void highlightLine(int index) {
+        for (int i = 0; i < pseudoCodeBox.getChildren().size(); i++) {
+            Label lbl = (Label) pseudoCodeBox.getChildren().get(i);
+            if (i == index) {
+                lbl.setStyle("-fx-padding: 4; -fx-background-color: " + HIGHLIGHT_BG + "; -fx-background-radius: 4;");
+                lbl.setTextFill(Color.web(HIGHLIGHT_TEXT));
+            } else {
+                lbl.setStyle("-fx-padding: 4; -fx-background-color: transparent; -fx-background-radius: 4;");
+                lbl.setTextFill(Color.web(CODE_COLOR));
+            }
+        }
     }
 
     @FXML
     void onBackClick(ActionEvent event) {
         try {
-            // OPTION 1: Check the 'home' folder
             String path = "/com/example/dsa_visual_lab/view/home/linear-dataStructures.fxml";
             URL url = getClass().getResource(path);
-
-            // OPTION 2: If not found, check the 'Linear-DataStructure' folder
             if (url == null) {
                 path = "/com/example/dsa_visual_lab/view/Linear-DataStructure/linear-dataStructures.fxml";
                 url = getClass().getResource(path);
             }
-
-            // Safety Check
-            if (url == null) {
-                System.out.println("CRITICAL ERROR: Could not find linear-dataStructures.fxml in any known folder!");
-                return;
-            }
-
-            // Load and Switch
             FXMLLoader loader = new FXMLLoader(url);
             Parent root = loader.load();
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             stage.getScene().setRoot(root);
-
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
-
-    // Stub for search methods
-    @FXML void btnLinearSearch(ActionEvent event) {}
-    @FXML void btnFindMax(ActionEvent event) {}
-    @FXML void btnCreateArray(ActionEvent event) {}
 }
