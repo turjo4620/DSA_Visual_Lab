@@ -28,10 +28,10 @@
                   prefWidth="600"
                   prefHeight="350"
                   style="-fx-background-color: linear-gradient(to bottom, #111827, #1E293B);
-                         -fx-background-radius: 20;
-                         -fx-border-color: #374151;
-                         -fx-border-radius: 20;
-                         -fx-border-width: 2;"/>
+             -fx-background-radius: 20;
+             -fx-border-color: #374151;
+             -fx-border-radius: 20;
+             -fx-border-width: 2;"/>
         </StackPane>
 
         <!-- RIGHT: Pseudocode Section -->
