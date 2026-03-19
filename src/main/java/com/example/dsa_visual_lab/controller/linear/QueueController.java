@@ -1,44 +1,46 @@
 package com.example.dsa_visual_lab.controller.linear;
 
+import javafx.animation.PauseTransition;
 import javafx.animation.ScaleTransition;
-import javafx.animation.TranslateTransition;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.Pane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.util.Duration;
-import javafx.scene.paint.Color;
 
 import java.io.IOException;
 import java.util.LinkedList;
 
 public class QueueController {
 
-    @FXML private Pane visualPane;
-    @FXML private TextField inputField;      // Single input
-    @FXML private TextField listInputField;  // Comma-separated input
+    @FXML private ScrollPane scrollPane;
+    @FXML private HBox visualPane;
+    @FXML private TextField inputField;
+    @FXML private TextField listInputField;
     @FXML private Label statusLabel;
+    @FXML private Label complexityLabel;
+    @FXML private VBox pseudoCodeBox;
+    @FXML private VBox controlsBox;
 
-    // NOTE: LinkedList implements Deque, allowing easy access to First and Last
     private final LinkedList<StackPane> visualQueue = new LinkedList<>();
-
-    // Constants
-    private static final double START_X = 50;
-    private static final double Y_POS = 150;
     private static final double BOX_SIZE = 60;
-    private static final double GAP = 10;
-    private static final int MAX_SIZE = 12; // Increased slightly
-
-    // ================== BASIC OPERATIONS ==================
+    private static final int MAX_SIZE = 12;
+    private static final String CODE_COLOR = "#34D399";
+    private static final String HIGHLIGHT_BG = "#374151";
+    private static final String HIGHLIGHT_TEXT = "#FCD34D";
 
     @FXML
     void onEnqueue(ActionEvent event) {
@@ -47,57 +49,106 @@ public class QueueController {
             setStatus("Please enter a value!", true);
             return;
         }
-        enqueueItem(value);
+
+        if (visualQueue.size() >= MAX_SIZE) {
+            setStatus("Queue is full! (Overflow)", true);
+            return;
+        }
+
         inputField.clear();
+        complexityLabel.setText("O(1) - Constant Time\nEnqueue updates the rear pointer.");
+        String[] codeLines = {
+                "enqueue(value):",
+                "  if queue is full: return OVERFLOW",
+                "  rear = rear + 1",
+                "  queue[rear] = value"
+        };
+        setupPseudoCode(codeLines);
+        controlsBox.setDisable(true);
+        setStatus("Animating Enqueue...", false);
+
+        PauseTransition step1 = new PauseTransition(Duration.seconds(0.5));
+        step1.setOnFinished(e -> highlightLine(1));
+
+        PauseTransition step2 = new PauseTransition(Duration.seconds(1.2));
+        step2.setOnFinished(e -> highlightLine(2));
+
+        PauseTransition step3 = new PauseTransition(Duration.seconds(1.9));
+        step3.setOnFinished(e -> {
+            highlightLine(3);
+            StackPane node = createNode(value);
+            visualPane.getChildren().add(node);
+            visualQueue.add(node);
+
+            ScaleTransition st = new ScaleTransition(Duration.millis(300), node);
+            st.setFromX(0); st.setFromY(0);
+            st.setToX(1); st.setToY(1);
+            st.play();
+
+            setStatus("Enqueued: " + value, false);
+            if (scrollPane != null) {
+                Platform.runLater(() -> scrollPane.setHvalue(1.0));
+            }
+        });
+
+        PauseTransition step4 = new PauseTransition(Duration.seconds(2.6));
+        step4.setOnFinished(e -> {
+            highlightLine(-1);
+            controlsBox.setDisable(false);
+        });
+
+        step1.play(); step2.play(); step3.play(); step4.play();
     }
 
     @FXML
     void onDequeue(ActionEvent event) {
         if (visualQueue.isEmpty()) {
-            setStatus("Queue is empty!", true);
+            setStatus("Error: Queue is empty (Underflow)!", true);
             return;
         }
 
-        StackPane head = visualQueue.pollFirst(); // Remove front
+        complexityLabel.setText("O(1) - Constant Time\nDequeue updates the front pointer.");
+        String[] codeLines = {
+                "dequeue():",
+                "  if queue is empty: return UNDERFLOW",
+                "  value = queue[front]",
+                "  front = front + 1",
+                "  return value"
+        };
+        setupPseudoCode(codeLines);
+        controlsBox.setDisable(true);
+        setStatus("Animating Dequeue...", false);
 
-        // Animate removal (Move Up and Fade)
-        TranslateTransition tt = new TranslateTransition(Duration.millis(400), head);
-        tt.setByY(-100);
-        tt.setOnFinished(e -> {
-            visualPane.getChildren().remove(head);
-            shiftNodes(); // Shift remaining items left
+        PauseTransition step1 = new PauseTransition(Duration.seconds(0.5));
+        step1.setOnFinished(e -> highlightLine(1));
+
+        PauseTransition step2 = new PauseTransition(Duration.seconds(1.2));
+        step2.setOnFinished(e -> highlightLine(2));
+
+        PauseTransition step3 = new PauseTransition(Duration.seconds(1.9));
+        step3.setOnFinished(e -> {
+            highlightLine(3);
+            StackPane head = visualQueue.pollFirst();
+            String val = extractValue(head);
+
+            ScaleTransition st = new ScaleTransition(Duration.millis(300), head);
+            st.setToX(0); st.setToY(0);
+            st.setOnFinished(ev -> visualPane.getChildren().remove(head));
+            st.play();
+
+            setStatus("Dequeued: " + val, false);
         });
-        tt.play();
 
-        setStatus("Dequeued item.", false);
-    }
+        PauseTransition step4 = new PauseTransition(Duration.seconds(2.6));
+        step4.setOnFinished(e -> highlightLine(4));
 
-    // ================== NEW FEATURES ==================
+        PauseTransition step5 = new PauseTransition(Duration.seconds(3.3));
+        step5.setOnFinished(e -> {
+            highlightLine(-1);
+            controlsBox.setDisable(false);
+        });
 
-    @FXML
-    void onCreateList(ActionEvent event) {
-        String input = listInputField.getText().trim();
-        if (input.isEmpty()) {
-            setStatus("Please enter a list (e.g. 10,20,30)", true);
-            return;
-        }
-
-        // 1. Clear existing queue
-        onClear(null);
-
-        // 2. Parse input by comma
-        String[] items = input.split(",");
-
-        if (items.length > MAX_SIZE) {
-            setStatus("List too long! Max " + MAX_SIZE + " items.", true);
-            return;
-        }
-
-        // 3. Add all items
-        for (String item : items) {
-            enqueueItem(item.trim());
-        }
-        setStatus("Created queue from list.", false);
+        step1.play(); step2.play(); step3.play(); step4.play(); step5.play();
     }
 
     @FXML
@@ -107,12 +158,34 @@ public class QueueController {
             return;
         }
 
-        // Peek First
-        StackPane frontNode = visualQueue.getFirst();
-        String value = extractValue(frontNode);
+        complexityLabel.setText("O(1) - Constant Time\nDirect access to front pointer.");
+        String[] codeLines = {
+                "peekFront():",
+                "  if queue is empty: return EMPTY",
+                "  return queue[front]"
+        };
+        setupPseudoCode(codeLines);
+        controlsBox.setDisable(true);
+        setStatus("Animating Peek Front...", false);
 
-        setStatus("Front of Queue: " + value, false);
-        highlightNode(frontNode, Color.GREEN);
+        PauseTransition step1 = new PauseTransition(Duration.seconds(0.5));
+        step1.setOnFinished(e -> highlightLine(1));
+
+        PauseTransition step2 = new PauseTransition(Duration.seconds(1.2));
+        step2.setOnFinished(e -> {
+            highlightLine(2);
+            StackPane frontNode = visualQueue.getFirst();
+            setStatus("Front of Queue: " + extractValue(frontNode), false);
+            highlightNode(frontNode, Color.GREEN);
+        });
+
+        PauseTransition step3 = new PauseTransition(Duration.seconds(2.2));
+        step3.setOnFinished(e -> {
+            highlightLine(-1);
+            controlsBox.setDisable(false);
+        });
+
+        step1.play(); step2.play(); step3.play();
     }
 
     @FXML
@@ -122,39 +195,99 @@ public class QueueController {
             return;
         }
 
-        // Peek Last
-        StackPane backNode = visualQueue.getLast();
-        String value = extractValue(backNode);
+        complexityLabel.setText("O(1) - Constant Time\nDirect access to rear pointer.");
+        String[] codeLines = {
+                "peekBack():",
+                "  if queue is empty: return EMPTY",
+                "  return queue[rear]"
+        };
+        setupPseudoCode(codeLines);
+        controlsBox.setDisable(true);
+        setStatus("Animating Peek Back...", false);
 
-        setStatus("Back of Queue: " + value, false);
-        highlightNode(backNode, Color.GREEN);
+        PauseTransition step1 = new PauseTransition(Duration.seconds(0.5));
+        step1.setOnFinished(e -> highlightLine(1));
+
+        PauseTransition step2 = new PauseTransition(Duration.seconds(1.2));
+        step2.setOnFinished(e -> {
+            highlightLine(2);
+            StackPane backNode = visualQueue.getLast();
+            setStatus("Back of Queue: " + extractValue(backNode), false);
+            highlightNode(backNode, Color.GREEN);
+        });
+
+        PauseTransition step3 = new PauseTransition(Duration.seconds(2.2));
+        step3.setOnFinished(e -> {
+            highlightLine(-1);
+            controlsBox.setDisable(false);
+        });
+
+        step1.play(); step2.play(); step3.play();
     }
 
-    // ================== HELPERS ==================
+    @FXML
+    void onIsEmpty(ActionEvent event) {
+        complexityLabel.setText("O(1) - Constant Time\nChecks if front > rear or size is 0.");
+        String[] codeLines = {
+                "isEmpty():",
+                "  if front > rear:",
+                "    return True",
+                "  else:",
+                "    return False"
+        };
+        setupPseudoCode(codeLines);
+        controlsBox.setDisable(true);
+        setStatus("Animating isEmpty...", false);
 
-    private void enqueueItem(String value) {
-        if (visualQueue.size() >= MAX_SIZE) {
-            setStatus("Queue is full!", true);
+        PauseTransition step1 = new PauseTransition(Duration.seconds(0.5));
+        step1.setOnFinished(e -> highlightLine(1));
+
+        PauseTransition step2 = new PauseTransition(Duration.seconds(1.2));
+        step2.setOnFinished(e -> {
+            boolean empty = visualQueue.isEmpty();
+            if (empty) {
+                highlightLine(2);
+            } else {
+                highlightLine(4);
+            }
+            setStatus("Is Empty? " + (empty ? "Yes (True)" : "No (False)"), false);
+        });
+
+        PauseTransition step3 = new PauseTransition(Duration.seconds(2.2));
+        step3.setOnFinished(e -> {
+            highlightLine(-1);
+            controlsBox.setDisable(false);
+        });
+
+        step1.play(); step2.play(); step3.play();
+    }
+
+    @FXML
+    void onCreateList(ActionEvent event) {
+        String input = listInputField.getText().trim();
+        if (input.isEmpty()) {
+            setStatus("Please enter a list (e.g. 10,20,30)", true);
             return;
         }
 
-        StackPane node = createNode(value);
+        onClear(null);
+        String[] items = input.split(",");
 
-        // Calculate Position
-        double targetX = START_X + (visualQueue.size() * (BOX_SIZE + GAP));
-        node.setLayoutX(targetX);
-        node.setLayoutY(Y_POS);
+        if (items.length > MAX_SIZE) {
+            setStatus("List too long! Max " + MAX_SIZE + " items.", true);
+            return;
+        }
 
-        visualPane.getChildren().add(node);
-        visualQueue.add(node);
+        for (String item : items) {
+            StackPane node = createNode(item.trim());
+            visualPane.getChildren().add(node);
+            visualQueue.add(node);
+        }
 
-        // Pop-in animation
-        ScaleTransition st = new ScaleTransition(Duration.millis(300), node);
-        st.setFromX(0); st.setFromY(0);
-        st.setToX(1); st.setToY(1);
-        st.play();
-
-        setStatus("Enqueued: " + value, false);
+        complexityLabel.setText("O(N) - Linear Time\nRequires iterating through the list elements.");
+        pseudoCodeBox.getChildren().clear();
+        setStatus("Created queue from list.", false);
+        listInputField.clear();
     }
 
     @FXML
@@ -162,6 +295,8 @@ public class QueueController {
         visualPane.getChildren().clear();
         visualQueue.clear();
         setStatus("Queue Cleared", false);
+        pseudoCodeBox.getChildren().clear();
+        complexityLabel.setText("Cleared");
     }
 
     @FXML
@@ -176,28 +311,14 @@ public class QueueController {
         }
     }
 
-    // Helper to shift nodes after dequeue
-    private void shiftNodes() {
-        int index = 0;
-        for (StackPane node : visualQueue) {
-            double targetX = START_X + (index * (BOX_SIZE + GAP));
-            TranslateTransition tt = new TranslateTransition(Duration.millis(300), node);
-            // We use layoutX for static pos, but translate for smooth movement if needed
-            // Here, simply updating layout via animation logic or direct set
-            // For simplicity in JavaFX standard:
-            node.setLayoutX(targetX);
-            index++;
-        }
-    }
-
-    // Helper to create the visual box
     private StackPane createNode(String text) {
         StackPane stack = new StackPane();
         Rectangle box = new Rectangle(BOX_SIZE, BOX_SIZE);
         box.setFill(Color.web("#1E293B"));
         box.setStroke(Color.web("#34D399"));
         box.setStrokeWidth(2);
-        box.setArcWidth(10); box.setArcHeight(10);
+        box.setArcWidth(10);
+        box.setArcHeight(10);
 
         Text value = new Text(text);
         value.setFill(Color.WHITE);
@@ -207,7 +328,6 @@ public class QueueController {
         return stack;
     }
 
-    // Helper to extract text from a node (StackPane -> Text)
     private String extractValue(StackPane stack) {
         for (Node n : stack.getChildren()) {
             if (n instanceof Text) {
@@ -217,14 +337,18 @@ public class QueueController {
         return "?";
     }
 
-    // Helper to highlight a node briefly (Pop effect)
     private void highlightNode(StackPane node, Color color) {
-
         if (!node.getChildren().isEmpty() && node.getChildren().get(0) instanceof Rectangle) {
             Rectangle box = (Rectangle) node.getChildren().get(0);
+            box.setStroke(color);
+            box.setStrokeWidth(4);
 
-            box.setStroke(color);      // <--- Change the color!
-            box.setStrokeWidth(4);      // <--- Make it THICK so we see it well
+            PauseTransition reset = new PauseTransition(Duration.seconds(1.5));
+            reset.setOnFinished(e -> {
+                box.setStroke(Color.web("#34D399"));
+                box.setStrokeWidth(2);
+            });
+            reset.play();
         }
         ScaleTransition st = new ScaleTransition(Duration.millis(200), node);
         st.setByX(0.2); st.setByY(0.2);
@@ -233,11 +357,34 @@ public class QueueController {
         st.play();
     }
 
-
-    // Helper for status messages
     private void setStatus(String msg, boolean isError) {
         statusLabel.setText(msg);
-        if (isError) statusLabel.setStyle("-fx-text-fill: #F87171"); // Red
-        else statusLabel.setStyle("-fx-text-fill: #34D399");       // Green
+        if (isError) statusLabel.setStyle("-fx-text-fill: #F87171; -fx-background-color: #334155; -fx-padding: 10 25; -fx-background-radius: 12; -fx-border-color: #475569; -fx-border-radius: 12;");
+        else statusLabel.setStyle("-fx-text-fill: #FCD34D; -fx-background-color: #334155; -fx-padding: 10 25; -fx-background-radius: 12; -fx-border-color: #475569; -fx-border-radius: 12;");
+    }
+
+    private void setupPseudoCode(String[] lines) {
+        pseudoCodeBox.getChildren().clear();
+        for (String line : lines) {
+            Label lbl = new Label(line);
+            lbl.setTextFill(Color.web(CODE_COLOR));
+            lbl.setFont(Font.font("Consolas", 14));
+            lbl.setMaxWidth(Double.MAX_VALUE);
+            lbl.setStyle("-fx-padding: 4; -fx-background-radius: 4;");
+            pseudoCodeBox.getChildren().add(lbl);
+        }
+    }
+
+    private void highlightLine(int index) {
+        for (int i = 0; i < pseudoCodeBox.getChildren().size(); i++) {
+            Label lbl = (Label) pseudoCodeBox.getChildren().get(i);
+            if (i == index) {
+                lbl.setStyle("-fx-padding: 4; -fx-background-color: " + HIGHLIGHT_BG + "; -fx-background-radius: 4;");
+                lbl.setTextFill(Color.web(HIGHLIGHT_TEXT));
+            } else {
+                lbl.setStyle("-fx-padding: 4; -fx-background-color: transparent; -fx-background-radius: 4;");
+                lbl.setTextFill(Color.web(CODE_COLOR));
+            }
+        }
     }
 }
