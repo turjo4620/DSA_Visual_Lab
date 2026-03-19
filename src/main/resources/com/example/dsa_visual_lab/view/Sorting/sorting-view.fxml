@@ -77,11 +77,10 @@
                         style="-fx-border-color: #FB923C;"/>
             </HBox>
 
-            <!-- Third row: Selection Sort (centered) -->
-<!--            <Button text="Selection Sort" prefWidth="250" prefHeight="150"-->
-<!--                    onAction="#handleSelectionSort"-->
-<!--                    styleClass="algo-button"-->
-<!--                    style="-fx-border-color: #FBBF24;"/>-->
+            <Button text="Merge Sort" prefWidth="250" prefHeight="150"
+                    onAction="#handleMergeSort"
+                    styleClass="algo-button"
+                    style="-fx-border-color: #A78BFA;"/>
         </VBox>
     </center>
 

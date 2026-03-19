@@ -64,6 +64,11 @@ public class SortingController {
             showAlert("Failed to load Home Page!");
         }
     }
+    @FXML
+    private void handleMergeSort(ActionEvent event) {
+        navigateTo(event,
+                "/com/example/dsa_visual_lab/view/Sorting/merge-sort-view.fxml");
+    }
 
 
     // ================= Helper Method =================
