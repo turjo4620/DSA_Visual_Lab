@@ -5,7 +5,7 @@
 
 <VBox xmlns="http://javafx.com/javafx/21.0.6"
       xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="com.example.dsa_visual_lab.controller.sorting.SelectionSortController"
+      fx:controller="com.example.dsa_visual_lab.controller.sorting.InsertionSortController"
       spacing="20"
       style="-fx-background-color: #0f172a; -fx-padding: 20;">
 
@@ -34,12 +34,13 @@
         <VBox spacing="15" prefWidth="400">
             <Label text="Pseudocode" style="-fx-text-fill: #FACC15; -fx-font-size: 18px; -fx-font-weight: bold;"/>
             <VBox spacing="8" style="-fx-background-color: #111827; -fx-border-color: #374151; -fx-border-width: 2; -fx-background-radius: 10; -fx-border-radius: 10; -fx-padding: 20;">
-                <Label fx:id="line1" text="for i = 0 to n-1" style="-fx-text-fill: white; -fx-font-size: 14px;"/>
-                <Label fx:id="line2" text="   minIndex = i" style="-fx-text-fill: white; -fx-font-size: 14px;"/>
-                <Label fx:id="line3" text="   for j = i+1 to n" style="-fx-text-fill: white; -fx-font-size: 14px;"/>
-                <Label fx:id="line4" text="      if arr[j] &lt; arr[minIndex]" style="-fx-text-fill: white; -fx-font-size: 14px;"/>
-                <Label fx:id="line5" text="         minIndex = j" style="-fx-text-fill: white; -fx-font-size: 14px;"/>
-                <Label fx:id="line6" text="   swap(arr[i], arr[minIndex])" style="-fx-text-fill: white; -fx-font-size: 14px;"/>
+                <Label fx:id="line1" text="for i = 1 to n-1" style="-fx-text-fill: white; -fx-font-size: 14px;"/>
+                <Label fx:id="line2" text="   key = arr[i]" style="-fx-text-fill: white; -fx-font-size: 14px;"/>
+                <Label fx:id="line3" text="   j = i - 1" style="-fx-text-fill: white; -fx-font-size: 14px;"/>
+                <Label fx:id="line4" text="   while j &gt;= 0 and arr[j] &gt; key" style="-fx-text-fill: white; -fx-font-size: 14px;"/>
+                <Label fx:id="line5" text="      arr[j + 1] = arr[j]" style="-fx-text-fill: white; -fx-font-size: 14px;"/>
+                <Label fx:id="line6" text="      j = j - 1" style="-fx-text-fill: white; -fx-font-size: 14px;"/>
+                <Label fx:id="line7" text="   arr[j + 1] = key" style="-fx-text-fill: white; -fx-font-size: 14px;"/>
             </VBox>
             <Label fx:id="statusLabel" text="Enter array values and click Set Array" style="-fx-text-fill: #38BDF8; -fx-font-size: 16px; -fx-font-weight: bold; -fx-wrap-text: true;"/>
         </VBox>

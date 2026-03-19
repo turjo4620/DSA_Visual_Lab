@@ -26,7 +26,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class SelectionSortController {
+public class InsertionSortController {
 
     @FXML private HBox arrayContainer;
     @FXML private TextField inputField;
@@ -34,7 +34,7 @@ public class SelectionSortController {
     @FXML private HBox controlsBox;
     @FXML private Slider speedSlider;
 
-    @FXML private Label line1, line2, line3, line4, line5, line6;
+    @FXML private Label line1, line2, line3, line4, line5, line6, line7;
     private Label[] codeLines;
 
     private int[] mainArray;
@@ -78,8 +78,8 @@ public class SelectionSortController {
 
     @FXML
     public void initialize() {
-        codeLines = new Label[]{line1, line2, line3, line4, line5, line6};
-        inputField.setText("84, 12, 45, 99, 32, 56, 18, 77, 25, 60");
+        codeLines = new Label[]{line1, line2, line3, line4, line5, line6, line7};
+        inputField.setText("62, 25, 88, 14, 47, 91, 33, 19, 55, 76");
         handleSetArray();
     }
 
@@ -128,75 +128,79 @@ public class SelectionSortController {
         animationSteps = new ArrayList<>();
         int[] tempArray = mainArray.clone();
 
-        generateSelectionSortSteps(tempArray);
+        generateInsertionSortSteps(tempArray);
 
         animationSteps.add(() -> {
             highlightCode(-1);
             for (BarNode b : visualBars) b.setColor("#4ADE80");
-            statusLabel.setText("Selection Sort Complete!");
+            statusLabel.setText("Insertion Sort Complete!");
             controlsBox.setDisable(false);
         });
 
         playAnimationSequence(0);
     }
 
-    private void generateSelectionSortSteps(int[] arr) {
-        for (int i = 0; i < arr.length - 1; i++) {
+    private void generateInsertionSortSteps(int[] arr) {
+        animationSteps.add(() -> {
+            visualBars[0].setColor("#4ADE80");
+            statusLabel.setText("First element is trivially sorted.");
+        });
+
+        for (int i = 1; i < arr.length; i++) {
             final int currI = i;
             animationSteps.add(() -> highlightCode(0));
 
-            int minIdx = i;
+            int key = arr[i];
+            final int keyVal = key;
+
             animationSteps.add(() -> {
                 highlightCode(1);
-                visualBars[currI].setColor("#F59E0B");
-                statusLabel.setText("Current minimum at index " + currI);
+                visualBars[currI].setColor("#EF4444");
+                statusLabel.setText("Selected key: " + keyVal + " at index " + currI);
             });
 
-            for (int j = i + 1; j < arr.length; j++) {
+            animationSteps.add(() -> highlightCode(2));
+            int j = i - 1;
+
+            while (j >= 0 && arr[j] > key) {
                 final int currJ = j;
-                final int currMin = minIdx;
+                final int currJPlus1 = j + 1;
+                final int valJ = arr[j];
 
                 animationSteps.add(() -> {
-                    highlightCode(2);
-                    visualBars[currJ].setColor("#A78BFA");
+                    highlightCode(3);
+                    visualBars[currJ].setColor("#FCD34D");
+                    statusLabel.setText("Comparing key (" + keyVal + ") with " + valJ);
                 });
 
-                animationSteps.add(() -> highlightCode(3));
+                arr[j + 1] = arr[j];
 
-                if (arr[j] < arr[minIdx]) {
-                    minIdx = j;
-                    final int newMin = minIdx;
-                    animationSteps.add(() -> {
-                        highlightCode(4);
-                        if (currMin != currI) visualBars[currMin].setColor("#38BDF8");
-                        visualBars[newMin].setColor("#EF4444");
-                        statusLabel.setText("New minimum found: " + arr[newMin]);
-                    });
-                } else {
-                    animationSteps.add(() -> visualBars[currJ].setColor("#38BDF8"));
+                animationSteps.add(() -> {
+                    highlightCode(4);
+                    visualBars[currJPlus1].updateValue(valJ);
+                    visualBars[currJPlus1].setColor("#FCD34D");
+                    visualBars[currJ].setColor("#38BDF8");
+                    statusLabel.setText(valJ + " is greater than " + keyVal + ", shifting it right.");
+                });
+
+                animationSteps.add(() -> highlightCode(5));
+                j = j - 1;
+            }
+
+            final int insertIdx = j + 1;
+            arr[insertIdx] = key;
+
+            animationSteps.add(() -> {
+                highlightCode(6);
+                visualBars[insertIdx].updateValue(keyVal);
+                visualBars[insertIdx].setColor("#4ADE80");
+                statusLabel.setText("Inserted key " + keyVal + " at index " + insertIdx);
+
+                for (int k = 0; k <= currI; k++) {
+                    visualBars[k].setColor("#4ADE80");
                 }
-            }
-
-            if (minIdx != i) {
-                int temp = arr[i];
-                arr[i] = arr[minIdx];
-                arr[minIdx] = temp;
-                final int valI = arr[i];
-                final int valMin = arr[minIdx];
-                final int finalMin = minIdx;
-
-                animationSteps.add(() -> {
-                    highlightCode(5);
-                    visualBars[currI].updateValue(valI);
-                    visualBars[finalMin].updateValue(valMin);
-                    visualBars[finalMin].setColor("#38BDF8");
-                    statusLabel.setText("Swapped minimum to sorted position.");
-                });
-            }
-
-            animationSteps.add(() -> visualBars[currI].setColor("#4ADE80"));
+            });
         }
-        animationSteps.add(() -> visualBars[arr.length - 1].setColor("#4ADE80"));
     }
 
     private void playAnimationSequence(int index) {

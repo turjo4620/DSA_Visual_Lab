@@ -39,7 +39,7 @@ public class SortingController {
 
     @FXML
     private void handleInsertionSort(ActionEvent event) {
-        showAlert("Visualizing Insertion Sort");
+        navigateTo(event, "/com/example/dsa_visual_lab/view/Sorting/insertion-sort-view.fxml");
     }
 
     @FXML
