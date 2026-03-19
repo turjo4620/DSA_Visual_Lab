@@ -85,8 +85,15 @@ public class HomeController {
     }
 
     @FXML
-    public void openGraphs() {
-        showFeatureAlert("Graph Algorithms (BFS, DFS)");
+    public void openGraphs(ActionEvent event) {
+        try {
+            Parent graphRoot = FXMLLoader.load(getClass().getResource("/com/example/dsa_visual_lab/view/graph/graph-view.fxml"));
+            Scene scene = ((Node) event.getSource()).getScene();
+            scene.setRoot(graphRoot);
+        } catch (IOException e) {
+            System.out.println("Error loading Knapsack View:");
+            e.printStackTrace();
+        }
     }
 
     @FXML

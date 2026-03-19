@@ -26,4 +26,6 @@ module com.example.dsa_visual_lab {
 
     exports com.example.dsa_visual_lab.controller.dp;
     opens com.example.dsa_visual_lab.controller.dp to javafx.fxml;
+
+    opens com.example.dsa_visual_lab.controller.graph to javafx.fxml;
 }
