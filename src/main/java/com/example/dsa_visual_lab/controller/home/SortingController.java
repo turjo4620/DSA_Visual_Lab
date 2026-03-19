@@ -10,8 +10,6 @@ import javafx.scene.Node;
 import javafx.stage.Stage;
 import java.io.IOException;
 
-
-
 public class SortingController {
 
     @FXML
@@ -19,54 +17,60 @@ public class SortingController {
         System.out.println("Sorting Page Loaded Successfully!");
     }
 
-    // ================= Sorting Buttons =================
+    @FXML
+    private void handleBubbleSort(ActionEvent event) {
+        navigateTo(event, "/com/example/dsa_visual_lab/view/Sorting/bubble-sort-view.fxml");
+    }
 
     @FXML
+    private void handleSelectionSort(ActionEvent event) {
+        navigateTo(event, "/com/example/dsa_visual_lab/view/Sorting/selection-sort-view.fxml");
+    }
 
-    private void handleBubbleSort(ActionEvent event) {
-        navigateTo(event,
-                "/com/example/dsa_visual_lab/view/Sorting/bubble-sort-view.fxml");
+    @FXML
+    private void handleMergeSort(ActionEvent event) {
+        navigateTo(event, "/com/example/dsa_visual_lab/view/Sorting/merge-sort-view.fxml");
     }
 
     @FXML
     private void handleQuickSort(ActionEvent event) {
-        navigateTo(event,
-                "/com/example/dsa_visual_lab/view/Sorting/quick-sort-view.fxml");
+        navigateTo(event, "/com/example/dsa_visual_lab/view/Sorting/quick-sort-view.fxml");
     }
 
     @FXML
     private void handleInsertionSort(ActionEvent event) {
-        showAlert("Visualizing Insertion Sort");
+        navigateTo(event, "/com/example/dsa_visual_lab/view/Sorting/insertion-sort-view.fxml");
     }
-    @FXML
-    private void handleSelectionSort(ActionEvent event) {
-        navigateTo(event,
-                "/com/example/dsa_visual_lab/view/Sorting/selection-sort-view.fxml");
-    }
-    // ================= Back Button =================
+
     @FXML
     private void handleBack(ActionEvent event) {
         try {
             Parent homeRoot = FXMLLoader.load(getClass().getResource("/com/example/dsa_visual_lab/view/home/home-view.fxml"));
-
-            Stage stage = (Stage)((Node)event.getSource()).getScene().getWindow();
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             Scene scene = stage.getScene();
 
-            // Replace root instead of creating a new Scene
             scene.setRoot(homeRoot);
-
-            // Reapply CSS so buttons keep style
             scene.getStylesheets().clear();
             scene.getStylesheets().add(getClass().getResource("/com/example/dsa_visual_lab/view/styles/home.css").toExternalForm());
-
         } catch (IOException e) {
             e.printStackTrace();
             showAlert("Failed to load Home Page!");
         }
     }
 
+    private void navigateTo(ActionEvent event, String fxmlPath) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
+            Parent root = loader.load();
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            Scene scene = stage.getScene();
+            scene.setRoot(root);
+        } catch (IOException e) {
+            e.printStackTrace();
+            showAlert("Failed to load page: " + fxmlPath);
+        }
+    }
 
-    // ================= Helper Method =================
     private void showAlert(String message) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Sorting Visualization");
@@ -74,20 +78,4 @@ public class SortingController {
         alert.setContentText(message + "\n\n(Here you can implement actual visualization!)");
         alert.showAndWait();
     }
-    private void navigateTo(ActionEvent event, String fxmlPath) {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
-            Parent root = loader.load();
-
-            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            Scene scene = stage.getScene();
-
-            scene.setRoot(root);
-
-        } catch (IOException e) {
-            e.printStackTrace();
-            showAlert("Failed to load page: " + fxmlPath);
-        }
-    }
-
 }

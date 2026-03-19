@@ -1,6 +1,7 @@
 package com.example.dsa_visual_lab.controller.sorting;
 
 import javafx.animation.PauseTransition;
+import javafx.animation.TranslateTransition;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -26,7 +27,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class SelectionSortController {
+public class MergeSortController {
 
     @FXML private HBox arrayContainer;
     @FXML private TextField inputField;
@@ -34,13 +35,18 @@ public class SelectionSortController {
     @FXML private HBox controlsBox;
     @FXML private Slider speedSlider;
 
-    @FXML private Label line1, line2, line3, line4, line5, line6;
+    @FXML private Label line1, line2, line3, line4, line5, line6, line8, line9, line10, line11, line12;
     private Label[] codeLines;
 
     private int[] mainArray;
     private BarNode[] visualBars;
     private List<Runnable> animationSteps;
     private double heightMultiplier;
+
+    private static final String COLOR_DEFAULT = "#38BDF8";
+    private static final String COLOR_ACTIVE = "#FCD34D";
+    private static final String COLOR_MERGING = "#A78BFA";
+    private static final String COLOR_SORTED = "#4ADE80";
 
     private class BarNode {
         VBox container;
@@ -53,7 +59,7 @@ public class SelectionSortController {
             valText.setFont(Font.font("System", FontWeight.BOLD, 14));
 
             bar = new Rectangle(35, value * heightMultiplier);
-            bar.setFill(Color.web("#38BDF8"));
+            bar.setFill(Color.web(COLOR_DEFAULT));
             bar.setArcWidth(8);
             bar.setArcHeight(8);
 
@@ -63,6 +69,7 @@ public class SelectionSortController {
 
             container = new VBox(5);
             container.setAlignment(Pos.BOTTOM_CENTER);
+            container.setMinHeight(170);
             container.getChildren().addAll(valText, bar, idxText);
         }
 
@@ -78,14 +85,14 @@ public class SelectionSortController {
 
     @FXML
     public void initialize() {
-        codeLines = new Label[]{line1, line2, line3, line4, line5, line6};
-        inputField.setText("84, 12, 45, 99, 32, 56, 18, 77, 25, 60");
+        codeLines = new Label[]{line1, line2, line3, line4, line5, line6, line8, line9, line10, line11, line12};
+        inputField.setText("45, 12, 89, 33, 67, 21, 5, 99, 54");
         handleSetArray();
     }
 
     private Duration getStepDuration() {
         double multiplier = 100.0 / (speedSlider != null ? speedSlider.getValue() : 100.0);
-        return Duration.millis(300 * multiplier);
+        return Duration.millis(500 * multiplier);
     }
 
     @FXML
@@ -102,7 +109,7 @@ public class SelectionSortController {
             }
 
             int maxVal = Arrays.stream(mainArray).max().orElse(1);
-            heightMultiplier = 450.0 / maxVal;
+            heightMultiplier = 120.0 / maxVal;
 
             drawInitialBars();
             statusLabel.setText("Array loaded. Ready to sort!");
@@ -115,6 +122,7 @@ public class SelectionSortController {
     private void drawInitialBars() {
         arrayContainer.getChildren().clear();
         visualBars = new BarNode[mainArray.length];
+
         for (int i = 0; i < mainArray.length; i++) {
             visualBars[i] = new BarNode(mainArray[i], i);
             arrayContainer.getChildren().add(visualBars[i].container);
@@ -124,87 +132,157 @@ public class SelectionSortController {
     @FXML
     public void handleStart() {
         if (mainArray == null || mainArray.length == 0) return;
+
         controlsBox.setDisable(true);
         animationSteps = new ArrayList<>();
         int[] tempArray = mainArray.clone();
 
-        generateSelectionSortSteps(tempArray);
+        generateMergeSortSteps(tempArray, 0, tempArray.length - 1, 0);
 
         animationSteps.add(() -> {
             highlightCode(-1);
-            for (BarNode b : visualBars) b.setColor("#4ADE80");
-            statusLabel.setText("Selection Sort Complete!");
+            for (BarNode b : visualBars) b.setColor(COLOR_SORTED);
+            statusLabel.setText("Merge Sort Complete! Full array back at Depth 0.");
             controlsBox.setDisable(false);
         });
 
         playAnimationSequence(0);
     }
 
-    private void generateSelectionSortSteps(int[] arr) {
-        for (int i = 0; i < arr.length - 1; i++) {
-            final int currI = i;
-            animationSteps.add(() -> highlightCode(0));
+    private void generateMergeSortSteps(int[] arr, int l, int r, int depth) {
+        animationSteps.add(() -> {
+            highlightCode(0);
+            setRangeColor(l, r, COLOR_ACTIVE);
+            setRangeDepth(l, r, depth);
+            statusLabel.setText("Depth " + depth + ": Splitting array [" + l + "..." + r + "]");
+        });
+        animationSteps.add(() -> highlightCode(1));
 
-            int minIdx = i;
+        if (l < r) {
+            int m = l + (r - l) / 2;
+            animationSteps.add(() -> highlightCode(2));
+
+            animationSteps.add(() -> highlightCode(3));
+            generateMergeSortSteps(arr, l, m, depth + 1);
+
             animationSteps.add(() -> {
-                highlightCode(1);
-                visualBars[currI].setColor("#F59E0B");
-                statusLabel.setText("Current minimum at index " + currI);
+                highlightCode(4);
+                statusLabel.setText("Depth " + depth + ": Left half split. Now splitting right half [" + (m+1) + "..." + r + "]");
+            });
+            generateMergeSortSteps(arr, m + 1, r, depth + 1);
+
+            animationSteps.add(() -> {
+                highlightCode(5);
+                statusLabel.setText("Depth " + depth + ": Both halves split. Ready to merge.");
+            });
+            generateMergeSteps(arr, l, m, r, depth);
+
+            animationSteps.add(() -> {
+                setRangeDepth(l, r, depth);
+                statusLabel.setText("Depth " + depth + ": Array [" + l + "..." + r + "] merged and pulled up.");
             });
 
-            for (int j = i + 1; j < arr.length; j++) {
-                final int currJ = j;
-                final int currMin = minIdx;
-
-                animationSteps.add(() -> {
-                    highlightCode(2);
-                    visualBars[currJ].setColor("#A78BFA");
-                });
-
-                animationSteps.add(() -> highlightCode(3));
-
-                if (arr[j] < arr[minIdx]) {
-                    minIdx = j;
-                    final int newMin = minIdx;
-                    animationSteps.add(() -> {
-                        highlightCode(4);
-                        if (currMin != currI) visualBars[currMin].setColor("#38BDF8");
-                        visualBars[newMin].setColor("#EF4444");
-                        statusLabel.setText("New minimum found: " + arr[newMin]);
-                    });
-                } else {
-                    animationSteps.add(() -> visualBars[currJ].setColor("#38BDF8"));
-                }
-            }
-
-            if (minIdx != i) {
-                int temp = arr[i];
-                arr[i] = arr[minIdx];
-                arr[minIdx] = temp;
-                final int valI = arr[i];
-                final int valMin = arr[minIdx];
-                final int finalMin = minIdx;
-
-                animationSteps.add(() -> {
-                    highlightCode(5);
-                    visualBars[currI].updateValue(valI);
-                    visualBars[finalMin].updateValue(valMin);
-                    visualBars[finalMin].setColor("#38BDF8");
-                    statusLabel.setText("Swapped minimum to sorted position.");
-                });
-            }
-
-            animationSteps.add(() -> visualBars[currI].setColor("#4ADE80"));
+        } else {
+            animationSteps.add(() -> {
+                setRangeColor(l, r, COLOR_DEFAULT);
+                statusLabel.setText("Depth " + depth + ": Base case. Single element [" + l + "] is sorted.");
+            });
         }
-        animationSteps.add(() -> visualBars[arr.length - 1].setColor("#4ADE80"));
+    }
+
+    private void generateMergeSteps(int[] arr, int l, int m, int r, int depth) {
+        animationSteps.add(() -> {
+            highlightCode(6);
+            setRangeColor(l, r, COLOR_MERGING);
+            statusLabel.setText("Depth " + depth + ": Merging [" + l + "-" + m + "] and [" + (m+1) + "-" + r + "]");
+        });
+
+        int n1 = m - l + 1;
+        int n2 = r - m;
+
+        int[] L = new int[n1];
+        int[] R = new int[n2];
+
+        animationSteps.add(() -> highlightCode(7));
+        System.arraycopy(arr, l, L, 0, n1);
+        System.arraycopy(arr, m + 1, R, 0, n2);
+
+        int i = 0, j = 0, k = l;
+
+        animationSteps.add(() -> highlightCode(8));
+        while (i < n1 && j < n2) {
+            animationSteps.add(() -> highlightCode(9));
+
+            final int currK = k;
+            if (L[i] <= R[j]) {
+                final int val = L[i];
+                arr[k] = L[i];
+                animationSteps.add(() -> {
+                    visualBars[currK].updateValue(val);
+                    visualBars[currK].setColor(COLOR_SORTED);
+                    statusLabel.setText("Picking smaller value: " + val);
+                });
+                i++;
+            } else {
+                final int val = R[j];
+                arr[k] = R[j];
+                animationSteps.add(() -> {
+                    visualBars[currK].updateValue(val);
+                    visualBars[currK].setColor(COLOR_SORTED);
+                    statusLabel.setText("Picking smaller value: " + val);
+                });
+                j++;
+            }
+            k++;
+        }
+
+        animationSteps.add(() -> highlightCode(10));
+        while (i < n1) {
+            final int currK = k;
+            final int val = L[i];
+            arr[k] = L[i];
+            animationSteps.add(() -> {
+                visualBars[currK].updateValue(val);
+                visualBars[currK].setColor(COLOR_SORTED);
+                statusLabel.setText("Copying remaining left value: " + val);
+            });
+            i++; k++;
+        }
+
+        while (j < n2) {
+            final int currK = k;
+            final int val = R[j];
+            arr[k] = R[j];
+            animationSteps.add(() -> {
+                visualBars[currK].updateValue(val);
+                visualBars[currK].setColor(COLOR_SORTED);
+                statusLabel.setText("Copying remaining right value: " + val);
+            });
+            j++; k++;
+        }
     }
 
     private void playAnimationSequence(int index) {
         if (index >= animationSteps.size()) return;
+
         animationSteps.get(index).run();
         PauseTransition delay = new PauseTransition(getStepDuration());
         delay.setOnFinished(e -> playAnimationSequence(index + 1));
         delay.play();
+    }
+
+    private void setRangeColor(int start, int end, String hex) {
+        for (int i = start; i <= end; i++) {
+            visualBars[i].setColor(hex);
+        }
+    }
+
+    private void setRangeDepth(int start, int end, int depth) {
+        for (int i = start; i <= end; i++) {
+            TranslateTransition tt = new TranslateTransition(Duration.millis(300), visualBars[i].container);
+            tt.setToY(depth * 40);
+            tt.play();
+        }
     }
 
     private void highlightCode(int activeIndex) {

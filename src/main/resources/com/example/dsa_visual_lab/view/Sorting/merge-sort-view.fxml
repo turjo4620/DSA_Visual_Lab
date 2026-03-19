@@ -5,7 +5,7 @@
 
 <VBox xmlns="http://javafx.com/javafx/21.0.6"
       xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="com.example.dsa_visual_lab.controller.sorting.SelectionSortController"
+      fx:controller="com.example.dsa_visual_lab.controller.sorting.MergeSortController"
       spacing="20"
       style="-fx-background-color: #0f172a; -fx-padding: 20;">
 
@@ -19,9 +19,10 @@
     </HBox>
 
     <HBox spacing="30" VBox.vgrow="ALWAYS">
+
         <StackPane alignment="CENTER" HBox.hgrow="ALWAYS">
             <HBox fx:id="arrayContainer"
-                  alignment="BOTTOM_CENTER"
+                  alignment="TOP_CENTER"
                   fillHeight="false"
                   spacing="5"
                   prefWidth="850"
@@ -34,12 +35,18 @@
         <VBox spacing="15" prefWidth="400">
             <Label text="Pseudocode" style="-fx-text-fill: #FACC15; -fx-font-size: 18px; -fx-font-weight: bold;"/>
             <VBox spacing="8" style="-fx-background-color: #111827; -fx-border-color: #374151; -fx-border-width: 2; -fx-background-radius: 10; -fx-border-radius: 10; -fx-padding: 20;">
-                <Label fx:id="line1" text="for i = 0 to n-1" style="-fx-text-fill: white; -fx-font-size: 14px;"/>
-                <Label fx:id="line2" text="   minIndex = i" style="-fx-text-fill: white; -fx-font-size: 14px;"/>
-                <Label fx:id="line3" text="   for j = i+1 to n" style="-fx-text-fill: white; -fx-font-size: 14px;"/>
-                <Label fx:id="line4" text="      if arr[j] &lt; arr[minIndex]" style="-fx-text-fill: white; -fx-font-size: 14px;"/>
-                <Label fx:id="line5" text="         minIndex = j" style="-fx-text-fill: white; -fx-font-size: 14px;"/>
-                <Label fx:id="line6" text="   swap(arr[i], arr[minIndex])" style="-fx-text-fill: white; -fx-font-size: 14px;"/>
+                <Label fx:id="line1" text="mergeSort(arr, l, r)" style="-fx-text-fill: white; -fx-font-size: 14px;"/>
+                <Label fx:id="line2" text="  if l &lt; r" style="-fx-text-fill: white; -fx-font-size: 14px;"/>
+                <Label fx:id="line3" text="    mid = l + (r - l) / 2" style="-fx-text-fill: white; -fx-font-size: 14px;"/>
+                <Label fx:id="line4" text="    mergeSort(arr, l, mid)" style="-fx-text-fill: white; -fx-font-size: 14px;"/>
+                <Label fx:id="line5" text="    mergeSort(arr, mid + 1, r)" style="-fx-text-fill: white; -fx-font-size: 14px;"/>
+                <Label fx:id="line6" text="    merge(arr, l, mid, r)" style="-fx-text-fill: white; -fx-font-size: 14px;"/>
+                <Label fx:id="line7" text="" style="-fx-text-fill: white; -fx-font-size: 10px;"/>
+                <Label fx:id="line8" text="merge(arr, l, mid, r)" style="-fx-text-fill: white; -fx-font-size: 14px;"/>
+                <Label fx:id="line9" text="  copy to temp arrays L[] and R[]" style="-fx-text-fill: white; -fx-font-size: 14px;"/>
+                <Label fx:id="line10" text="  while L and R have elements:" style="-fx-text-fill: white; -fx-font-size: 14px;"/>
+                <Label fx:id="line11" text="    arr[k] = smaller(L[i], R[j])" style="-fx-text-fill: white; -fx-font-size: 14px;"/>
+                <Label fx:id="line12" text="  copy remaining elements" style="-fx-text-fill: white; -fx-font-size: 14px;"/>
             </VBox>
             <Label fx:id="statusLabel" text="Enter array values and click Set Array" style="-fx-text-fill: #38BDF8; -fx-font-size: 16px; -fx-font-weight: bold; -fx-wrap-text: true;"/>
         </VBox>

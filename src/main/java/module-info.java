@@ -13,19 +13,19 @@ module com.example.dsa_visual_lab {
     requires eu.hansolo.tilesfx;
     requires com.almasb.fxgl.all;
 
-    // Exports
     exports com.example.dsa_visual_lab;
 
-    // Opens - Allowing JavaFX to see your files
     opens com.example.dsa_visual_lab to javafx.fxml;
     opens com.example.dsa_visual_lab.controller.home to javafx.fxml;
 
-    // This SINGLE line now handles both QueueController and ArrayController
     opens com.example.dsa_visual_lab.controller.linear to javafx.fxml;
 
-    // Open sorting controllers
     opens com.example.dsa_visual_lab.controller.sorting to javafx.fxml;
 
-    // Open BST controller
     opens com.example.dsa_visual_lab.controller.BSTController to javafx.fxml;
+
+    exports com.example.dsa_visual_lab.controller.dp;
+    opens com.example.dsa_visual_lab.controller.dp to javafx.fxml;
+
+    opens com.example.dsa_visual_lab.controller.graph to javafx.fxml;
 }

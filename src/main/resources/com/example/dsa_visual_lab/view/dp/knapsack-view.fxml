@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.Slider?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane fx:id="rootPane" prefHeight="800.0" prefWidth="1280.0"
+            style="-fx-background-color: #0F172A;"
+            xmlns="http://javafx.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.example.dsa_visual_lab.controller.dp.KnapsackController">
+
+    <top>
+        <StackPane alignment="CENTER_LEFT" prefHeight="80.0">
+            <padding>
+                <Insets bottom="10" left="20" right="20" top="10" />
+            </padding>
+            <Button onAction="#onBackClick" style="-fx-background-color: transparent; -fx-text-fill: #94A3B8; -fx-font-size: 14px; -fx-cursor: hand; -fx-border-color: #94A3B8; -fx-border-radius: 5;" text="← Back" StackPane.alignment="CENTER_LEFT" />
+            <Label text="0/1 Knapsack (Dynamic Programming)" textFill="#F59E0B" StackPane.alignment="CENTER">
+                <font>
+                    <Font name="System Bold" size="28.0" />
+                </font>
+            </Label>
+        </StackPane>
+    </top>
+
+    <center>
+        <HBox spacing="10" style="-fx-padding: 10;">
+            <ScrollPane fx:id="scrollPane" fitToHeight="true" fitToWidth="true" style="-fx-background-color: #1E293B; -fx-background: #1E293B; -fx-border-color: #334155; -fx-border-width: 2; -fx-background-radius: 10;" HBox.hgrow="ALWAYS">
+                <GridPane fx:id="dpGrid" alignment="CENTER" hgap="5" style="-fx-padding: 20;" vgap="5" />
+            </ScrollPane>
+
+            <VBox prefWidth="350.0" spacing="15" style="-fx-background-color: #1E293B; -fx-background-radius: 10; -fx-padding: 15;">
+                <Label style="-fx-font-weight: bold; -fx-font-size: 16px;" text="Time &amp; Space Complexity" textFill="#38BDF8" />
+                <Label fx:id="complexityLabel" style="-fx-font-size: 14px; -fx-background-color: #0F172A; -fx-padding: 10; -fx-background-radius: 8; -fx-border-color: #334155; -fx-border-radius: 8;" text="Waiting for action..." textFill="#94A3B8" wrapText="true" />
+
+                <Label style="-fx-font-weight: bold; -fx-font-size: 16px;" text="Pseudocode" textFill="#FCD34D">
+                    <VBox.margin>
+                        <Insets top="10" />
+                    </VBox.margin>
+                </Label>
+                <VBox fx:id="pseudoCodeBox" spacing="2" style="-fx-background-color: #0F172A; -fx-padding: 10; -fx-background-radius: 8; -fx-border-color: #334155; -fx-border-radius: 8;" VBox.vgrow="ALWAYS" />
+            </VBox>
+        </HBox>
+    </center>
+
+    <bottom>
+        <VBox alignment="CENTER" spacing="15" style="-fx-padding: 20;">
+            <Label fx:id="statusLabel" style="-fx-text-fill: #FCD34D; -fx-background-color: #334155; -fx-padding: 10 25; -fx-background-radius: 12; -fx-border-color: #475569; -fx-border-radius: 12;" text="Ready">
+                <font>
+                    <Font size="16.0" />
+                </font>
+            </Label>
+
+            <HBox fx:id="controlsBox" alignment="CENTER" spacing="15">
+                <VBox alignment="CENTER" spacing="5" style="-fx-background-color: #1E293B; -fx-padding: 5 15; -fx-background-radius: 8; -fx-border-color: #334155; -fx-border-radius: 8;">
+                    <Label style="-fx-font-size: 12px;" text="Speed" textFill="#94A3B8" />
+                    <Slider fx:id="speedSlider" max="200" min="10" prefWidth="100" value="100" />
+                </VBox>
+
+                <TextField fx:id="capacityField" prefWidth="100" promptText="Capacity (W)" style="-fx-background-color: #1E293B; -fx-text-fill: white; -fx-border-color: #475569; -fx-padding: 8; -fx-background-radius: 5;" />
+                <TextField fx:id="weightsField" prefWidth="150" promptText="Weights (e.g. 1,3,4)" style="-fx-background-color: #1E293B; -fx-text-fill: white; -fx-border-color: #475569; -fx-padding: 8; -fx-background-radius: 5;" />
+                <TextField fx:id="valuesField" prefWidth="150" promptText="Values (e.g. 15,20,30)" style="-fx-background-color: #1E293B; -fx-text-fill: white; -fx-border-color: #475569; -fx-padding: 8; -fx-background-radius: 5;" />
+
+                <Button onAction="#onSolve" prefWidth="90" style="-fx-background-color: #F59E0B; -fx-text-fill: #0F172A; -fx-font-weight: bold; -fx-padding: 8; -fx-background-radius: 5; -fx-cursor: hand;" text="Solve DP" />
+                <Button onAction="#onClear" prefWidth="70" style="-fx-background-color: transparent; -fx-text-fill: #F87171; -fx-border-color: #F87171; -fx-padding: 8; -fx-background-radius: 5; -fx-cursor: hand;" text="Clear" />
+            </HBox>
+        </VBox>
+    </bottom>
+</BorderPane>
