@@ -18,13 +18,17 @@
                 style="-fx-border-color: #F87171; -fx-background-color: transparent; -fx-text-fill: white; -fx-cursor: hand;"/>
     </HBox>
 
-    <HBox spacing="30">
-        <StackPane alignment="CENTER">
+    <HBox spacing="30" VBox.vgrow="ALWAYS">
+
+        <StackPane alignment="CENTER" HBox.hgrow="ALWAYS">
             <HBox fx:id="arrayContainer"
-                  alignment="BOTTOM_CENTER"
+                  alignment="TOP_CENTER"
+                  fillHeight="false"
                   spacing="5"
-                  prefWidth="650"
-                  prefHeight="400"
+                  prefWidth="850"
+                  prefHeight="750"
+                  maxWidth="Infinity"
+                  maxHeight="Infinity"
                   style="-fx-background-color: linear-gradient(to bottom, #111827, #1E293B); -fx-background-radius: 20; -fx-border-color: #374151; -fx-border-radius: 20; -fx-border-width: 2; -fx-padding: 20;"/>
         </StackPane>
 
