@@ -7,11 +7,9 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -29,22 +27,22 @@ public class StackController {
     @FXML private ScrollPane scrollPane;
     @FXML private VBox visualPane;
     @FXML private TextField inputField;
+    @FXML private TextField listInputField;
     @FXML private Label statusLabel;
     @FXML private Label complexityLabel;
     @FXML private VBox pseudoCodeBox;
-    @FXML private HBox controlsBox;
 
     private Stack<Integer> stack = new Stack<>();
-    private static final double RECT_WIDTH = 100;
-    private static final double RECT_HEIGHT = 40;
-    private static final String CODE_COLOR = "#34D399";
-    private static final String HIGHLIGHT_BG = "#374151";
+    private static final double RECT_WIDTH = 120; // Made slightly wider for bigger fonts
+    private static final double RECT_HEIGHT = 45; // Taller for bigger fonts
+    private static final String CODE_COLOR = "#A78BFA";
+    private static final String HIGHLIGHT_BG = "#334155";
     private static final String HIGHLIGHT_TEXT = "#FCD34D";
 
     @FXML
     public void onPush(ActionEvent event) {
         try {
-            int value = Integer.parseInt(inputField.getText());
+            int value = Integer.parseInt(inputField.getText().trim());
             inputField.clear();
 
             complexityLabel.setText("O(1) - Constant Time\nPushing only updates the top pointer.");
@@ -55,8 +53,7 @@ public class StackController {
                     "  stack[top] = value"
             };
             setupPseudoCode(codeLines);
-            controlsBox.setDisable(true);
-            statusLabel.setText("Animating Push...");
+            setStatus("Animating Push...", false);
 
             PauseTransition step1 = new PauseTransition(Duration.seconds(0.5));
             step1.setOnFinished(e -> highlightLine(1));
@@ -69,29 +66,26 @@ public class StackController {
                 highlightLine(3);
                 stack.push(value);
                 drawStack();
-                statusLabel.setText("Pushed: " + value);
+                setStatus("Pushed: " + value, false);
                 if (scrollPane != null) {
                     Platform.runLater(() -> scrollPane.setVvalue(0.0));
                 }
             });
 
             PauseTransition step4 = new PauseTransition(Duration.seconds(2.6));
-            step4.setOnFinished(e -> {
-                highlightLine(-1);
-                controlsBox.setDisable(false);
-            });
+            step4.setOnFinished(e -> highlightLine(-1));
 
             step1.play(); step2.play(); step3.play(); step4.play();
 
         } catch (NumberFormatException e) {
-            statusLabel.setText("Error: Enter a valid number");
+            setStatus("Error: Enter a valid number", true);
         }
     }
 
     @FXML
     public void onPop(ActionEvent event) {
         if (stack.isEmpty()) {
-            statusLabel.setText("Error: Stack is empty (Underflow)!");
+            setStatus("Error: Stack is empty (Underflow)!", true);
             return;
         }
 
@@ -104,8 +98,7 @@ public class StackController {
                 "  return value"
         };
         setupPseudoCode(codeLines);
-        controlsBox.setDisable(true);
-        statusLabel.setText("Animating Pop...");
+        setStatus("Animating Pop...", false);
 
         PauseTransition step1 = new PauseTransition(Duration.seconds(0.5));
         step1.setOnFinished(e -> highlightLine(1));
@@ -118,17 +111,14 @@ public class StackController {
             highlightLine(3);
             int poppedValue = stack.pop();
             drawStack();
-            statusLabel.setText("Popped: " + poppedValue);
+            setStatus("Popped: " + poppedValue, false);
         });
 
         PauseTransition step4 = new PauseTransition(Duration.seconds(2.6));
         step4.setOnFinished(e -> highlightLine(4));
 
         PauseTransition step5 = new PauseTransition(Duration.seconds(3.3));
-        step5.setOnFinished(e -> {
-            highlightLine(-1);
-            controlsBox.setDisable(false);
-        });
+        step5.setOnFinished(e -> highlightLine(-1));
 
         step1.play(); step2.play(); step3.play(); step4.play(); step5.play();
     }
@@ -136,7 +126,7 @@ public class StackController {
     @FXML
     public void onPeek(ActionEvent event) {
         if (stack.isEmpty()) {
-            statusLabel.setText("Stack is empty");
+            setStatus("Stack is empty", true);
             return;
         }
 
@@ -147,8 +137,7 @@ public class StackController {
                 "  return stack[top]"
         };
         setupPseudoCode(codeLines);
-        controlsBox.setDisable(true);
-        statusLabel.setText("Animating Peek...");
+        setStatus("Animating Peek...", false);
 
         PauseTransition step1 = new PauseTransition(Duration.seconds(0.5));
         step1.setOnFinished(e -> highlightLine(1));
@@ -156,22 +145,19 @@ public class StackController {
         PauseTransition step2 = new PauseTransition(Duration.seconds(1.2));
         step2.setOnFinished(e -> {
             highlightLine(2);
-            statusLabel.setText("Top Element: " + stack.peek());
+            setStatus("Top Element: " + stack.peek(), false);
             drawStack();
 
             if (!visualPane.getChildren().isEmpty()) {
                 StackPane topNode = (StackPane) visualPane.getChildren().get(0);
                 Rectangle rect = (Rectangle) topNode.getChildren().get(0);
-                rect.setFill(Color.web("#4ADE80"));
-                rect.setStroke(Color.web("#14532D"));
+                rect.setStroke(Color.web("#FCD34D"));
+                rect.setStrokeWidth(4);
             }
         });
 
         PauseTransition step3 = new PauseTransition(Duration.seconds(2.2));
-        step3.setOnFinished(e -> {
-            highlightLine(-1);
-            controlsBox.setDisable(false);
-        });
+        step3.setOnFinished(e -> highlightLine(-1));
 
         step1.play(); step2.play(); step3.play();
     }
@@ -188,8 +174,7 @@ public class StackController {
                 "    return False"
         };
         setupPseudoCode(codeLines);
-        controlsBox.setDisable(true);
-        statusLabel.setText("Animating isEmpty...");
+        setStatus("Animating isEmpty...", false);
 
         PauseTransition step1 = new PauseTransition(Duration.seconds(0.5));
         step1.setOnFinished(e -> highlightLine(1));
@@ -202,23 +187,44 @@ public class StackController {
             } else {
                 highlightLine(4);
             }
-            statusLabel.setText("Is Empty? " + (empty ? "Yes (True)" : "No (False)"));
+            setStatus("Is Empty? " + (empty ? "Yes (True)" : "No (False)"), false);
         });
 
         PauseTransition step3 = new PauseTransition(Duration.seconds(2.2));
-        step3.setOnFinished(e -> {
-            highlightLine(-1);
-            controlsBox.setDisable(false);
-        });
+        step3.setOnFinished(e -> highlightLine(-1));
 
         step1.play(); step2.play(); step3.play();
+    }
+
+    @FXML
+    void onCreateList(ActionEvent event) {
+        String input = listInputField.getText().trim();
+        if (input.isEmpty()) {
+            setStatus("Please enter a list (e.g. 10,20,30)", true);
+            return;
+        }
+
+        try {
+            stack.clear();
+            String[] items = input.split(",");
+            for (String item : items) {
+                stack.push(Integer.parseInt(item.trim()));
+            }
+            drawStack();
+            setStatus("Stack initialized with " + stack.size() + " elements.", false);
+            pseudoCodeBox.getChildren().clear();
+            complexityLabel.setText("Cleared");
+            listInputField.clear();
+        } catch (NumberFormatException e) {
+            setStatus("Error: Enter valid numbers separated by commas.", true);
+        }
     }
 
     @FXML
     public void onClear(ActionEvent event) {
         stack.clear();
         drawStack();
-        statusLabel.setText("Stack Cleared");
+        setStatus("Stack Cleared", false);
         pseudoCodeBox.getChildren().clear();
         complexityLabel.setText("Cleared");
     }
@@ -226,9 +232,13 @@ public class StackController {
     @FXML
     protected void onBackClick(ActionEvent event) {
         try {
-            Parent root = FXMLLoader.load(getClass().getResource("/com/example/dsa_visual_lab/view/Linear-DataStructure/linear-dataStructures.fxml"));
-            Scene scene = ((Node) event.getSource()).getScene();
-            scene.setRoot(root);
+            String path = "/com/example/dsa_visual_lab/view/home/linear-dataStructures.fxml";
+            if (getClass().getResource(path) == null) {
+                path = "/com/example/dsa_visual_lab/view/Linear-DataStructure/linear-dataStructures.fxml";
+            }
+            Parent root = FXMLLoader.load(getClass().getResource(path));
+            Stage stage = (Stage)((Node)event.getSource()).getScene().getWindow();
+            stage.getScene().setRoot(root);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -238,17 +248,27 @@ public class StackController {
         visualPane.getChildren().clear();
         for (Integer value : stack) {
             Rectangle rect = new Rectangle(RECT_WIDTH, RECT_HEIGHT);
-            rect.setFill(Color.web("#A78BFA"));
-            rect.setStroke(Color.web("#0F172A"));
-            rect.setArcWidth(10);
-            rect.setArcHeight(10);
+            rect.setFill(Color.web("#0F172A"));
+            rect.setStroke(Color.web("#A78BFA"));
+            rect.setStrokeWidth(2);
+            rect.setArcWidth(8);
+            rect.setArcHeight(8);
 
             Text text = new Text(String.valueOf(value));
-            text.setFill(Color.web("#0F172A"));
-            text.setStyle("-fx-font-weight: bold; -fx-font-size: 14px;");
+            text.setFill(Color.WHITE);
+            text.setStyle("-fx-font-weight: bold; -fx-font-size: 18px;");
 
             StackPane itemNode = new StackPane(rect, text);
-            visualPane.getChildren().add(0, itemNode);
+            visualPane.getChildren().add(0, itemNode); // Insert at 0 so top of stack shows visually at the top
+        }
+    }
+
+    private void setStatus(String msg, boolean isError) {
+        statusLabel.setText(msg);
+        if (isError) {
+            statusLabel.setTextFill(Color.web("#F87171"));
+        } else {
+            statusLabel.setTextFill(Color.web("#FCD34D"));
         }
     }
 
@@ -257,9 +277,9 @@ public class StackController {
         for (String line : lines) {
             Label lbl = new Label(line);
             lbl.setTextFill(Color.web(CODE_COLOR));
-            lbl.setFont(Font.font("Consolas", 14));
+            lbl.setFont(Font.font("Consolas", 16));
             lbl.setMaxWidth(Double.MAX_VALUE);
-            lbl.setStyle("-fx-padding: 4; -fx-background-radius: 4;");
+            lbl.setStyle("-fx-padding: 2;");
             pseudoCodeBox.getChildren().add(lbl);
         }
     }
@@ -268,10 +288,10 @@ public class StackController {
         for (int i = 0; i < pseudoCodeBox.getChildren().size(); i++) {
             Label lbl = (Label) pseudoCodeBox.getChildren().get(i);
             if (i == index) {
-                lbl.setStyle("-fx-padding: 4; -fx-background-color: " + HIGHLIGHT_BG + "; -fx-background-radius: 4;");
+                lbl.setStyle("-fx-padding: 2; -fx-background-color: " + HIGHLIGHT_BG + "; -fx-background-radius: 2;");
                 lbl.setTextFill(Color.web(HIGHLIGHT_TEXT));
             } else {
-                lbl.setStyle("-fx-padding: 4; -fx-background-color: transparent; -fx-background-radius: 4;");
+                lbl.setStyle("-fx-padding: 2; -fx-background-color: transparent;");
                 lbl.setTextFill(Color.web(CODE_COLOR));
             }
         }

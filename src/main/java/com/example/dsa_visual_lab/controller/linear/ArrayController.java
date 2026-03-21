@@ -1,6 +1,7 @@
 package com.example.dsa_visual_lab.controller.linear;
 
 import javafx.animation.PauseTransition;
+import javafx.animation.TranslateTransition;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -8,7 +9,6 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.control.Label;
-import javafx.scene.control.ProgressBar;
 import javafx.scene.control.Slider;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
@@ -28,26 +28,25 @@ public class ArrayController {
 
     @FXML private Pane visualPane;
     @FXML private Label statusLabel, lblSizeCap, complexityLabel;
-    @FXML private ProgressBar capacityBar;
     @FXML private Slider speedSlider;
-    @FXML private TextField insertValueField, insertIndexField, searchValField, capacityField;
+    @FXML private TextField insertValueField, insertIndexField, searchValField, capacityField, initValuesField;
     @FXML private VBox pseudoCodeBox, controlsBox;
 
     private int[] arrayData;
     private int size = 0;
     private int capacity = 8;
 
-    private static final double BOX_SIZE = 65;
-    private static final double SPACING = 15;
+    private static final double BOX_SIZE = 60;
+    private static final double SPACING = 10;
     private static final String CODE_COLOR = "#34D399";
-    private static final String HIGHLIGHT_BG = "#374151";
+    private static final String HIGHLIGHT_BG = "#334155";
     private static final String HIGHLIGHT_TEXT = "#FCD34D";
 
     @FXML
     public void initialize() {
         arrayData = new int[capacity];
         render();
-        updateCapacityBar();
+        updateSizeAndCapacityText();
     }
 
     private Duration getStepDuration() {
@@ -72,7 +71,6 @@ public class ArrayController {
                 "  size++"
         };
         setupPseudoCode(codeLines);
-        controlsBox.setDisable(true);
         setStatus("Animating Append...", false);
 
         PauseTransition step1 = new PauseTransition(getStepDuration());
@@ -95,14 +93,13 @@ public class ArrayController {
             size++;
             render();
             highlightNode(size - 1, Color.web("#4ADE80"));
-            updateCapacityBar();
+            updateSizeAndCapacityText();
             setStatus("Appended " + val, false);
         });
 
         PauseTransition step4 = new PauseTransition(getStepDuration().multiply(4));
         step4.setOnFinished(e -> {
             highlightLine(-1);
-            controlsBox.setDisable(false);
         });
 
         step1.play(); step2.play(); step3.play(); step4.play();
@@ -131,7 +128,6 @@ public class ArrayController {
                 "  size++"
         };
         setupPseudoCode(codeLines);
-        controlsBox.setDisable(true);
         setStatus("Animating Insert...", false);
 
         if (size >= capacity) growArray();
@@ -148,27 +144,37 @@ public class ArrayController {
             arrayData[targetIndex] = value;
             size++;
             render();
-            updateCapacityBar();
+            updateSizeAndCapacityText();
             highlightNode(targetIndex, Color.web("#4ADE80"));
             setStatus("Inserted " + value + " at index " + targetIndex, false);
 
             PauseTransition end = new PauseTransition(getStepDuration());
             end.setOnFinished(ev -> {
                 highlightLine(-1);
-                controlsBox.setDisable(false);
             });
             end.play();
             return;
         }
 
         highlightLine(3);
-        arrayData[i + 1] = arrayData[i];
-        render();
-        highlightNode(i + 1, Color.web("#FCD34D"));
 
-        PauseTransition pause = new PauseTransition(getStepDuration());
-        pause.setOnFinished(e -> animateShiftRight(i - 1, targetIndex, value));
-        pause.play();
+        StackPane nodeToMove = getVisualNode(i);
+        if (nodeToMove != null) {
+            highlightNode(i, Color.web("#FCD34D"));
+
+            TranslateTransition slide = new TranslateTransition(getStepDuration(), nodeToMove);
+            slide.setByX(BOX_SIZE + SPACING);
+            slide.setOnFinished(e -> {
+                arrayData[i + 1] = arrayData[i];
+                render();
+                animateShiftRight(i - 1, targetIndex, value);
+            });
+            slide.play();
+        } else {
+            arrayData[i + 1] = arrayData[i];
+            render();
+            animateShiftRight(i - 1, targetIndex, value);
+        }
     }
 
     @FXML
@@ -183,7 +189,6 @@ public class ArrayController {
                 "  size--"
         };
         setupPseudoCode(codeLines);
-        controlsBox.setDisable(true);
         setStatus("Animating Remove Last...", false);
 
         PauseTransition step1 = new PauseTransition(getStepDuration());
@@ -195,14 +200,13 @@ public class ArrayController {
             arrayData[size - 1] = 0;
             size--;
             render();
-            updateCapacityBar();
+            updateSizeAndCapacityText();
             setStatus("Removed last element", false);
         });
 
         PauseTransition step3 = new PauseTransition(getStepDuration().multiply(3));
         step3.setOnFinished(e -> {
             highlightLine(-1);
-            controlsBox.setDisable(false);
         });
 
         step1.play(); step2.play(); step3.play();
@@ -228,7 +232,6 @@ public class ArrayController {
                 "  size--"
         };
         setupPseudoCode(codeLines);
-        controlsBox.setDisable(true);
         setStatus("Animating Remove...", false);
 
         PauseTransition delay = new PauseTransition(getStepDuration());
@@ -242,26 +245,36 @@ public class ArrayController {
             arrayData[size - 1] = 0;
             size--;
             render();
-            updateCapacityBar();
+            updateSizeAndCapacityText();
             setStatus("Removed element and shifted", false);
 
             PauseTransition end = new PauseTransition(getStepDuration());
             end.setOnFinished(ev -> {
                 highlightLine(-1);
-                controlsBox.setDisable(false);
             });
             end.play();
             return;
         }
 
         highlightLine(3);
-        arrayData[i] = arrayData[i + 1];
-        render();
-        highlightNode(i, Color.web("#F87171"));
 
-        PauseTransition pause = new PauseTransition(getStepDuration());
-        pause.setOnFinished(e -> animateShiftLeft(i + 1));
-        pause.play();
+        StackPane nodeToMove = getVisualNode(i + 1);
+        if (nodeToMove != null) {
+            highlightNode(i + 1, Color.web("#F87171"));
+
+            TranslateTransition slide = new TranslateTransition(getStepDuration(), nodeToMove);
+            slide.setByX(-(BOX_SIZE + SPACING));
+            slide.setOnFinished(e -> {
+                arrayData[i] = arrayData[i + 1];
+                render();
+                animateShiftLeft(i + 1);
+            });
+            slide.play();
+        } else {
+            arrayData[i] = arrayData[i + 1];
+            render();
+            animateShiftLeft(i + 1);
+        }
     }
 
     @FXML
@@ -280,7 +293,6 @@ public class ArrayController {
                 "  return -1"
         };
         setupPseudoCode(codeLines);
-        controlsBox.setDisable(true);
         setStatus("Searching for " + target + "...", false);
 
         animateSearchLoop(0, target);
@@ -294,7 +306,6 @@ public class ArrayController {
             PauseTransition end = new PauseTransition(getStepDuration());
             end.setOnFinished(e -> {
                 highlightLine(-1);
-                controlsBox.setDisable(false);
             });
             end.play();
             return;
@@ -313,7 +324,6 @@ public class ArrayController {
                 PauseTransition end = new PauseTransition(getStepDuration());
                 end.setOnFinished(ev -> {
                     highlightLine(-1);
-                    controlsBox.setDisable(false);
                 });
                 end.play();
             } else {
@@ -338,7 +348,6 @@ public class ArrayController {
                 "  return maxVal"
         };
         setupPseudoCode(codeLines);
-        controlsBox.setDisable(true);
         setStatus("Finding Max...", false);
 
         int[] maxData = { arrayData[0], 0 };
@@ -359,7 +368,6 @@ public class ArrayController {
             PauseTransition end = new PauseTransition(getStepDuration());
             end.setOnFinished(e -> {
                 highlightLine(-1);
-                controlsBox.setDisable(false);
             });
             end.play();
             return;
@@ -387,15 +395,37 @@ public class ArrayController {
         try {
             capacity = Integer.parseInt(capacityField.getText().trim());
             if (capacity <= 0) capacity = 8;
-            arrayData = new int[capacity];
-            size = 0;
+
+            String valStr = initValuesField.getText().trim();
+
+            if (!valStr.isEmpty()) {
+                String[] strValues = valStr.split(",");
+                if (strValues.length > capacity) {
+                    capacity = strValues.length;
+                    capacityField.setText(String.valueOf(capacity));
+                }
+
+                arrayData = new int[capacity];
+                size = 0;
+
+                for (String s : strValues) {
+                    arrayData[size++] = Integer.parseInt(s.trim());
+                }
+
+                setStatus("Array initialized with " + size + " elements.", false);
+            } else {
+                arrayData = new int[capacity];
+                size = 0;
+                setStatus("Empty array created with capacity " + capacity, false);
+            }
+
             render();
-            updateCapacityBar();
+            updateSizeAndCapacityText();
             pseudoCodeBox.getChildren().clear();
             complexityLabel.setText("Cleared");
-            setStatus("Array created with capacity " + capacity, false);
+
         } catch (NumberFormatException e) {
-            setStatus("Invalid capacity", true);
+            setStatus("Error: Make sure values are numbers (e.g. 5, 10, 15)", true);
         }
     }
 
@@ -405,7 +435,7 @@ public class ArrayController {
         System.arraycopy(arrayData, 0, newArr, 0, size);
         arrayData = newArr;
         render();
-        updateCapacityBar();
+        updateSizeAndCapacityText();
     }
 
     private void render() {
@@ -419,8 +449,8 @@ public class ArrayController {
             stack.setLayoutY(startY);
 
             Rectangle rect = new Rectangle(BOX_SIZE, BOX_SIZE);
-            rect.setArcWidth(8);
-            rect.setArcHeight(8);
+            rect.setArcWidth(5);
+            rect.setArcHeight(5);
             rect.setStrokeWidth(2);
 
             Text valText = new Text();
@@ -431,7 +461,7 @@ public class ArrayController {
             idxText.setFill(Color.web("#94A3B8"));
             idxText.setFont(Font.font("System", 14));
             idxText.setLayoutX(startX + i * (BOX_SIZE + SPACING) + (BOX_SIZE / 2) - 5);
-            idxText.setLayoutY(startY + BOX_SIZE + 25);
+            idxText.setLayoutY(startY + BOX_SIZE + 20);
 
             if (i < size) {
                 rect.setFill(Color.web("#1E293B"));
@@ -450,34 +480,38 @@ public class ArrayController {
         visualPane.setMinWidth((capacity * (BOX_SIZE + SPACING)) + 40);
     }
 
-    private void highlightNode(int index, Color color) {
+    private StackPane getVisualNode(int index) {
         int targetNodeIndex = index * 2;
         if (targetNodeIndex < visualPane.getChildren().size()) {
             Node n = visualPane.getChildren().get(targetNodeIndex);
             if (n instanceof StackPane) {
-                StackPane node = (StackPane) n;
-                Rectangle box = (Rectangle) node.getChildren().get(0);
-                box.setStroke(color);
-                box.setStrokeWidth(4);
-                box.getStrokeDashArray().clear();
+                return (StackPane) n;
             }
+        }
+        return null;
+    }
+
+    private void highlightNode(int index, Color color) {
+        StackPane node = getVisualNode(index);
+        if (node != null) {
+            Rectangle box = (Rectangle) node.getChildren().get(0);
+            box.setStroke(color);
+            box.setStrokeWidth(3);
+            box.getStrokeDashArray().clear();
         }
     }
 
-    private void updateCapacityBar() {
-        lblSizeCap.setText("Size: " + size + " / Capacity: " + capacity);
-        double progress = (double) size / capacity;
-        capacityBar.setProgress(progress);
-
-        if (progress > 0.8) capacityBar.setStyle("-fx-accent: #F59E0B; -fx-control-inner-background: #1E293B; -fx-background-radius: 10; -fx-border-radius: 10;");
-        if (progress == 1.0) capacityBar.setStyle("-fx-accent: #EF4444; -fx-control-inner-background: #1E293B; -fx-background-radius: 10; -fx-border-radius: 10;");
-        else capacityBar.setStyle("-fx-accent: #38BDF8; -fx-control-inner-background: #1E293B; -fx-background-radius: 10; -fx-border-radius: 10;");
+    private void updateSizeAndCapacityText() {
+        lblSizeCap.setText("Size = " + size + " | Capacity = " + capacity);
     }
 
     private void setStatus(String msg, boolean isError) {
         statusLabel.setText(msg);
-        if (isError) statusLabel.setStyle("-fx-text-fill: #F87171; -fx-background-color: #334155; -fx-padding: 10 25; -fx-background-radius: 12; -fx-border-color: #475569; -fx-border-radius: 12;");
-        else statusLabel.setStyle("-fx-text-fill: #FCD34D; -fx-background-color: #334155; -fx-padding: 10 25; -fx-background-radius: 12; -fx-border-color: #475569; -fx-border-radius: 12;");
+        if (isError) {
+            statusLabel.setTextFill(Color.web("#F87171"));
+        } else {
+            statusLabel.setTextFill(Color.web("#FCD34D"));
+        }
     }
 
     private void setupPseudoCode(String[] lines) {
@@ -487,7 +521,7 @@ public class ArrayController {
             lbl.setTextFill(Color.web(CODE_COLOR));
             lbl.setFont(Font.font("Consolas", 14));
             lbl.setMaxWidth(Double.MAX_VALUE);
-            lbl.setStyle("-fx-padding: 4; -fx-background-radius: 4;");
+            lbl.setStyle("-fx-padding: 2;");
             pseudoCodeBox.getChildren().add(lbl);
         }
     }
@@ -496,10 +530,10 @@ public class ArrayController {
         for (int i = 0; i < pseudoCodeBox.getChildren().size(); i++) {
             Label lbl = (Label) pseudoCodeBox.getChildren().get(i);
             if (i == index) {
-                lbl.setStyle("-fx-padding: 4; -fx-background-color: " + HIGHLIGHT_BG + "; -fx-background-radius: 4;");
+                lbl.setStyle("-fx-padding: 2; -fx-background-color: " + HIGHLIGHT_BG + "; -fx-background-radius: 2;");
                 lbl.setTextFill(Color.web(HIGHLIGHT_TEXT));
             } else {
-                lbl.setStyle("-fx-padding: 4; -fx-background-color: transparent; -fx-background-radius: 4;");
+                lbl.setStyle("-fx-padding: 2; -fx-background-color: transparent;");
                 lbl.setTextFill(Color.web(CODE_COLOR));
             }
         }

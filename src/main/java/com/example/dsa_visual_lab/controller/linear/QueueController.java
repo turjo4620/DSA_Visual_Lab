@@ -33,13 +33,12 @@ public class QueueController {
     @FXML private Label statusLabel;
     @FXML private Label complexityLabel;
     @FXML private VBox pseudoCodeBox;
-    @FXML private VBox controlsBox;
 
     private final LinkedList<StackPane> visualQueue = new LinkedList<>();
-    private static final double BOX_SIZE = 60;
+    private static final double BOX_SIZE = 70; // Slightly larger for better text fitting
     private static final int MAX_SIZE = 12;
     private static final String CODE_COLOR = "#34D399";
-    private static final String HIGHLIGHT_BG = "#374151";
+    private static final String HIGHLIGHT_BG = "#334155";
     private static final String HIGHLIGHT_TEXT = "#FCD34D";
 
     @FXML
@@ -64,7 +63,6 @@ public class QueueController {
                 "  queue[rear] = value"
         };
         setupPseudoCode(codeLines);
-        controlsBox.setDisable(true);
         setStatus("Animating Enqueue...", false);
 
         PauseTransition step1 = new PauseTransition(Duration.seconds(0.5));
@@ -92,10 +90,7 @@ public class QueueController {
         });
 
         PauseTransition step4 = new PauseTransition(Duration.seconds(2.6));
-        step4.setOnFinished(e -> {
-            highlightLine(-1);
-            controlsBox.setDisable(false);
-        });
+        step4.setOnFinished(e -> highlightLine(-1));
 
         step1.play(); step2.play(); step3.play(); step4.play();
     }
@@ -116,7 +111,6 @@ public class QueueController {
                 "  return value"
         };
         setupPseudoCode(codeLines);
-        controlsBox.setDisable(true);
         setStatus("Animating Dequeue...", false);
 
         PauseTransition step1 = new PauseTransition(Duration.seconds(0.5));
@@ -143,10 +137,7 @@ public class QueueController {
         step4.setOnFinished(e -> highlightLine(4));
 
         PauseTransition step5 = new PauseTransition(Duration.seconds(3.3));
-        step5.setOnFinished(e -> {
-            highlightLine(-1);
-            controlsBox.setDisable(false);
-        });
+        step5.setOnFinished(e -> highlightLine(-1));
 
         step1.play(); step2.play(); step3.play(); step4.play(); step5.play();
     }
@@ -165,7 +156,6 @@ public class QueueController {
                 "  return queue[front]"
         };
         setupPseudoCode(codeLines);
-        controlsBox.setDisable(true);
         setStatus("Animating Peek Front...", false);
 
         PauseTransition step1 = new PauseTransition(Duration.seconds(0.5));
@@ -180,10 +170,7 @@ public class QueueController {
         });
 
         PauseTransition step3 = new PauseTransition(Duration.seconds(2.2));
-        step3.setOnFinished(e -> {
-            highlightLine(-1);
-            controlsBox.setDisable(false);
-        });
+        step3.setOnFinished(e -> highlightLine(-1));
 
         step1.play(); step2.play(); step3.play();
     }
@@ -202,7 +189,6 @@ public class QueueController {
                 "  return queue[rear]"
         };
         setupPseudoCode(codeLines);
-        controlsBox.setDisable(true);
         setStatus("Animating Peek Back...", false);
 
         PauseTransition step1 = new PauseTransition(Duration.seconds(0.5));
@@ -217,10 +203,7 @@ public class QueueController {
         });
 
         PauseTransition step3 = new PauseTransition(Duration.seconds(2.2));
-        step3.setOnFinished(e -> {
-            highlightLine(-1);
-            controlsBox.setDisable(false);
-        });
+        step3.setOnFinished(e -> highlightLine(-1));
 
         step1.play(); step2.play(); step3.play();
     }
@@ -236,7 +219,6 @@ public class QueueController {
                 "    return False"
         };
         setupPseudoCode(codeLines);
-        controlsBox.setDisable(true);
         setStatus("Animating isEmpty...", false);
 
         PauseTransition step1 = new PauseTransition(Duration.seconds(0.5));
@@ -254,10 +236,7 @@ public class QueueController {
         });
 
         PauseTransition step3 = new PauseTransition(Duration.seconds(2.2));
-        step3.setOnFinished(e -> {
-            highlightLine(-1);
-            controlsBox.setDisable(false);
-        });
+        step3.setOnFinished(e -> highlightLine(-1));
 
         step1.play(); step2.play(); step3.play();
     }
@@ -302,8 +281,11 @@ public class QueueController {
     @FXML
     void onBackClick(ActionEvent event) {
         try {
-            String fxmlPath = "/com/example/dsa_visual_lab/view/Linear-DataStructure/linear-dataStructures.fxml";
-            Parent root = FXMLLoader.load(getClass().getResource(fxmlPath));
+            String path = "/com/example/dsa_visual_lab/view/home/linear-dataStructures.fxml";
+            if (getClass().getResource(path) == null) {
+                path = "/com/example/dsa_visual_lab/view/Linear-DataStructure/linear-dataStructures.fxml";
+            }
+            Parent root = FXMLLoader.load(getClass().getResource(path));
             Stage stage = (Stage)((Node)event.getSource()).getScene().getWindow();
             stage.getScene().setRoot(root);
         } catch (IOException e) {
@@ -314,11 +296,11 @@ public class QueueController {
     private StackPane createNode(String text) {
         StackPane stack = new StackPane();
         Rectangle box = new Rectangle(BOX_SIZE, BOX_SIZE);
-        box.setFill(Color.web("#1E293B"));
+        box.setFill(Color.web("#0F172A"));
         box.setStroke(Color.web("#34D399"));
         box.setStrokeWidth(2);
-        box.setArcWidth(10);
-        box.setArcHeight(10);
+        box.setArcWidth(8);
+        box.setArcHeight(8);
 
         Text value = new Text(text);
         value.setFill(Color.WHITE);
@@ -359,8 +341,11 @@ public class QueueController {
 
     private void setStatus(String msg, boolean isError) {
         statusLabel.setText(msg);
-        if (isError) statusLabel.setStyle("-fx-text-fill: #F87171; -fx-background-color: #334155; -fx-padding: 10 25; -fx-background-radius: 12; -fx-border-color: #475569; -fx-border-radius: 12;");
-        else statusLabel.setStyle("-fx-text-fill: #FCD34D; -fx-background-color: #334155; -fx-padding: 10 25; -fx-background-radius: 12; -fx-border-color: #475569; -fx-border-radius: 12;");
+        if (isError) {
+            statusLabel.setTextFill(Color.web("#F87171"));
+        } else {
+            statusLabel.setTextFill(Color.web("#FCD34D"));
+        }
     }
 
     private void setupPseudoCode(String[] lines) {
@@ -368,9 +353,9 @@ public class QueueController {
         for (String line : lines) {
             Label lbl = new Label(line);
             lbl.setTextFill(Color.web(CODE_COLOR));
-            lbl.setFont(Font.font("Consolas", 14));
+            lbl.setFont(Font.font("Consolas", 16));
             lbl.setMaxWidth(Double.MAX_VALUE);
-            lbl.setStyle("-fx-padding: 4; -fx-background-radius: 4;");
+            lbl.setStyle("-fx-padding: 2;");
             pseudoCodeBox.getChildren().add(lbl);
         }
     }
@@ -379,10 +364,10 @@ public class QueueController {
         for (int i = 0; i < pseudoCodeBox.getChildren().size(); i++) {
             Label lbl = (Label) pseudoCodeBox.getChildren().get(i);
             if (i == index) {
-                lbl.setStyle("-fx-padding: 4; -fx-background-color: " + HIGHLIGHT_BG + "; -fx-background-radius: 4;");
+                lbl.setStyle("-fx-padding: 2; -fx-background-color: " + HIGHLIGHT_BG + "; -fx-background-radius: 2;");
                 lbl.setTextFill(Color.web(HIGHLIGHT_TEXT));
             } else {
-                lbl.setStyle("-fx-padding: 4; -fx-background-color: transparent; -fx-background-radius: 4;");
+                lbl.setStyle("-fx-padding: 2; -fx-background-color: transparent;");
                 lbl.setTextFill(Color.web(CODE_COLOR));
             }
         }

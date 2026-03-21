@@ -17,12 +17,12 @@
 
     <top>
         <VBox alignment="CENTER" prefHeight="200.0" spacing="10.0"
-              style="-fx-background-color: linear-gradient(to bottom right, #1E293B, #0F172A); -fx-border-color: #38BDF8; -fx-border-width: 0 0 2 0;">
+              style="-fx-background-color: #1E293B; -fx-border-color: #38BDF8; -fx-border-width: 0 0 2 0;">
             <Label text="DSA VISUAL LAB" textFill="#38BDF8">
                 <font>
                     <Font name="System Bold" size="56.0" />
                 </font>
-                <style>-fx-effect: dropshadow(three-pass-box, #38BDF8, 15, 0.2, 0, 0);</style>
+<!--                <style>-fx-effect: dropshadow(three-pass-box, #38BDF8, 15, 0.2, 0, 0);</style>-->
             </Label>
             <Label text="Master Data Structures &amp; Algorithms Through Visualization" textFill="#94A3B8">
                 <font>

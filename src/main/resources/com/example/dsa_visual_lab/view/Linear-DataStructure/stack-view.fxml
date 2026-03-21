@@ -1,126 +1,91 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.control.ScrollPane?>
-<?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.Pane?>
-<?import javafx.scene.layout.StackPane?>
-<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane fx:id="stackContainer" prefHeight="700.0" prefWidth="1100.0"
-            style="-fx-background-color: #0F172A;"
-            xmlns="http://javafx.com/javafx/21"
-            xmlns:fx="http://javafx.com/fxml/1"
+<BorderPane fx:id="stackContainer" prefHeight="800" prefWidth="1280" style="-fx-background-color: #0F172A;"
+            xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="com.example.dsa_visual_lab.controller.linear.StackController">
 
     <top>
-        <StackPane alignment="CENTER_LEFT" prefHeight="100.0">
-            <padding>
-                <Insets left="30" right="30" top="20" bottom="20"/>
-            </padding>
-
-            <Button text="← BACK" onAction="#onBackClick"
-                    style="-fx-background-color: transparent; -fx-border-color: #A78BFA; -fx-border-radius: 20; -fx-border-width: 2; -fx-text-fill: #A78BFA; -fx-font-weight: bold; -fx-cursor: hand;"
-                    StackPane.alignment="TOP_LEFT">
-                <font><Font size="14.0"/></font>
-                <padding><Insets top="8" right="20" bottom="8" left="20"/></padding>
-            </Button>
-
-            <Label text="Stack Visualization (LIFO)" textFill="#A78BFA" StackPane.alignment="CENTER">
-                <font>
-                    <Font name="System Bold" size="36.0" />
-                </font>
-                <style>-fx-effect: dropshadow(three-pass-box, rgba(167, 139, 250, 0.4), 15, 0.2, 0, 0);</style>
-            </Label>
-        </StackPane>
+        <HBox alignment="CENTER_LEFT" prefHeight="60" spacing="20" style="-fx-background-color: #1E293B; -fx-border-color: #334155; -fx-border-width: 0 0 1 0; -fx-padding: 0 20;">
+            <Button onAction="#onBackClick" text="Back" style="-fx-background-color: #0F172A; -fx-text-fill: #94A3B8; -fx-border-color: #334155; -fx-border-radius: 6; -fx-background-radius: 6; -fx-cursor: hand; -fx-font-size: 15px;"/>
+            <Label text="Stack Visualization (LIFO)" textFill="#A78BFA" style="-fx-font-weight: bold; -fx-font-size: 26px;" />
+        </HBox>
     </top>
 
     <center>
         <VBox alignment="CENTER" spacing="20">
             <padding><Insets top="20" right="20" bottom="20" left="20"/></padding>
 
-            <ScrollPane fx:id="scrollPane" prefHeight="400.0" prefWidth="800.0"
-                        fitToWidth="true" fitToHeight="true"
-                        style="-fx-background: #1E293B; -fx-background-color: #1E293B; -fx-background-radius: 20; -fx-border-color: #334155; -fx-border-radius: 20; -fx-border-width: 2;">
+            <ScrollPane fx:id="scrollPane" fitToWidth="true" fitToHeight="true" vbarPolicy="NEVER" hbarPolicy="NEVER" style="-fx-background: #0F172A; -fx-background-color: #0F172A; -fx-border-color: transparent;">
                 <content>
-                    <VBox fx:id="visualPane" alignment="BOTTOM_CENTER" spacing="5.0"
-                          style="-fx-background-color: transparent;">
-                        <padding><Insets bottom="10" top="10"/></padding>
+                    <VBox fx:id="visualPane" alignment="BOTTOM_CENTER" spacing="5.0" prefHeight="350" minWidth="600" style="-fx-background-color: #1E293B; -fx-border-color: #334155; -fx-border-width: 2; -fx-background-radius: 8; -fx-border-radius: 8;">
+                        <padding><Insets bottom="20" top="20"/></padding>
                     </VBox>
                 </content>
             </ScrollPane>
 
-            <Label fx:id="statusLabel" text="Ready" textFill="#FCD34D"
-                   style="-fx-background-color: #334155; -fx-padding: 10 25; -fx-background-radius: 12; -fx-border-color: #475569; -fx-border-radius: 12;">
-                <font><Font name="System Bold" size="20.0"/></font>
-            </Label>
+            <Label fx:id="statusLabel" text="System Ready" textFill="#FCD34D" style="-fx-background-color: #1E293B; -fx-padding: 10 20; -fx-border-color: #334155; -fx-background-radius: 8; -fx-border-radius: 8; -fx-font-size: 18px;"/>
         </VBox>
     </center>
 
     <right>
-        <VBox prefWidth="320.0" spacing="15"
-              style="-fx-background-color: #1E293B; -fx-background-radius: 20; -fx-border-color: #334155; -fx-border-radius: 20; -fx-border-width: 2;">
-            <padding><Insets top="25" right="20" bottom="25" left="20"/></padding>
+        <VBox prefWidth="320" spacing="15" style="-fx-background-color: #1E293B; -fx-border-color: #334155; -fx-border-width: 2; -fx-background-radius: 8; -fx-border-radius: 8;">
+            <padding><Insets top="20" right="15" bottom="20" left="15"/></padding>
             <BorderPane.margin><Insets top="20" right="20" bottom="20" left="0"/></BorderPane.margin>
 
-            <Label text="Analysis Panel" textFill="#A78BFA">
-                <font><Font name="System Bold" size="22.0"/></font>
-            </Label>
+            <Label text="Analysis Panel" textFill="#A78BFA" style="-fx-font-weight: bold; -fx-font-size: 20px;"/>
+            <Pane prefHeight="2" style="-fx-background-color: #334155;" />
+
+            <Label text="Time Complexity" textFill="#60A5FA" style="-fx-font-weight: bold; -fx-font-size: 16px;"/>
+            <Label fx:id="complexityLabel" text="Waiting for action..." textFill="#E2E8F0" wrapText="true" style="-fx-font-size: 15px;" />
 
             <Pane prefHeight="2" style="-fx-background-color: #334155;" />
 
-            <Label text="Time Complexity" textFill="#60A5FA">
-                <font><Font name="System Bold" size="16.0"/></font>
-            </Label>
-            <Label fx:id="complexityLabel" text="Waiting for action..." textFill="#E2E8F0" wrapText="true">
-                <font><Font size="14.0"/></font>
-            </Label>
-
-            <Pane prefHeight="2" style="-fx-background-color: #334155;" />
-
-            <Label text="Pseudo-code" textFill="#60A5FA">
-                <font><Font name="System Bold" size="16.0"/></font>
-            </Label>
-
-            <VBox fx:id="pseudoCodeBox" prefHeight="200.0" spacing="2"
-                  style="-fx-background-color: #0F172A; -fx-padding: 10; -fx-background-radius: 8; -fx-border-color: #334155; -fx-border-radius: 8;">
-                <Label text="" textFill="#34D399">
-                    <font><Font name="Consolas" size="14.0"/></font>
-                </Label>
+            <Label text="Pseudo-code" textFill="#60A5FA" style="-fx-font-weight: bold; -fx-font-size: 16px;"/>
+            <VBox fx:id="pseudoCodeBox" prefHeight="220" spacing="5" style="-fx-background-color: #0F172A; -fx-padding: 10; -fx-border-color: #334155; -fx-border-radius: 4; -fx-background-radius: 4;">
+                <Label text="// Code will appear here" textFill="#A78BFA" style="-fx-font-family: 'Consolas'; -fx-font-size: 16px;"/>
             </VBox>
         </VBox>
     </right>
 
     <bottom>
-        <VBox spacing="15" alignment="CENTER">
-            <padding><Insets bottom="60" top="10" right="320"/></padding>
+        <HBox alignment="CENTER" spacing="15" prefHeight="130" style="-fx-background-color: #1E293B; -fx-border-color: #334155; -fx-border-width: 1 0 0 0;">
+            <padding><Insets bottom="15" top="15" right="20" left="20"/></padding>
 
-            <HBox fx:id="controlsBox" alignment="CENTER" spacing="20.0">
-                <TextField fx:id="inputField" promptText="Value" prefWidth="120" prefHeight="45"
-                           style="-fx-background-color: #1E293B; -fx-text-fill: white; -fx-border-color: #A78BFA; -fx-border-radius: 8; -fx-background-radius: 8; -fx-font-size: 14px;"/>
+            <VBox spacing="10" alignment="CENTER_LEFT">
+                <TextField fx:id="inputField" promptText="Value" prefWidth="120" style="-fx-background-color: #0F172A; -fx-text-fill: white; -fx-border-color: #475569; -fx-border-radius: 6; -fx-pref-height: 40; -fx-font-size: 16px;"/>
+            </VBox>
 
-                <Button text="Push" onAction="#onPush" prefHeight="45" prefWidth="120"
-                        style="-fx-background-color: #A78BFA; -fx-text-fill: #0F172A; -fx-font-weight: bold; -fx-background-radius: 8; -fx-cursor: hand; -fx-font-size: 15px;"/>
+            <VBox spacing="5" alignment="CENTER">
+                <Label text="Modify" textFill="#94A3B8" style="-fx-font-size: 15px;"/>
+                <HBox spacing="10">
+                    <Button text="Push" onAction="#onPush" prefWidth="95" style="-fx-background-color: #0F172A; -fx-text-fill: #A78BFA; -fx-border-color: #334155; -fx-border-radius: 6; -fx-background-radius: 6; -fx-pref-height: 40; -fx-cursor: hand; -fx-font-size: 15px;"/>
+                    <Button text="Pop" onAction="#onPop" prefWidth="95" style="-fx-background-color: #0F172A; -fx-text-fill: #A78BFA; -fx-border-color: #334155; -fx-border-radius: 6; -fx-background-radius: 6; -fx-pref-height: 40; -fx-cursor: hand; -fx-font-size: 15px;"/>
+                </HBox>
+            </VBox>
 
-                <Button text="Pop" onAction="#onPop" prefHeight="45" prefWidth="120"
-                        style="-fx-background-color: transparent; -fx-border-color: #F87171; -fx-text-fill: #F87171; -fx-border-width: 2; -fx-border-radius: 8; -fx-font-weight: bold; -fx-cursor: hand; -fx-font-size: 15px;"/>
+            <VBox spacing="5" alignment="CENTER">
+                <Label text="Actions" textFill="#94A3B8" style="-fx-font-size: 15px;"/>
+                <HBox spacing="10">
+                    <Button text="Peek" onAction="#onPeek" prefWidth="105" style="-fx-background-color: #0F172A; -fx-text-fill: #A78BFA; -fx-border-color: #334155; -fx-border-radius: 6; -fx-background-radius: 6; -fx-pref-height: 40; -fx-cursor: hand; -fx-font-size: 15px;"/>
+                    <Button text="IsEmpty" onAction="#onIsEmpty" prefWidth="105" style="-fx-background-color: #0F172A; -fx-text-fill: #A78BFA; -fx-border-color: #334155; -fx-border-radius: 6; -fx-background-radius: 6; -fx-pref-height: 40; -fx-cursor: hand; -fx-font-size: 15px;"/>
+                </HBox>
+            </VBox>
 
-                <Pane prefWidth="20" />
+            <Region prefWidth="10" />
 
-                <Button text="Peek" onAction="#onPeek" prefHeight="45" prefWidth="120"
-                        style="-fx-background-color: #1E293B; -fx-border-color: #60A5FA; -fx-text-fill: #60A5FA; -fx-border-width: 2; -fx-border-radius: 8; -fx-font-weight: bold; -fx-cursor: hand; -fx-font-size: 15px;"/>
-
-                <Button text="IsEmpty" onAction="#onIsEmpty" prefHeight="45" prefWidth="120"
-                        style="-fx-background-color: #1E293B; -fx-border-color: #FCD34D; -fx-text-fill: #FCD34D; -fx-border-width: 2; -fx-border-radius: 8; -fx-font-weight: bold; -fx-cursor: hand; -fx-font-size: 15px;"/>
-
-                <Button text="Clear" onAction="#onClear" prefHeight="45" prefWidth="120"
-                        style="-fx-background-color: transparent; -fx-text-fill: #94A3B8; -fx-font-weight: bold; -fx-cursor: hand; -fx-font-size: 15px;"/>
-            </HBox>
-        </VBox>
+            <VBox spacing="5" alignment="CENTER_LEFT">
+                <Label text="Initialize" textFill="#94A3B8" style="-fx-font-size: 15px;"/>
+                <HBox spacing="10">
+                    <TextField fx:id="listInputField" promptText="e.g. 10,20,30" prefWidth="160" style="-fx-background-color: #0F172A; -fx-text-fill: white; -fx-border-color: #475569; -fx-border-radius: 6; -fx-pref-height: 40; -fx-font-size: 16px;"/>
+                    <Button text="Create Stack" onAction="#onCreateList" prefWidth="125" style="-fx-background-color: #0F172A; -fx-text-fill: #A78BFA; -fx-border-color: #334155; -fx-border-radius: 6; -fx-background-radius: 6; -fx-pref-height: 40; -fx-cursor: hand; -fx-font-size: 15px;"/>
+                    <Button text="Clear" onAction="#onClear" prefWidth="75" style="-fx-background-color: #0F172A; -fx-text-fill: #A78BFA; -fx-border-color: #334155; -fx-border-radius: 6; -fx-background-radius: 6; -fx-pref-height: 40; -fx-cursor: hand; -fx-font-size: 15px;"/>
+                </HBox>
+            </VBox>
+        </HBox>
     </bottom>
 </BorderPane>
