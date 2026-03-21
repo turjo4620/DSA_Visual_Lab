@@ -18,7 +18,6 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
-import javafx.stage.Stage;
 import javafx.util.Duration;
 
 import java.io.IOException;
@@ -35,6 +34,7 @@ public class BubbleSortController {
     @FXML private Slider speedSlider;
 
     @FXML private Label line1, line2, line3, line4;
+
     private Label[] codeLines;
 
     private int[] mainArray;
@@ -115,6 +115,7 @@ public class BubbleSortController {
     private void drawInitialBars() {
         arrayContainer.getChildren().clear();
         visualBars = new BarNode[mainArray.length];
+
         for (int i = 0; i < mainArray.length; i++) {
             visualBars[i] = new BarNode(mainArray[i], i);
             arrayContainer.getChildren().add(visualBars[i].container);
@@ -124,10 +125,11 @@ public class BubbleSortController {
     @FXML
     public void handleStart() {
         if (mainArray == null || mainArray.length == 0) return;
+
         controlsBox.setDisable(true);
         animationSteps = new ArrayList<>();
-        int[] tempArray = mainArray.clone();
 
+        int[] tempArray = mainArray.clone();
         generateBubbleSortSteps(tempArray);
 
         animationSteps.add(() -> {
@@ -143,6 +145,7 @@ public class BubbleSortController {
     private void generateBubbleSortSteps(int[] arr) {
         for (int i = 0; i < arr.length - 1; i++) {
             animationSteps.add(() -> highlightCode(0));
+
             for (int j = 0; j < arr.length - i - 1; j++) {
                 final int a = j;
                 final int b = j + 1;
@@ -160,6 +163,7 @@ public class BubbleSortController {
                     int temp = arr[a];
                     arr[a] = arr[b];
                     arr[b] = temp;
+
                     final int valA = arr[a];
                     final int valB = arr[b];
 
@@ -178,15 +182,19 @@ public class BubbleSortController {
                     visualBars[b].setColor("#38BDF8");
                 });
             }
+
             final int sortedIdx = arr.length - i - 1;
             animationSteps.add(() -> visualBars[sortedIdx].setColor("#4ADE80"));
         }
+
         animationSteps.add(() -> visualBars[0].setColor("#4ADE80"));
     }
 
     private void playAnimationSequence(int index) {
         if (index >= animationSteps.size()) return;
+
         animationSteps.get(index).run();
+
         PauseTransition delay = new PauseTransition(getStepDuration());
         delay.setOnFinished(e -> playAnimationSequence(index + 1));
         delay.play();
@@ -195,9 +203,9 @@ public class BubbleSortController {
     private void highlightCode(int activeIndex) {
         for (int i = 0; i < codeLines.length; i++) {
             if (i == activeIndex) {
-                codeLines[i].setStyle("-fx-background-color: #374151; -fx-text-fill: #FCD34D; -fx-padding: 2; -fx-background-radius: 4; -fx-font-size: 14px;");
+                codeLines[i].setStyle("-fx-background-color: #374151; -fx-text-fill: #FCD34D; -fx-padding: 2; -fx-background-radius: 4;");
             } else {
-                codeLines[i].setStyle("-fx-background-color: transparent; -fx-text-fill: white; -fx-padding: 2; -fx-font-size: 14px;");
+                codeLines[i].setStyle("-fx-background-color: transparent; -fx-text-fill: white;");
             }
         }
     }
