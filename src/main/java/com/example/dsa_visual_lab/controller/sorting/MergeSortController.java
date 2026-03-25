@@ -191,75 +191,86 @@ public class MergeSortController {
     }
 
     private void generateMergeSteps(int[] arr, int l, int m, int r, int depth) {
+
         animationSteps.add(() -> {
             highlightCode(6);
             setRangeColor(l, r, COLOR_MERGING);
-            statusLabel.setText("Depth " + depth + ": Merging [" + l + "-" + m + "] and [" + (m+1) + "-" + r + "]");
+            statusLabel.setText("Merging [" + l + "-" + m + "] and [" + (m+1) + "-" + r + "]");
         });
 
-        int n1 = m - l + 1;
-        int n2 = r - m;
-
-        int[] L = new int[n1];
-        int[] R = new int[n2];
-
-        animationSteps.add(() -> highlightCode(7));
-        System.arraycopy(arr, l, L, 0, n1);
-        System.arraycopy(arr, m + 1, R, 0, n2);
+        int[] L = Arrays.copyOfRange(arr, l, m + 1);
+        int[] R = Arrays.copyOfRange(arr, m + 1, r + 1);
 
         int i = 0, j = 0, k = l;
 
         animationSteps.add(() -> highlightCode(8));
-        while (i < n1 && j < n2) {
+
+        while (i < L.length && j < R.length) {
+
             animationSteps.add(() -> highlightCode(9));
 
-            final int currK = k;
-            if (L[i] <= R[j]) {
-                final int val = L[i];
-                arr[k] = L[i];
-                animationSteps.add(() -> {
-                    visualBars[currK].updateValue(val);
-                    visualBars[currK].setColor(COLOR_SORTED);
-                    statusLabel.setText("Picking smaller value: " + val);
-                });
-                i++;
-            } else {
-                final int val = R[j];
-                arr[k] = R[j];
-                animationSteps.add(() -> {
-                    visualBars[currK].updateValue(val);
-                    visualBars[currK].setColor(COLOR_SORTED);
-                    statusLabel.setText("Picking smaller value: " + val);
-                });
-                j++;
+            final int val;
+            if (L[i] <= R[j]) val = L[i++];
+            else val = R[j++];
+
+            arr[k] = val;
+            final int idx = k++;
+
+            animationSteps.add(() -> {
+                visualBars[idx].updateValue(val);
+                visualBars[idx].setColor(COLOR_MERGING);
+
+
+                TranslateTransition tt = new TranslateTransition(Duration.millis(300), visualBars[idx].container);
+                tt.setToY(depth * 40 + 60);
+                tt.play();
+
+                statusLabel.setText("Dropping: " + val);
+            });
+        }
+
+        while (i < L.length) {
+            final int val = L[i++];
+            arr[k] = val;
+            final int idx = k++;
+
+            animationSteps.add(() -> {
+                visualBars[idx].updateValue(val);
+                visualBars[idx].setColor(COLOR_MERGING);
+
+                TranslateTransition tt = new TranslateTransition(Duration.millis(300), visualBars[idx].container);
+                tt.setToY(depth * 40 + 60);
+                tt.play();
+            });
+        }
+
+        while (j < R.length) {
+            final int val = R[j++];
+            arr[k] = val;
+            final int idx = k++;
+
+            animationSteps.add(() -> {
+                visualBars[idx].updateValue(val);
+                visualBars[idx].setColor(COLOR_MERGING);
+
+                TranslateTransition tt = new TranslateTransition(Duration.millis(300), visualBars[idx].container);
+                tt.setToY(depth * 40 + 60);
+                tt.play();
+            });
+        }
+
+
+        animationSteps.add(() -> {
+            for (int x = l; x <= r; x++) {
+                visualBars[x].setColor(COLOR_SORTED);
+
+                TranslateTransition tt = new TranslateTransition(Duration.millis(300), visualBars[x].container);
+                tt.setToY(depth * 40);
+                tt.play();
             }
-            k++;
-        }
 
-        animationSteps.add(() -> highlightCode(10));
-        while (i < n1) {
-            final int currK = k;
-            final int val = L[i];
-            arr[k] = L[i];
-            animationSteps.add(() -> {
-                visualBars[currK].updateValue(val);
-                visualBars[currK].setColor(COLOR_SORTED);
-                statusLabel.setText("Copying remaining left value: " + val);
-            });
-            i++; k++;
-        }
-
-        while (j < n2) {
-            final int currK = k;
-            final int val = R[j];
-            arr[k] = R[j];
-            animationSteps.add(() -> {
-                visualBars[currK].updateValue(val);
-                visualBars[currK].setColor(COLOR_SORTED);
-                statusLabel.setText("Copying remaining right value: " + val);
-            });
-            j++; k++;
-        }
+            statusLabel.setText("Merged.");
+        });
     }
 
     private void playAnimationSequence(int index) {
