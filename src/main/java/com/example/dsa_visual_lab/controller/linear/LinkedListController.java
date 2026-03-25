@@ -9,7 +9,6 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
@@ -28,11 +27,9 @@ import java.util.LinkedList;
 public class LinkedListController {
 
     @FXML private Pane visualPane;
-    @FXML private Label statusLabel;
-    @FXML private TextField valueField, indexField;
-    @FXML private Label complexityLabel;
+    @FXML private Label statusLabel, complexityLabel;
+    @FXML private TextField valueField, indexField, initValuesField;
     @FXML private VBox pseudoCodeBox;
-    @FXML private HBox controlsBox;
 
     private final LinkedList<String> listData = new LinkedList<>();
 
@@ -43,7 +40,7 @@ public class LinkedListController {
     private static final double GAP = 60;
 
     private static final String CODE_COLOR = "#34D399";
-    private static final String HIGHLIGHT_BG = "#374151";
+    private static final String HIGHLIGHT_BG = "#334155";
     private static final String HIGHLIGHT_TEXT = "#FCD34D";
 
     @FXML
@@ -59,7 +56,6 @@ public class LinkedListController {
                 "  head = newNode"
         };
         setupPseudoCode(codeLines);
-        controlsBox.setDisable(true);
         setStatus("Animating Insert Head...", false);
 
         PauseTransition step1 = new PauseTransition(Duration.seconds(0.5));
@@ -78,10 +74,7 @@ public class LinkedListController {
         });
 
         PauseTransition step4 = new PauseTransition(Duration.seconds(2.6));
-        step4.setOnFinished(e -> {
-            highlightLine(-1);
-            controlsBox.setDisable(false);
-        });
+        step4.setOnFinished(e -> highlightLine(-1));
 
         step1.play(); step2.play(); step3.play(); step4.play();
     }
@@ -100,7 +93,6 @@ public class LinkedListController {
                 "  tail = newNode"
         };
         setupPseudoCode(codeLines);
-        controlsBox.setDisable(true);
         setStatus("Animating Insert Tail...", false);
 
         PauseTransition step1 = new PauseTransition(Duration.seconds(0.5));
@@ -119,10 +111,7 @@ public class LinkedListController {
         });
 
         PauseTransition step4 = new PauseTransition(Duration.seconds(2.6));
-        step4.setOnFinished(e -> {
-            highlightLine(-1);
-            controlsBox.setDisable(false);
-        });
+        step4.setOnFinished(e -> highlightLine(-1));
 
         step1.play(); step2.play(); step3.play(); step4.play();
     }
@@ -145,7 +134,6 @@ public class LinkedListController {
                     "  temp.next = newNode"
             };
             setupPseudoCode(codeLines);
-            controlsBox.setDisable(true);
             setStatus("Animating Insert at Index...", false);
 
             PauseTransition step1 = new PauseTransition(Duration.seconds(0.5));
@@ -165,10 +153,7 @@ public class LinkedListController {
             });
 
             PauseTransition step4 = new PauseTransition(Duration.seconds(2.6));
-            step4.setOnFinished(e -> {
-                highlightLine(-1);
-                controlsBox.setDisable(false);
-            });
+            step4.setOnFinished(e -> highlightLine(-1));
 
             step1.play(); step2.play(); step3.play(); step4.play();
 
@@ -190,7 +175,6 @@ public class LinkedListController {
                 "  free(temp)"
         };
         setupPseudoCode(codeLines);
-        controlsBox.setDisable(true);
         setStatus("Animating Delete Head...", false);
 
         PauseTransition step1 = new PauseTransition(Duration.seconds(0.5));
@@ -208,10 +192,7 @@ public class LinkedListController {
         });
 
         PauseTransition step4 = new PauseTransition(Duration.seconds(2.6));
-        step4.setOnFinished(e -> {
-            highlightLine(-1);
-            controlsBox.setDisable(false);
-        });
+        step4.setOnFinished(e -> highlightLine(-1));
 
         step1.play(); step2.play(); step3.play(); step4.play();
     }
@@ -229,7 +210,6 @@ public class LinkedListController {
                 "  tail.next = null"
         };
         setupPseudoCode(codeLines);
-        controlsBox.setDisable(true);
         setStatus("Animating Delete Tail...", false);
 
         PauseTransition step1 = new PauseTransition(Duration.seconds(0.5));
@@ -247,10 +227,7 @@ public class LinkedListController {
         });
 
         PauseTransition step4 = new PauseTransition(Duration.seconds(2.6));
-        step4.setOnFinished(e -> {
-            highlightLine(-1);
-            controlsBox.setDisable(false);
-        });
+        step4.setOnFinished(e -> highlightLine(-1));
 
         step1.play(); step2.play(); step3.play(); step4.play();
     }
@@ -273,7 +250,6 @@ public class LinkedListController {
                     "  free(nodeToRemove)"
             };
             setupPseudoCode(codeLines);
-            controlsBox.setDisable(true);
             setStatus("Animating Delete at Index...", false);
 
             PauseTransition step1 = new PauseTransition(Duration.seconds(0.5));
@@ -292,10 +268,7 @@ public class LinkedListController {
             });
 
             PauseTransition step4 = new PauseTransition(Duration.seconds(2.6));
-            step4.setOnFinished(e -> {
-                highlightLine(-1);
-                controlsBox.setDisable(false);
-            });
+            step4.setOnFinished(e -> highlightLine(-1));
 
             step1.play(); step2.play(); step3.play(); step4.play();
 
@@ -321,7 +294,6 @@ public class LinkedListController {
                 "  return False"
         };
         setupPseudoCode(codeLines);
-        controlsBox.setDisable(true);
         setStatus("Animating Search...", false);
 
         PauseTransition step1 = new PauseTransition(Duration.seconds(0.5));
@@ -340,12 +312,29 @@ public class LinkedListController {
         });
 
         PauseTransition step3 = new PauseTransition(Duration.seconds(3.0));
-        step3.setOnFinished(e -> {
-            highlightLine(-1);
-            controlsBox.setDisable(false);
-        });
+        step3.setOnFinished(e -> highlightLine(-1));
 
         step1.play(); step2.play(); step3.play();
+    }
+
+    @FXML
+    void onCreateList(ActionEvent event) {
+        String valStr = initValuesField.getText().trim();
+        listData.clear();
+
+        if (!valStr.isEmpty()) {
+            String[] strValues = valStr.split(",");
+            for (String s : strValues) {
+                listData.add(s.trim());
+            }
+            setStatus("List initialized with " + listData.size() + " elements.", false);
+        } else {
+            setStatus("Empty list created.", false);
+        }
+
+        render();
+        pseudoCodeBox.getChildren().clear();
+        complexityLabel.setText("Cleared");
     }
 
     private void render() {
@@ -363,7 +352,8 @@ public class LinkedListController {
                         currentX + NODE_WIDTH + GAP, START_Y + NODE_HEIGHT / 2);
             } else {
                 Text nullText = new Text("NULL");
-                nullText.setFill(Color.web("#64748B"));
+                nullText.setFill(Color.web("#94A3B8"));
+                nullText.setStyle("-fx-font-size: 16px;"); // Larger NULL text
                 nullText.setLayoutX(currentX + NODE_WIDTH + 15);
                 nullText.setLayoutY(START_Y + NODE_HEIGHT / 2 + 5);
                 visualPane.getChildren().add(nullText);
@@ -378,17 +368,17 @@ public class LinkedListController {
 
         Rectangle box = new Rectangle(NODE_WIDTH, NODE_HEIGHT);
         box.setFill(Color.web("#1E293B"));
-        box.setStroke(Color.web("#818CF8"));
+        box.setStroke(Color.web("#38BDF8"));
         box.setStrokeWidth(2);
-        box.setArcWidth(10);
-        box.setArcHeight(10);
+        box.setArcWidth(8);
+        box.setArcHeight(8);
 
         Line separator = new Line(NODE_WIDTH * 0.7, 0, NODE_WIDTH * 0.7, NODE_HEIGHT);
-        separator.setStroke(Color.web("#818CF8"));
+        separator.setStroke(Color.web("#38BDF8"));
 
         Text text = new Text(val);
         text.setFill(Color.WHITE);
-        text.setStyle("-fx-font-weight: bold; -fx-font-size: 16px;");
+        text.setStyle("-fx-font-weight: bold; -fx-font-size: 18px;"); // Larger node text
         text.setTranslateX(-8);
 
         stack.getChildren().addAll(box, separator, text);
@@ -410,19 +400,19 @@ public class LinkedListController {
     }
 
     private void highlightNode(int index) {
-        int childIndex = index * 3;
+        int childIndex = index * 2;
         if (childIndex < visualPane.getChildren().size()) {
             Node n = visualPane.getChildren().get(childIndex);
             if (n instanceof StackPane) {
                 StackPane node = (StackPane) n;
                 Rectangle box = (Rectangle) node.getChildren().get(0);
 
-                box.setStroke(Color.web("#4ADE80"));
-                box.setStrokeWidth(4);
+                box.setStroke(Color.web("#FCD34D"));
+                box.setStrokeWidth(3);
 
                 PauseTransition reset = new PauseTransition(Duration.seconds(1.5));
                 reset.setOnFinished(e -> {
-                    box.setStroke(Color.web("#818CF8"));
+                    box.setStroke(Color.web("#38BDF8"));
                     box.setStrokeWidth(2);
                 });
                 reset.play();
@@ -432,8 +422,11 @@ public class LinkedListController {
 
     private void setStatus(String msg, boolean isError) {
         statusLabel.setText(msg);
-        if (isError) statusLabel.setStyle("-fx-text-fill: #F87171; -fx-background-color: #334155; -fx-padding: 10 25; -fx-background-radius: 12; -fx-border-color: #475569; -fx-border-radius: 12;");
-        else statusLabel.setStyle("-fx-text-fill: #FCD34D; -fx-background-color: #334155; -fx-padding: 10 25; -fx-background-radius: 12; -fx-border-color: #475569; -fx-border-radius: 12;");
+        if (isError) {
+            statusLabel.setTextFill(Color.web("#F87171"));
+        } else {
+            statusLabel.setTextFill(Color.web("#FCD34D"));
+        }
     }
 
     private void setupPseudoCode(String[] lines) {
@@ -441,9 +434,9 @@ public class LinkedListController {
         for (String line : lines) {
             Label lbl = new Label(line);
             lbl.setTextFill(Color.web(CODE_COLOR));
-            lbl.setFont(Font.font("Consolas", 14));
+            lbl.setFont(Font.font("Consolas", 16)); // Larger pseudo-code text
             lbl.setMaxWidth(Double.MAX_VALUE);
-            lbl.setStyle("-fx-padding: 4; -fx-background-radius: 4;");
+            lbl.setStyle("-fx-padding: 2;");
             pseudoCodeBox.getChildren().add(lbl);
         }
     }
@@ -452,10 +445,10 @@ public class LinkedListController {
         for (int i = 0; i < pseudoCodeBox.getChildren().size(); i++) {
             Label lbl = (Label) pseudoCodeBox.getChildren().get(i);
             if (i == index) {
-                lbl.setStyle("-fx-padding: 4; -fx-background-color: " + HIGHLIGHT_BG + "; -fx-background-radius: 4;");
+                lbl.setStyle("-fx-padding: 2; -fx-background-color: " + HIGHLIGHT_BG + "; -fx-background-radius: 2;");
                 lbl.setTextFill(Color.web(HIGHLIGHT_TEXT));
             } else {
-                lbl.setStyle("-fx-padding: 4; -fx-background-color: transparent; -fx-background-radius: 4;");
+                lbl.setStyle("-fx-padding: 2; -fx-background-color: transparent;");
                 lbl.setTextFill(Color.web(CODE_COLOR));
             }
         }

@@ -1,5 +1,5 @@
 /* root: The main dark theme variables */
-.root {
+/*.root {
     -fx-background-color: #0B1120; /* Deep Navy (Almost Black) */
     -fx-font-family: 'Inter', 'Segoe UI', sans-serif;
     -fx-text-fill: #E2E8F0;
