@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.Rectangle?>
+
+<VBox xmlns="http://javafx.com/javafx/21.0.6"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.example.dsa_visual_lab.controller.mst.MSTController"
+      spacing="20"
+      style="-fx-background-color: #0f172a; -fx-padding: 20;">
+
+
+    <HBox alignment="TOP_LEFT">
+        <Button text="← BACK"
+                prefWidth="120"
+                prefHeight="40"
+                onAction="#handleBack"
+                styleClass="algo-button"
+                style="-fx-border-color: #F87171; -fx-background-color: transparent; -fx-text-fill: white; -fx-cursor: hand;"/>
+    </HBox>
+
+
+    <HBox spacing="30" VBox.vgrow="ALWAYS">
+
+
+        <StackPane alignment="CENTER" HBox.hgrow="ALWAYS">
+            <clip>
+                <Rectangle width="850" height="750"/>
+            </clip>
+
+            <Pane fx:id="graphPane"
+                  prefWidth="850"
+                  prefHeight="750"
+                  style="-fx-background-color: linear-gradient(to bottom, #111827, #1E293B);
+                         -fx-background-radius: 20;
+                         -fx-border-color: #374151;
+                         -fx-border-radius: 20;
+                         -fx-border-width: 2;"/>
+        </StackPane>
+
+
+        <VBox spacing="15" prefWidth="400">
+            <Label text="Pseudocode"
+                   style="-fx-text-fill: #FACC15; -fx-font-size: 18px; -fx-font-weight: bold;"/>
+
+            <VBox spacing="8" style="-fx-background-color: #111827; -fx-border-color: #374151;
+                                     -fx-border-width: 2; -fx-background-radius: 10; -fx-border-radius: 10;
+                                     -fx-padding: 20;">
+                <Label fx:id="line1" text="Sort edges by weight" style="-fx-text-fill: white; -fx-font-size: 14px;"/>
+                <Label fx:id="line2" text="Pick smallest edge" style="-fx-text-fill: white; -fx-font-size: 14px;"/>
+                <Label fx:id="line3" text="Check for cycle using DSU" style="-fx-text-fill: white; -fx-font-size: 14px;"/>
+                <Label fx:id="line4" text="If no cycle → add edge to MST" style="-fx-text-fill: white; -fx-font-size: 14px;"/>
+                <Label fx:id="line5" text="Else → skip edge" style="-fx-text-fill: white; -fx-font-size: 14px;"/>
+                <Label fx:id="line6" text="Repeat until MST is complete" style="-fx-text-fill: white; -fx-font-size: 14px;"/>
+            </VBox>
+
+            <Label fx:id="statusLabel" text="Click Start to run Kruskal"
+                   style="-fx-text-fill: #38BDF8; -fx-font-size: 16px; -fx-font-weight: bold; -fx-wrap-text: true;"/>
+        </VBox>
+
+    </HBox>
+
+
+    <HBox spacing="15" alignment="CENTER" style="-fx-padding: 10;">
+
+
+        <VBox alignment="CENTER"
+              spacing="5"
+              style="-fx-background-color: #1E293B; -fx-padding: 5 10; -fx-border-radius: 5; -fx-border-color: #475569;">
+            <Label text="Speed" textFill="#94A3B8" style="-fx-font-size: 12px;"/>
+            <Slider fx:id="speedSlider" min="10" max="200" value="100" prefWidth="100"/>
+        </VBox>
+
+
+        <Button text="Start"
+                onAction="#handleStart"
+                prefWidth="150"
+                style="-fx-background-color: #34D399; -fx-text-fill: #0F172A; -fx-font-weight: bold; -fx-cursor: hand; -fx-padding: 10; -fx-background-radius: 5;"/>
+
+        <Button text="Reset"
+                onAction="#handleReset"
+                prefWidth="120"
+                style="-fx-background-color: transparent; -fx-text-fill: #FB923C; -fx-border-color: #FB923C; -fx-cursor: hand; -fx-padding: 10; -fx-border-radius: 5;"/>
+    </HBox>
+
+</VBox>

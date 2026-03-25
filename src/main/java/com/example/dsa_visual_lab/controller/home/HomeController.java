@@ -97,8 +97,15 @@ public class HomeController {
     }
 
     @FXML
-    public void openMST() {
-        showFeatureAlert("Minimum Spanning Trees");
+    public void openMST(ActionEvent event) {
+        try {
+            Parent root = FXMLLoader.load(getClass().getResource("/com/example/dsa_visual_lab/view/MST/mst-view.fxml"));
+            Scene scene = ((Node) event.getSource()).getScene();
+            scene.setRoot(root);
+        } catch (IOException e) {
+            System.out.println("Error loading Mst View:");
+            e.printStackTrace();
+        }
     }
 
     private void showFeatureAlert(String featureName) {
