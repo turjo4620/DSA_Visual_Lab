@@ -1,11 +1,9 @@
-/* root: The main dark theme variables */
-/*.root {
-    -fx-background-color: #0B1120; /* Deep Navy (Almost Black) */
+
     -fx-font-family: 'Inter', 'Segoe UI', sans-serif;
     -fx-text-fill: #E2E8F0;
 }
 
-/* ================= TOP BAR ================= */
+
 .top-bar {
     -fx-background-color: #1E293B;
     -fx-border-color: #334155;
@@ -19,7 +17,7 @@
     -fx-text-fill: #E2E8F0;
 }
 
-/* ================= BUTTONS ================= */
+
 .btn-back {
     -fx-background-color: transparent;
     -fx-text-fill: #94A3B8;
@@ -28,7 +26,7 @@
 }
 .btn-back:hover { -fx-text-fill: white; }
 
-/* Primary Action (Blue) */
+
 .btn-primary {
     -fx-background-color: #3B82F6;
     -fx-text-fill: white;
@@ -38,7 +36,7 @@
 }
 .btn-primary:hover { -fx-background-color: #2563EB; }
 
-/* Destructive Action (Red) */
+
 .btn-danger {
     -fx-background-color: rgba(239, 68, 68, 0.15);
     -fx-text-fill: #EF4444;
@@ -49,7 +47,7 @@
 }
 .btn-danger:hover { -fx-background-color: rgba(239, 68, 68, 0.25); }
 
-/* Secondary Action (Purple/Ghost) */
+
 .btn-secondary {
     -fx-background-color: transparent;
     -fx-text-fill: #A78BFA;
@@ -59,11 +57,11 @@
 }
 .btn-secondary:hover { -fx-background-color: rgba(167, 139, 250, 0.1); }
 
-/* ================= INPUTS & PANELS ================= */
+
 .panel-bg {
-    -fx-background-color: #1E293B; /* Lighter Navy Surface */
+    -fx-background-color: #1E293B;
     -fx-border-color: #334155;
-    -fx-border-width: 0 1 0 0; /* Right border only for separation */
+    -fx-border-width: 0 1 0 0;
 }
 
 .text-field {
@@ -75,14 +73,14 @@
 }
 .text-field:focused { -fx-border-color: #3B82F6; }
 
-/* Error Label */
+
 .error-msg {
     -fx-text-fill: #F87171;
     -fx-font-size: 11px;
     -fx-padding: 2 0 0 0;
 }
 
-/* ================= ACCORDION (CONTROLS) ================= */
+
 .accordion .titled-pane {
     -fx-text-fill: #E2E8F0;
 }
@@ -96,7 +94,7 @@
     -fx-border-color: transparent;
 }
 
-/* ================= TABS (LEARNING) ================= */
+
 .tab-pane .tab-header-area .tab-header-background {
     -fx-background-color: #1E293B;
 }
@@ -115,12 +113,12 @@
 }
 .tab-pane .tab:selected .tab-label { -fx-text-fill: white; }
 
-/* ================= VISUALIZATION AREA ================= */
+
 .vis-container {
     -fx-background-color: #0B1120;
 }
 
-/* Capacity Bar (Progress Bar Styling) */
+
 .capacity-bar .track {
     -fx-background-color: #1E293B;
     -fx-background-radius: 4;
@@ -130,7 +128,7 @@
     -fx-background-radius: 4;
 }
 
-/* The Array Box */
+
 .array-box {
     -fx-fill: #1E293B;
     -fx-stroke: #475569;
