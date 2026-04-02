@@ -6,7 +6,6 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 import javafx.scene.control.TextField;
@@ -44,6 +43,9 @@ public class KnapsackController {
     private int itemCount;
     private StackPane[][] visualCells;
 
+    private int currentItem = 1;
+    private int currentCapacity = 1;
+
     private static final double CELL_SIZE = 50;
     private static final String CODE_COLOR = "#34D399";
     private static final String HIGHLIGHT_BG = "#374151";
@@ -53,6 +55,10 @@ public class KnapsackController {
     public void initialize() {
         complexityLabel.setText("Waiting for input...");
         setupPseudoCode(new String[]{""});
+
+        weightsField.setText("2, 3, 4, 5");
+        valuesField.setText("3, 4, 5, 6");
+        capacityField.setText("8");
     }
 
     private Duration getStepDuration() {
@@ -76,7 +82,11 @@ public class KnapsackController {
             dpTable = new int[itemCount + 1][maxCapacity + 1];
             visualCells = new StackPane[itemCount + 1][maxCapacity + 1];
 
+            currentItem = 1;
+            currentCapacity = 1;
+
             complexityLabel.setText("O(N × W) Time & Space\nGenerates a 2D table to store subproblem results.");
+
             String[] dpAlgorithmLines = {
                     "for i = 1 to n:",
                     "  for w = 1 to capacity:",
@@ -89,13 +99,12 @@ public class KnapsackController {
                     "return dp[n][capacity]"
             };
             setupPseudoCode(dpAlgorithmLines);
-            controlsBox.setDisable(true);
 
             drawEmptyGrid();
             setStatus("Building DP Table...", false);
 
             PauseTransition initialDelay = new PauseTransition(Duration.seconds(1));
-            initialDelay.setOnFinished(e -> processCell(1, 1));
+            initialDelay.setOnFinished(e -> processCell());
             initialDelay.play();
 
         } catch (Exception e) {
@@ -133,16 +142,18 @@ public class KnapsackController {
         }
     }
 
-    private void processCell(int currentItem, int currentCapacity) {
+    private void processCell() {
         if (currentItem > itemCount) {
             highlightCodeLine(8);
-            setStatus("Optimal Value Found: " + dpTable[itemCount][maxCapacity], false);
-            traceOptimalPath(itemCount, maxCapacity);
+            setStatus("Optimal Value: " + dpTable[itemCount][maxCapacity], false);
+            controlsBox.setDisable(false);
             return;
         }
 
         if (currentCapacity > maxCapacity) {
-            processCell(currentItem + 1, 1);
+            currentCapacity = 1;
+            currentItem++;
+            processCell();
             return;
         }
 
@@ -154,53 +165,41 @@ public class KnapsackController {
 
         PauseTransition calculationDelay = new PauseTransition(getStepDuration());
         calculationDelay.setOnFinished(e -> {
-            int currentItemWeight = itemWeights[currentItem - 1];
-            int currentItemValue = itemValues[currentItem - 1];
+            int weight = itemWeights[currentItem - 1];
+            int value = itemValues[currentItem - 1];
 
-            if (currentItemWeight <= currentCapacity) {
+            if (weight <= currentCapacity) {
                 highlightCodeLine(5);
-                int valueIfIncluded = currentItemValue + dpTable[currentItem - 1][currentCapacity - currentItemWeight];
-                int valueIfExcluded = dpTable[currentItem - 1][currentCapacity];
-                dpTable[currentItem][currentCapacity] = Math.max(valueIfIncluded, valueIfExcluded);
+
+                int include = value + dpTable[currentItem - 1][currentCapacity - weight];
+                int exclude = dpTable[currentItem - 1][currentCapacity];
+
+                dpTable[currentItem][currentCapacity] = Math.max(include, exclude);
 
                 applyCellBorder(visualCells[currentItem - 1][currentCapacity], "#A78BFA");
-                applyCellBorder(visualCells[currentItem - 1][currentCapacity - currentItemWeight], "#4ADE80");
+                applyCellBorder(visualCells[currentItem - 1][currentCapacity - weight], "#4ADE80");
 
-                setStatus("max( exclude: " + valueIfExcluded + " , include: " + currentItemValue + "+" + dpTable[currentItem-1][currentCapacity-currentItemWeight] + " )", false);
+                setStatus("max(" + exclude + ", " + include + ")", false);
+
             } else {
                 highlightCodeLine(7);
+
                 dpTable[currentItem][currentCapacity] = dpTable[currentItem - 1][currentCapacity];
+
                 applyCellBorder(visualCells[currentItem - 1][currentCapacity], "#A78BFA");
-                setStatus("Weight limit exceeded (" + currentItemWeight + " > " + currentCapacity + "). Copying value " + dpTable[currentItem-1][currentCapacity], false);
+
+                setStatus("Copy " + dpTable[currentItem][currentCapacity], false);
             }
 
             setCellTextContent(activeCell, String.valueOf(dpTable[currentItem][currentCapacity]), "#FFFFFF");
 
-            PauseTransition moveNextDelay = new PauseTransition(getStepDuration().multiply(1.5));
-            moveNextDelay.setOnFinished(ev -> processCell(currentItem, currentCapacity + 1));
+            currentCapacity++;
+
+            PauseTransition moveNextDelay = new PauseTransition(getStepDuration());
+            moveNextDelay.setOnFinished(ev -> processCell());
             moveNextDelay.play();
         });
         calculationDelay.play();
-    }
-
-    private void traceOptimalPath(int itemIndex, int remainingCapacity) {
-        if (itemIndex <= 0 || remainingCapacity <= 0) {
-            controlsBox.setDisable(false);
-            return;
-        }
-
-        PauseTransition backtrackingDelay = new PauseTransition(getStepDuration());
-        backtrackingDelay.setOnFinished(e -> {
-            if (dpTable[itemIndex][remainingCapacity] != dpTable[itemIndex - 1][remainingCapacity]) {
-                applyCellBorder(visualCells[itemIndex][remainingCapacity], "#10B981");
-                setStatus("Item " + itemIndex + " is part of optimal solution", false);
-                traceOptimalPath(itemIndex - 1, remainingCapacity - itemWeights[itemIndex - 1]);
-            } else {
-                applyCellBorder(visualCells[itemIndex][remainingCapacity], "#64748B");
-                traceOptimalPath(itemIndex - 1, remainingCapacity);
-            }
-        });
-        backtrackingDelay.play();
     }
 
     private StackPane createHeaderLabel(String content, String colorHexCode) {
@@ -232,7 +231,7 @@ public class KnapsackController {
     }
 
     private void setCellTextContent(StackPane targetCell, String newContent, String textColorHexCode) {
-        if (targetCell.getChildren().size() > 1 && targetCell.getChildren().get(1) instanceof Text) {
+        if (targetCell != null && targetCell.getChildren().size() > 1 && targetCell.getChildren().get(1) instanceof Text) {
             Text textElement = (Text) targetCell.getChildren().get(1);
             textElement.setText(newContent);
             textElement.setFill(Color.web(textColorHexCode));
@@ -240,7 +239,7 @@ public class KnapsackController {
     }
 
     private void applyCellBorder(StackPane targetCell, String strokeColorHexCode) {
-        if (targetCell.getChildren().get(0) instanceof Rectangle) {
+        if (targetCell != null && targetCell.getChildren().size() > 0 && targetCell.getChildren().get(0) instanceof Rectangle) {
             Rectangle rectElement = (Rectangle) targetCell.getChildren().get(0);
             rectElement.setStroke(Color.web(strokeColorHexCode));
             rectElement.setStrokeWidth(4);
@@ -253,8 +252,10 @@ public class KnapsackController {
             for (int w = 0; w <= maxCapacity; w++) {
                 if (visualCells[i][w] != null && visualCells[i][w].getChildren().get(0) instanceof Rectangle) {
                     Rectangle rectElement = (Rectangle) visualCells[i][w].getChildren().get(0);
-                    rectElement.setStroke(Color.web("#475569"));
-                    rectElement.setStrokeWidth(2);
+                    if (i < currentItem || (i == currentItem && w < currentCapacity)) {
+                        rectElement.setStroke(Color.web("#475569"));
+                        rectElement.setStrokeWidth(2);
+                    }
                 }
             }
         }
@@ -266,6 +267,8 @@ public class KnapsackController {
         capacityField.clear();
         weightsField.clear();
         valuesField.clear();
+        currentItem = 1;
+        currentCapacity = 1;
         setStatus("Ready", false);
         setupPseudoCode(new String[]{""});
         complexityLabel.setText("Cleared");
