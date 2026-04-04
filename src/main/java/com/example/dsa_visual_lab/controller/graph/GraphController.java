@@ -98,14 +98,10 @@ public class GraphController {
         setupPseudoCode(new String[]{""});
 
         modeGroup.selectedToggleProperty().addListener((obs, oldVal, newVal) -> {
-            if (newVal == null) {
-                oldVal.setSelected(true);
-            } else {
-                clearSelection();
-                if (edgeStartNode != null) {
-                    edgeStartNode.circle.setStroke(Color.web("#34D399"));
-                    edgeStartNode = null;
-                }
+            clearSelection();
+            if (edgeStartNode != null) {
+                edgeStartNode.circle.setStroke(Color.web("#34D399"));
+                edgeStartNode = null;
             }
         });
     }
@@ -266,6 +262,7 @@ public class GraphController {
         List<Runnable> steps = new ArrayList<>();
         Queue<Integer> queue = new LinkedList<>();
         Set<Integer> visited = new HashSet<>();
+        List<Integer> resultPath = new ArrayList<>(); // Track the output path
 
         steps.add(() -> highlightLine(1));
         queue.add(startNode);
@@ -274,8 +271,15 @@ public class GraphController {
 
         while (!queue.isEmpty()) {
             int curr = queue.poll();
+            resultPath.add(curr); // Add to our result list when dequeued
+            String currentPathString = resultPath.toString(); // Capture state for the lambda
+
             steps.add(() -> highlightLine(4));
-            steps.add(() -> { highlightLine(4); highlightNode(curr, "#FCD34D"); });
+            steps.add(() -> {
+                highlightLine(4);
+                highlightNode(curr, "#FCD34D");
+                setStatus("BFS Path: " + currentPathString, false); // Print output
+            });
 
             for (int neighbor : adjacencyList.get(curr)) {
                 steps.add(() -> highlightLine(5));
@@ -291,7 +295,10 @@ public class GraphController {
             }
             steps.add(() -> { highlightNode(curr, "#A78BFA"); });
         }
-        steps.add(() -> { highlightLine(-1); controlsBox.setDisable(false); setStatus("BFS Complete", false); });
+
+        // Final print
+        String finalPath = resultPath.toString();
+        steps.add(() -> { highlightLine(-1); controlsBox.setDisable(false); setStatus("BFS Complete: " + finalPath, false); });
 
         playAnimationSequence(steps, 0);
     }
@@ -315,6 +322,7 @@ public class GraphController {
         List<Runnable> steps = new ArrayList<>();
         Stack<Integer> stack = new Stack<>();
         Set<Integer> visited = new HashSet<>();
+        List<Integer> resultPath = new ArrayList<>(); // Track the output path
 
         steps.add(() -> highlightLine(1));
         stack.push(startNode);
@@ -325,7 +333,14 @@ public class GraphController {
 
             if (!visited.contains(curr)) {
                 visited.add(curr);
-                steps.add(() -> { highlightLine(5); highlightNode(curr, "#FCD34D"); });
+                resultPath.add(curr); // Add to our result list when visited
+                String currentPathString = resultPath.toString(); // Capture state for the lambda
+
+                steps.add(() -> {
+                    highlightLine(5);
+                    highlightNode(curr, "#FCD34D");
+                    setStatus("DFS Path: " + currentPathString, false); // Print output
+                });
 
                 for (int neighbor : adjacencyList.get(curr)) {
                     steps.add(() -> highlightLine(6));
@@ -340,7 +355,10 @@ public class GraphController {
                 steps.add(() -> { highlightNode(curr, "#A78BFA"); });
             }
         }
-        steps.add(() -> { highlightLine(-1); controlsBox.setDisable(false); setStatus("DFS Complete", false); });
+
+        // Final print
+        String finalPath = resultPath.toString();
+        steps.add(() -> { highlightLine(-1); controlsBox.setDisable(false); setStatus("DFS Complete: " + finalPath, false); });
 
         playAnimationSequence(steps, 0);
     }

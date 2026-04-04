@@ -66,7 +66,7 @@
                     <ToggleGroup fx:id="modeGroup"/>
                 </fx:define>
                 <HBox spacing="5" style="-fx-background-color: #1E293B; -fx-padding: 5; -fx-background-radius: 8; -fx-border-color: #334155; -fx-border-radius: 8;">
-                    <ToggleButton fx:id="btnAddVertex" text="Add Vertex" toggleGroup="$modeGroup" style="-fx-cursor: hand; -fx-text-fill: white; -fx-base: #334155;" selected="true"/>
+                    <ToggleButton fx:id="btnAddVertex" text="Add Vertex" toggleGroup="$modeGroup" style="-fx-cursor: hand; -fx-text-fill: white; -fx-base: #334155;"/>
                     <ToggleButton fx:id="btnAddEdge" text="Add Edge" toggleGroup="$modeGroup" style="-fx-cursor: hand; -fx-text-fill: white; -fx-base: #334155;"/>
                     <ToggleButton fx:id="btnSelect" text="Select" toggleGroup="$modeGroup" style="-fx-cursor: hand; -fx-text-fill: white; -fx-base: #334155;"/>
                 </HBox>
