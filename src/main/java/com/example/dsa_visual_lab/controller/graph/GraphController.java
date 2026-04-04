@@ -28,6 +28,7 @@ import java.util.*;
 public class GraphController {
 
     @FXML private Pane visualPane;
+    @FXML private ToggleGroup modeGroup;
     @FXML private ToggleButton btnAddVertex, btnAddEdge, btnSelect;
     @FXML private ComboBox<String> traversalDropdown;
     @FXML private TextField startNodeField;
@@ -42,7 +43,7 @@ public class GraphController {
     private final Map<Integer, List<Integer>> adjacencyList = new HashMap<>();
 
     private GraphNode edgeStartNode = null;
-    private Object selectedItem = null; // Can be a GraphNode or GraphEdge
+    private Object selectedItem = null;
 
     private static final double RADIUS = 20;
     private static final String CODE_COLOR = "#34D399";
@@ -94,7 +95,19 @@ public class GraphController {
         complexityLabel.setText("Waiting for action...");
         traversalDropdown.getItems().addAll("BFS", "DFS");
         traversalDropdown.getSelectionModel().selectFirst();
-        setupPseudoCode(new String[]{"// Ready to build graph"});
+        setupPseudoCode(new String[]{""});
+
+        modeGroup.selectedToggleProperty().addListener((obs, oldVal, newVal) -> {
+            if (newVal == null) {
+                oldVal.setSelected(true);
+            } else {
+                clearSelection();
+                if (edgeStartNode != null) {
+                    edgeStartNode.circle.setStroke(Color.web("#34D399"));
+                    edgeStartNode = null;
+                }
+            }
+        });
     }
 
     private Duration getStepDuration() {
@@ -104,7 +117,7 @@ public class GraphController {
 
     @FXML
     public void onCanvasClick(MouseEvent event) {
-        if (event.getTarget() != visualPane) return; // Ignore clicks directly on nodes/edges
+        if (event.getTarget() != visualPane) return;
 
         if (btnAddVertex.isSelected()) {
             GraphNode newNode = new GraphNode(nextNodeId++, event.getX(), event.getY());
@@ -121,19 +134,19 @@ public class GraphController {
         if (btnAddEdge.isSelected()) {
             if (edgeStartNode == null) {
                 edgeStartNode = node;
-                node.circle.setStroke(Color.web("#FCD34D")); // Highlight as start
+                node.circle.setStroke(Color.web("#FCD34D"));
                 setStatus("Select target vertex to create edge.", false);
             } else {
                 if (edgeStartNode != node) {
                     createEdge(edgeStartNode, node);
                 }
-                edgeStartNode.circle.setStroke(Color.web("#34D399")); // Reset
+                edgeStartNode.circle.setStroke(Color.web("#34D399"));
                 edgeStartNode = null;
             }
         } else if (btnSelect.isSelected()) {
             clearSelection();
             selectedItem = node;
-            node.circle.setStroke(Color.web("#EF4444")); // Highlight red for deletion
+            node.circle.setStroke(Color.web("#EF4444"));
             setStatus("Selected Vertex " + node.id, false);
         }
     }
@@ -148,14 +161,14 @@ public class GraphController {
     }
 
     private void createEdge(GraphNode u, GraphNode v) {
-        if (adjacencyList.get(u.id).contains(v.id)) return; // No duplicates
+        if (adjacencyList.get(u.id).contains(v.id)) return;
 
         GraphEdge newEdge = new GraphEdge(u, v);
         edges.add(newEdge);
         adjacencyList.get(u.id).add(v.id);
-        adjacencyList.get(v.id).add(u.id); // Undirected graph
+        adjacencyList.get(v.id).add(u.id);
 
-        visualPane.getChildren().add(0, newEdge.line); // Add behind nodes
+        visualPane.getChildren().add(0, newEdge.line);
         setStatus("Edge created: " + u.id + " - " + v.id, false);
     }
 
@@ -169,14 +182,12 @@ public class GraphController {
             nodes.remove(node.id);
             adjacencyList.remove(node.id);
 
-            // Remove connected edges
             Iterator<GraphEdge> it = edges.iterator();
             while (it.hasNext()) {
                 GraphEdge edge = it.next();
                 if (edge.source == node || edge.target == node) {
                     visualPane.getChildren().remove(edge.line);
                     it.remove();
-                    // Clean adjacency list of other nodes
                     if (adjacencyList.containsKey(edge.source.id)) adjacencyList.get(edge.source.id).remove(Integer.valueOf(node.id));
                     if (adjacencyList.containsKey(edge.target.id)) adjacencyList.get(edge.target.id).remove(Integer.valueOf(node.id));
                 }
@@ -259,12 +270,12 @@ public class GraphController {
         steps.add(() -> highlightLine(1));
         queue.add(startNode);
         visited.add(startNode);
-        steps.add(() -> { highlightLine(2); highlightNode(startNode, "#38BDF8"); }); // Blue for in queue
+        steps.add(() -> { highlightLine(2); highlightNode(startNode, "#38BDF8"); });
 
         while (!queue.isEmpty()) {
             int curr = queue.poll();
             steps.add(() -> highlightLine(4));
-            steps.add(() -> { highlightLine(4); highlightNode(curr, "#FCD34D"); }); // Yellow for current
+            steps.add(() -> { highlightLine(4); highlightNode(curr, "#FCD34D"); });
 
             for (int neighbor : adjacencyList.get(curr)) {
                 steps.add(() -> highlightLine(5));
@@ -273,12 +284,12 @@ public class GraphController {
                     steps.add(() -> {
                         highlightLine(7);
                         highlightEdge(curr, neighbor, "#38BDF8");
-                        highlightNode(neighbor, "#38BDF8"); // Blue for queued
+                        highlightNode(neighbor, "#38BDF8");
                     });
                     queue.add(neighbor);
                 }
             }
-            steps.add(() -> { highlightNode(curr, "#A78BFA"); }); // Purple for fully processed
+            steps.add(() -> { highlightNode(curr, "#A78BFA"); });
         }
         steps.add(() -> { highlightLine(-1); controlsBox.setDisable(false); setStatus("BFS Complete", false); });
 
@@ -314,19 +325,19 @@ public class GraphController {
 
             if (!visited.contains(curr)) {
                 visited.add(curr);
-                steps.add(() -> { highlightLine(5); highlightNode(curr, "#FCD34D"); }); // Current active
+                steps.add(() -> { highlightLine(5); highlightNode(curr, "#FCD34D"); });
 
                 for (int neighbor : adjacencyList.get(curr)) {
                     steps.add(() -> highlightLine(6));
                     if (!visited.contains(neighbor)) {
                         steps.add(() -> {
                             highlightLine(8);
-                            highlightEdge(curr, neighbor, "#F59E0B"); // Pending path
+                            highlightEdge(curr, neighbor, "#F59E0B");
                         });
                         stack.push(neighbor);
                     }
                 }
-                steps.add(() -> { highlightNode(curr, "#A78BFA"); }); // Processed
+                steps.add(() -> { highlightNode(curr, "#A78BFA"); });
             }
         }
         steps.add(() -> { highlightLine(-1); controlsBox.setDisable(false); setStatus("DFS Complete", false); });
