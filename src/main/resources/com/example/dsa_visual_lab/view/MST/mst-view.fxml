@@ -1,104 +1,173 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.shape.Rectangle?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Slider?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ToggleButton?>
+<?import javafx.scene.control.ToggleGroup?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
-<VBox xmlns="http://javafx.com/javafx/21.0.6"
-      xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="com.example.dsa_visual_lab.controller.mst.MSTController"
-      spacing="20"
-      style="-fx-background-color: #0f172a; -fx-padding: 20;">
+<BorderPane prefHeight="800.0" prefWidth="1280.0"
+            style="-fx-background-color: #0F172A;"
+            xmlns="http://javafx.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.example.dsa_visual_lab.controller.mst.MSTController">
 
-    <HBox alignment="CENTER_LEFT" spacing="20">
-        <Button text="← BACK"
-                prefWidth="120"
-                prefHeight="40"
-                onAction="#handleBack"
-                styleClass="algo-button"
-                style="-fx-border-color: #F87171; -fx-background-color: transparent; -fx-text-fill: white; -fx-cursor: hand;"/>
-        <Label text="Minimum Spanning Tree" style="-fx-text-fill: white; -fx-font-size: 28px; -fx-font-weight: bold;"/>
-    </HBox>
+    <top>
+        <HBox alignment="CENTER_LEFT" prefHeight="80.0"
+              style="-fx-padding: 10 20;">
+            <Button text="← Back"
+                    onAction="#handleBack"
+                    style="-fx-background-color: transparent; -fx-text-fill: #94A3B8;
+                           -fx-font-size: 14px; -fx-cursor: hand;
+                           -fx-border-color: #94A3B8; -fx-border-radius: 5;"/>
 
-    <HBox spacing="30" VBox.vgrow="ALWAYS">
+            <Label text="Minimum Spanning Tree (Kruskal's)"
+                   textFill="#F59E0B"
+                   style="-fx-font-weight: bold;"
+                   HBox.hgrow="ALWAYS"
+                   alignment="CENTER">
+                <font>
+                    <Font name="System Bold" size="28.0"/>
+                </font>
+                <HBox.margin>
+                    <Insets left="20"/>
+                </HBox.margin>
+            </Label>
+        </HBox>
+    </top>
 
-        <StackPane alignment="CENTER" HBox.hgrow="ALWAYS">
-            <clip>
-                <Rectangle width="850" height="750"/>
-            </clip>
+    <center>
+        <HBox spacing="10" style="-fx-padding: 10;">
 
             <Pane fx:id="graphPane"
-                  prefWidth="850"
-                  prefHeight="750"
-                  onMouseClicked="#onPaneClick"
-                  pickOnBounds="true"
-                  style="-fx-background-color: #111827;
-                         -fx-background-radius: 20;
-                         -fx-border-color: #374151;
-                         -fx-border-radius: 20;
-                         -fx-border-width: 2;"/>
-        </StackPane>
+                  style="-fx-background-color: #1E293B;
+                         -fx-background-radius: 10;
+                         -fx-border-color: #334155;
+                         -fx-border-width: 2;"
+                  HBox.hgrow="ALWAYS"/>
 
-        <VBox spacing="15" prefWidth="400">
-            <Label text="Pseudocode"
-                   style="-fx-text-fill: #FACC15; -fx-font-size: 18px; -fx-font-weight: bold;"/>
+            <VBox prefWidth="350.0" spacing="15"
+                  style="-fx-background-color: #1E293B;
+                         -fx-background-radius: 10;
+                         -fx-padding: 15;">
 
-            <VBox spacing="8" style="-fx-background-color: #111827; -fx-border-color: #374151;
-                                     -fx-border-width: 2; -fx-background-radius: 10; -fx-border-radius: 10;
-                                     -fx-padding: 20;">
-                <Label fx:id="line1" text="Sort edges by weight" style="-fx-text-fill: white; -fx-font-size: 14px;"/>
-                <Label fx:id="line2" text="Pick smallest edge" style="-fx-text-fill: white; -fx-font-size: 14px;"/>
-                <Label fx:id="line3" text="Check for cycle using DSU" style="-fx-text-fill: white; -fx-font-size: 14px;"/>
-                <Label fx:id="line4" text="If no cycle → add edge to MST" style="-fx-text-fill: white; -fx-font-size: 14px;"/>
-                <Label fx:id="line5" text="Else → skip edge" style="-fx-text-fill: white; -fx-font-size: 14px;"/>
-                <Label fx:id="line6" text="Repeat until MST is complete" style="-fx-text-fill: white; -fx-font-size: 14px;"/>
+                <Label text="Pseudocode"
+                       textFill="#FCD34D"
+                       style="-fx-font-weight: bold; -fx-font-size: 16px;"/>
+
+                <VBox spacing="8"
+                      style="-fx-background-color: #0F172A; -fx-padding: 10;
+                             -fx-background-radius: 8; -fx-border-color: #334155;
+                             -fx-border-radius: 8;"
+                      VBox.vgrow="ALWAYS">
+                    <Label fx:id="line1" text="Sort all edges by weight"
+                           style="-fx-text-fill: white; -fx-font-size: 14px; -fx-padding: 4; -fx-background-radius: 4;"/>
+                    <Label fx:id="line2" text="Pick the smallest edge"
+                           style="-fx-text-fill: white; -fx-font-size: 14px; -fx-padding: 4; -fx-background-radius: 4;"/>
+                    <Label fx:id="line3" text="Check for cycle using DSU"
+                           style="-fx-text-fill: white; -fx-font-size: 14px; -fx-padding: 4; -fx-background-radius: 4;"/>
+                    <Label fx:id="line4" text="If no cycle → add edge to MST"
+                           style="-fx-text-fill: white; -fx-font-size: 14px; -fx-padding: 4; -fx-background-radius: 4;"/>
+                    <Label fx:id="line5" text="Else → skip edge (cycle detected)"
+                           style="-fx-text-fill: white; -fx-font-size: 14px; -fx-padding: 4; -fx-background-radius: 4;"/>
+                    <Label fx:id="line6" text="Repeat until MST is complete"
+                           style="-fx-text-fill: white; -fx-font-size: 14px; -fx-padding: 4; -fx-background-radius: 4;"/>
+                </VBox>
             </VBox>
 
-            <Label fx:id="statusLabel" text="Click Start to run Kruskal"
-                   style="-fx-text-fill: #38BDF8; -fx-font-size: 16px; -fx-font-weight: bold; -fx-wrap-text: true;"/>
-        </VBox>
-
-    </HBox>
-
-    <HBox spacing="15" alignment="CENTER" style="-fx-padding: 10;">
-
-        <VBox alignment="CENTER" spacing="5"
-              style="-fx-background-color: #1E293B; -fx-padding: 5 10;
-                 -fx-border-radius: 5; -fx-border-color: #475569;">
-            <Label text="Speed" textFill="#94A3B8" style="-fx-font-size: 12px;"/>
-            <Slider fx:id="speedSlider" min="10" max="200" value="100" prefWidth="100"/>
-        </VBox>
-
-        <VBox alignment="CENTER" spacing="5"
-              style="-fx-background-color: #1E293B; -fx-padding: 5 10;
-                 -fx-border-radius: 5; -fx-border-color: #475569;">
-            <Label text="Edge Weight" style="-fx-text-fill: #94A3B8; -fx-font-size: 12px;"/>
-            <TextField fx:id="edgeWeightField"
-                       text="1"
-                       prefWidth="60"
-                       alignment="CENTER"
-                       style="-fx-background-color: #0F172A; -fx-text-fill: #FACC15;
-                          -fx-border-color: #475569; -fx-border-radius: 4;
-                          -fx-font-weight: bold; -fx-font-size: 14px;"/>
-        </VBox>
-
-        <HBox spacing="10" alignment="CENTER">
-            <fx:define>
-                <ToggleGroup fx:id="modeGroup"/>
-            </fx:define>
-            <ToggleButton fx:id="btnAddNode" text="Add Node" toggleGroup="$modeGroup" selected="true"/>
-            <ToggleButton fx:id="btnAddEdge" text="Add Edge" toggleGroup="$modeGroup"/>
         </HBox>
+    </center>
 
-        <Button text="Start" onAction="#handleStart" prefWidth="150"
-                style="-fx-background-color: #34D399; -fx-text-fill: #0F172A;
-                   -fx-font-weight: bold; -fx-cursor: hand;
-                   -fx-padding: 10; -fx-background-radius: 5;"/>
+    <bottom>
+        <VBox alignment="CENTER" spacing="15" style="-fx-padding: 20;">
 
-        <Button text="Reset" onAction="#handleReset" prefWidth="120"
-                style="-fx-background-color: transparent; -fx-text-fill: #FB923C;
-                   -fx-border-color: #FB923C; -fx-cursor: hand;
-                   -fx-padding: 10; -fx-border-radius: 5;"/>
-    </HBox>
+            <Label fx:id="statusLabel"
+                   text="Select a mode to build the graph"
+                   style="-fx-text-fill: #FCD34D; -fx-background-color: #334155;
+                          -fx-padding: 10 25; -fx-background-radius: 12;
+                          -fx-border-color: #475569; -fx-border-radius: 12;">
+                <font>
+                    <Font size="16.0"/>
+                </font>
+            </Label>
 
-</VBox>
+            <HBox alignment="CENTER" spacing="10">
+                <fx:define>
+                    <ToggleGroup fx:id="modeGroup"/>
+                </fx:define>
+
+                <HBox spacing="5"
+                      style="-fx-background-color: #1E293B; -fx-padding: 5;
+                             -fx-background-radius: 8; -fx-border-color: #334155;
+                             -fx-border-radius: 8;">
+                    <ToggleButton fx:id="btnAddNode"
+                                  text="Add Node"
+                                  toggleGroup="$modeGroup"
+                                  style="-fx-cursor: hand; -fx-text-fill: white; -fx-base: #334155;"/>
+                    <ToggleButton fx:id="btnAddEdge"
+                                  text="Add Edge"
+                                  toggleGroup="$modeGroup"
+                                  style="-fx-cursor: hand; -fx-text-fill: white; -fx-base: #334155;"/>
+                    <ToggleButton fx:id="btnSelect"
+                                  text="Select"
+                                  toggleGroup="$modeGroup"
+                                  style="-fx-cursor: hand; -fx-text-fill: white; -fx-base: #334155;"/>
+                </HBox>
+
+                <Button text="Delete Selected"
+                        onAction="#handleDeleteSelected"
+                        style="-fx-background-color: transparent; -fx-text-fill: #F87171;
+                               -fx-border-color: #F87171; -fx-padding: 5 10;
+                               -fx-background-radius: 5; -fx-cursor: hand;"/>
+
+                <Pane prefWidth="15"/>
+
+                <VBox alignment="CENTER" spacing="5"
+                      style="-fx-background-color: #1E293B; -fx-padding: 5 10;
+                             -fx-background-radius: 8; -fx-border-color: #334155;
+                             -fx-border-radius: 8;">
+                    <Label text="Speed" textFill="#94A3B8"
+                           style="-fx-font-size: 10px;"/>
+                    <Slider fx:id="speedSlider" min="10" max="200" value="100" prefWidth="80"/>
+                </VBox>
+
+                <VBox alignment="CENTER" spacing="5"
+                      style="-fx-background-color: #1E293B; -fx-padding: 5 10;
+                             -fx-background-radius: 8; -fx-border-color: #334155;
+                             -fx-border-radius: 8;">
+                    <Label text="Edge Weight" textFill="#94A3B8"
+                           style="-fx-font-size: 10px;"/>
+                    <TextField fx:id="edgeWeightField"
+                               text="1"
+                               prefWidth="60"
+                               alignment="CENTER"
+                               style="-fx-background-color: #0F172A; -fx-text-fill: #FACC15;
+                                      -fx-border-color: #475569; -fx-border-radius: 4;
+                                      -fx-font-weight: bold; -fx-font-size: 14px;"/>
+                </VBox>
+
+                <Button text="Start"
+                        onAction="#handleStart"
+                        prefWidth="85"
+                        style="-fx-background-color: #34D399; -fx-text-fill: #0F172A;
+                               -fx-font-weight: bold; -fx-padding: 8;
+                               -fx-background-radius: 5; -fx-cursor: hand;"/>
+
+                <Button text="Reset"
+                        onAction="#handleReset"
+                        prefWidth="60"
+                        style="-fx-background-color: transparent; -fx-text-fill: #FB923C;
+                               -fx-border-color: #FB923C; -fx-padding: 8;
+                               -fx-background-radius: 5; -fx-cursor: hand;"/>
+            </HBox>
+        </VBox>
+    </bottom>
+
+</BorderPane>

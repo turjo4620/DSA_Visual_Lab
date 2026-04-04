@@ -10,6 +10,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
@@ -26,59 +27,56 @@ public class MSTController {
     @FXML private Pane graphPane;
     @FXML private Label statusLabel;
     @FXML private Slider speedSlider;
-    @FXML private TextField edgeWeightField; // 🔥 single weight input
+    @FXML private TextField edgeWeightField;
 
     @FXML private Label line1, line2, line3, line4, line5, line6;
     private Label[] pseudoLines;
 
-    @FXML private ToggleButton btnAddNode, btnAddEdge;
+    @FXML private ToggleButton btnAddNode, btnAddEdge, btnSelect;
+    @FXML private ToggleGroup modeGroup;
 
     private int nextNodeId = 0;
     private static final double RADIUS = 22;
 
+    private Object selectedItem = null;
+    private GraphNode edgeStart = null;
+    private int[] parent;
+    private List<Runnable> steps = new ArrayList<>();
+
     private class GraphNode {
         int id;
+        StackPane visual;
         Circle circle;
-        Text label;
 
         GraphNode(int id, double x, double y) {
             this.id = id;
 
             circle = new Circle(RADIUS);
-            circle.setCenterX(x);
-            circle.setCenterY(y);
             circle.setFill(Color.TRANSPARENT);
             circle.setStroke(Color.web("#34D399"));
             circle.setStrokeWidth(2.5);
 
-            label = new Text(String.valueOf(id));
-            label.setFill(Color.WHITE);
-            label.setFont(Font.font("Arial", FontWeight.BOLD, 14));
+            Text text = new Text(String.valueOf(id));
+            text.setFill(Color.WHITE);
+            text.setFont(Font.font("System", FontWeight.BOLD, 14));
 
+            visual = new StackPane(circle, text);
+            visual.setLayoutX(x - RADIUS);
+            visual.setLayoutY(y - RADIUS);
+            visual.setPrefSize(RADIUS * 2, RADIUS * 2);
 
-            layoutLabel();
-
-            circle.setOnMouseClicked(e -> {
+            visual.setOnMouseClicked(e -> {
+                e.consume();
                 if (btnAddEdge.isSelected()) {
-                    handleNodeClick(this);
-                    e.consume();
-                }
-            });
-            label.setOnMouseClicked(e -> {
-                if (btnAddEdge.isSelected()) {
-                    handleNodeClick(this);
-                    e.consume();
+                    handleNodeClickForEdge(this);
+                } else if (btnSelect.isSelected()) {
+                    handleNodeClickForSelect(this);
                 }
             });
         }
 
-        void layoutLabel() {
-            // Use applyCss trick: just offset by half of approximate char width
-            double tw = label.getLayoutBounds().getWidth();
-            double th = label.getLayoutBounds().getHeight();
-            label.setX(circle.getCenterX() - tw / 2);
-            label.setY(circle.getCenterY() + th / 4);
-        }
+        double centerX() { return visual.getLayoutX() + RADIUS; }
+        double centerY() { return visual.getLayoutY() + RADIUS; }
     }
 
     private class GraphEdge {
@@ -92,7 +90,6 @@ public class MSTController {
             this.v = v;
             this.w = w;
 
-            // ✅ Compute start/end on circle BORDER toward the other node
             double[] start = borderPoint(u, v);
             double[] end   = borderPoint(v, u);
 
@@ -100,21 +97,29 @@ public class MSTController {
             line.setStroke(Color.web("#94A3B8"));
             line.setStrokeWidth(2);
 
-            double mx = (u.circle.getCenterX() + v.circle.getCenterX()) / 2;
-            double my = (u.circle.getCenterY() + v.circle.getCenterY()) / 2;
+            double mx = (u.centerX() + v.centerX()) / 2;
+            double my = (u.centerY() + v.centerY()) / 2;
             weightLabel = new Text(String.valueOf(w));
             weightLabel.setFill(Color.web("#FACC15"));
             weightLabel.setFont(Font.font("Arial", FontWeight.BOLD, 13));
             weightLabel.setX(mx + 5);
             weightLabel.setY(my - 5);
+
+            line.setOnMouseClicked(e -> {
+                e.consume();
+                if (btnSelect.isSelected()) {
+                    handleEdgeClickForSelect(this);
+                }
+            });
+
+            weightLabel.setOnMouseClicked(e -> e.consume());
         }
 
-        // Returns the point on node 'from' circle border facing node 'to'
         double[] borderPoint(GraphNode from, GraphNode to) {
-            double fx = from.circle.getCenterX();
-            double fy = from.circle.getCenterY();
-            double tx = to.circle.getCenterX();
-            double ty = to.circle.getCenterY();
+            double fx = from.centerX();
+            double fy = from.centerY();
+            double tx = to.centerX();
+            double ty = to.centerY();
             double angle = Math.atan2(ty - fy, tx - fx);
             return new double[]{
                     fx + RADIUS * Math.cos(angle),
@@ -125,9 +130,6 @@ public class MSTController {
 
     private Map<Integer, GraphNode> nodes = new HashMap<>();
     private List<GraphEdge> edges = new ArrayList<>();
-    private GraphNode edgeStart = null;
-    private int[] parent;
-    private List<Runnable> steps = new ArrayList<>();
 
     class Edge {
         int u, v, w;
@@ -137,6 +139,104 @@ public class MSTController {
     @FXML
     public void initialize() {
         pseudoLines = new Label[]{line1, line2, line3, line4, line5, line6};
+
+        graphPane.setOnMouseClicked(event -> {
+            if (!btnAddNode.isSelected()) return;
+            GraphNode node = new GraphNode(nextNodeId++, event.getX(), event.getY());
+            nodes.put(node.id, node);
+            graphPane.getChildren().add(node.visual);
+            statusLabel.setText("Added Node " + node.id);
+        });
+
+        modeGroup.selectedToggleProperty().addListener((obs, oldVal, newVal) -> {
+            if (newVal == null) {
+                oldVal.setSelected(true);
+                return;
+            }
+            clearSelection();
+            if (edgeStart != null) {
+                edgeStart.circle.setStroke(Color.web("#34D399"));
+                edgeStart = null;
+            }
+        });
+    }
+
+    private void handleNodeClickForEdge(GraphNode node) {
+        if (edgeStart == null) {
+            edgeStart = node;
+            node.circle.setStroke(Color.web("#FCD34D"));
+            statusLabel.setText("Selected Node " + node.id + " — click target node");
+        } else {
+            if (edgeStart != node) {
+                int w = getEdgeWeight();
+                GraphEdge e = new GraphEdge(edgeStart, node, w);
+                edges.add(e);
+                graphPane.getChildren().add(0, e.line);
+                graphPane.getChildren().add(e.weightLabel);
+                statusLabel.setText("Edge (" + edgeStart.id + " → " + node.id + ") w=" + w);
+            }
+            edgeStart.circle.setStroke(Color.web("#34D399"));
+            edgeStart = null;
+        }
+    }
+
+    private void handleNodeClickForSelect(GraphNode node) {
+        clearSelection();
+        selectedItem = node;
+        node.circle.setStroke(Color.web("#EF4444"));
+        statusLabel.setText("Selected Node " + node.id + " — click Delete Selected to remove");
+    }
+
+    private void handleEdgeClickForSelect(GraphEdge edge) {
+        clearSelection();
+        selectedItem = edge;
+        edge.line.setStroke(Color.web("#EF4444"));
+        edge.line.setStrokeWidth(4);
+        statusLabel.setText("Selected Edge (" + edge.u.id + " → " + edge.v.id + ") — click Delete Selected to remove");
+    }
+
+    @FXML
+    public void handleDeleteSelected() {
+        if (selectedItem == null) {
+            statusLabel.setText("Nothing selected. Use Select mode first.");
+            return;
+        }
+
+        if (selectedItem instanceof GraphNode) {
+            GraphNode node = (GraphNode) selectedItem;
+            Iterator<GraphEdge> it = edges.iterator();
+            while (it.hasNext()) {
+                GraphEdge ge = it.next();
+                if (ge.u == node || ge.v == node) {
+                    graphPane.getChildren().remove(ge.line);
+                    graphPane.getChildren().remove(ge.weightLabel);
+                    it.remove();
+                }
+            }
+            graphPane.getChildren().remove(node.visual);
+            nodes.remove(node.id);
+            statusLabel.setText("Deleted Node " + node.id + " and its edges.");
+
+        } else if (selectedItem instanceof GraphEdge) {
+            GraphEdge ge = (GraphEdge) selectedItem;
+            graphPane.getChildren().remove(ge.line);
+            graphPane.getChildren().remove(ge.weightLabel);
+            edges.remove(ge);
+            statusLabel.setText("Deleted Edge (" + ge.u.id + " → " + ge.v.id + ")");
+        }
+
+        selectedItem = null;
+    }
+
+    private void clearSelection() {
+        if (selectedItem instanceof GraphNode) {
+            ((GraphNode) selectedItem).circle.setStroke(Color.web("#34D399"));
+        } else if (selectedItem instanceof GraphEdge) {
+            GraphEdge ge = (GraphEdge) selectedItem;
+            ge.line.setStroke(Color.web("#94A3B8"));
+            ge.line.setStrokeWidth(2);
+        }
+        selectedItem = null;
     }
 
     private int getEdgeWeight() {
@@ -144,40 +244,6 @@ public class MSTController {
             return Integer.parseInt(edgeWeightField.getText().trim());
         } catch (NumberFormatException e) {
             return 1;
-        }
-    }
-
-    @FXML
-    public void onPaneClick(MouseEvent event) {
-        if (!btnAddNode.isSelected()) return;
-        if (!(event.getTarget() instanceof Pane)) return;
-
-        double x = event.getX();
-        double y = event.getY();
-
-        GraphNode node = new GraphNode(nextNodeId++, x, y);
-        nodes.put(node.id, node);
-        graphPane.getChildren().addAll(node.circle, node.label);
-        statusLabel.setText("Added Node " + node.id);
-    }
-
-    private void handleNodeClick(GraphNode node) {
-        if (edgeStart == null) {
-            edgeStart = node;
-            node.circle.setStroke(Color.YELLOW);
-            statusLabel.setText("Selected Node " + node.id + " — click target node");
-        } else {
-            if (edgeStart != node) {
-                int w = getEdgeWeight();
-                GraphEdge e = new GraphEdge(edgeStart, node, w);
-                edges.add(e);
-                // Insert line at bottom, weight label on top (above circles)
-                graphPane.getChildren().add(0, e.line);
-                graphPane.getChildren().add(e.weightLabel);
-                statusLabel.setText("Edge (" + edgeStart.id + "→" + node.id + ") w=" + w);
-            }
-            edgeStart.circle.setStroke(Color.web("#34D399"));
-            edgeStart = null;
         }
     }
 
@@ -276,6 +342,7 @@ public class MSTController {
         edges.clear();
         nextNodeId = 0;
         edgeStart = null;
+        selectedItem = null;
         statusLabel.setText("Reset done.");
         for (Label l : pseudoLines)
             l.setStyle("-fx-background-color:transparent; -fx-text-fill:white;");
