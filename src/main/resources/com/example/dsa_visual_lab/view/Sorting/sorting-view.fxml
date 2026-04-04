@@ -14,10 +14,8 @@
             prefWidth="1000" prefHeight="650"
             style="-fx-background-color: #0F172A;">
 
-    <!-- Top section: Back button + Titles -->
     <top>
-        <VBox spacing="5.0"> <!-- Reduced spacing between back button and titles -->
-            <!-- Back Button aligned left -->
+        <VBox spacing="5.0">
             <HBox alignment="TOP_LEFT">
                 <padding>
                     <Insets top="10" left="10" right="10" bottom="0"/>
@@ -30,10 +28,9 @@
                 </children>
             </HBox>
 
-            <!-- Titles centered -->
-            <VBox alignment="CENTER" spacing="5.0"> <!-- Reduced spacing between labels -->
+            <VBox alignment="CENTER" spacing="5.0">
                 <padding>
-                    <Insets top="5" right="20" bottom="10" left="20"/> <!-- Lifted top by reducing from 10 to 5 -->
+                    <Insets top="5" right="20" bottom="10" left="20"/>
                 </padding>
                 <Label text="Sorting Algorithms" textFill="#818CF8">
                     <font>
@@ -49,11 +46,8 @@
         </VBox>
     </top>
 
-
-    <!-- Center section: Sorting Buttons -->
     <center>
         <VBox spacing="30" alignment="CENTER">
-            <!-- First row: Bubble Sort and Merge Sort -->
             <HBox spacing="30" alignment="CENTER">
                 <Button text="Bubble Sort" prefWidth="250" prefHeight="150"
                         onAction="#handleBubbleSort"
@@ -65,7 +59,6 @@
                         style="-fx-border-color: #818CF8;"/>
             </HBox>
 
-            <!-- Second row: Quick Sort and Insertion Sort -->
             <HBox spacing="30" alignment="CENTER">
                 <Button text="Quick Sort" prefWidth="250" prefHeight="150"
                         onAction="#handleQuickSort"
@@ -83,8 +76,5 @@
                     style="-fx-border-color: #A78BFA;"/>
         </VBox>
     </center>
-
-
-
 
 </BorderPane>
