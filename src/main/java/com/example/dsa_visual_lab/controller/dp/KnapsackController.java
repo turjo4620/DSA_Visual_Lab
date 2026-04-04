@@ -146,7 +146,7 @@ public class KnapsackController {
         if (currentItem > itemCount) {
             highlightCodeLine(8);
             setStatus("Optimal Value: " + dpTable[itemCount][maxCapacity], false);
-            controlsBox.setDisable(false);
+            controlsBox.setDisable(true);
             return;
         }
 

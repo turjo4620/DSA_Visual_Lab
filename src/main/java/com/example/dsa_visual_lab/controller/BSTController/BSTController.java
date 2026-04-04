@@ -27,7 +27,6 @@ import javafx.util.Duration;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 public class BSTController {
 
@@ -462,28 +461,6 @@ public class BSTController {
         activeNode = null;
         render();
         if (controlsBox != null) controlsBox.setDisable(false);
-    }
-
-    @FXML
-    public void onRandomize(ActionEvent event) {
-        onClear();
-        Random random = new Random();
-        int nodesToCreate = 6 + random.nextInt(3);
-        for (int i = 0; i < nodesToCreate; i++) {
-            int val = random.nextInt(199) - 99;
-            root = silentInsert(root, val);
-        }
-        render();
-        setupPseudoCode(new String[]{""});
-        setStatus("Generated Random BST", false);
-    }
-
-    private TreeNode silentInsert(TreeNode node, int val) {
-        if (node == null) return new TreeNode(val);
-        if (val < node.value) node.left = silentInsert(node.left, val);
-        else if (val > node.value) node.right = silentInsert(node.right, val);
-        else node.count++;
-        return node;
     }
 
     private void render() {

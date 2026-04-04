@@ -82,7 +82,7 @@
 
                 <TextField fx:id="startNodeField" prefWidth="70" promptText="Start Node" style="-fx-background-color: #1E293B; -fx-text-fill: white; -fx-border-color: #475569; -fx-padding: 8; -fx-background-radius: 5;" />
 
-                <ComboBox fx:id="traversalDropdown" prefWidth="100" promptText="Algorithm" style="-fx-background-color: #1E293B; -fx-text-fill: white; -fx-border-color: #475569; -fx-background-radius: 5; -fx-cursor: hand;" />
+                <ComboBox fx:id="traversalDropdown" prefWidth="100" promptText="Algorithm" style="-fx-background-color: #FFFFFF; -fx-text-fill: #0F172A; -fx-border-color: #475569; -fx-background-radius: 5; -fx-cursor: hand;" />
 
                 <Button onAction="#onTraverse" prefWidth="85" style="-fx-background-color: #A78BFA; -fx-text-fill: #0F172A; -fx-font-weight: bold; -fx-padding: 8; -fx-background-radius: 5; -fx-cursor: hand;" text="Traverse" />
 
