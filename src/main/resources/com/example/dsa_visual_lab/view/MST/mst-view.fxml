@@ -10,19 +10,17 @@
       spacing="20"
       style="-fx-background-color: #0f172a; -fx-padding: 20;">
 
-
-    <HBox alignment="TOP_LEFT">
+    <HBox alignment="CENTER_LEFT" spacing="20">
         <Button text="← BACK"
                 prefWidth="120"
                 prefHeight="40"
                 onAction="#handleBack"
                 styleClass="algo-button"
                 style="-fx-border-color: #F87171; -fx-background-color: transparent; -fx-text-fill: white; -fx-cursor: hand;"/>
+        <Label text="Minimum Spanning Tree" style="-fx-text-fill: white; -fx-font-size: 28px; -fx-font-weight: bold;"/>
     </HBox>
 
-
     <HBox spacing="30" VBox.vgrow="ALWAYS">
-
 
         <StackPane alignment="CENTER" HBox.hgrow="ALWAYS">
             <clip>
@@ -34,13 +32,12 @@
                   prefHeight="750"
                   onMouseClicked="#onPaneClick"
                   pickOnBounds="true"
-                  style="-fx-background-color: linear-gradient(to bottom, #111827, #1E293B);
+                  style="-fx-background-color: #111827;
                          -fx-background-radius: 20;
                          -fx-border-color: #374151;
                          -fx-border-radius: 20;
                          -fx-border-width: 2;"/>
         </StackPane>
-
 
         <VBox spacing="15" prefWidth="400">
             <Label text="Pseudocode"
@@ -63,10 +60,8 @@
 
     </HBox>
 
-
     <HBox spacing="15" alignment="CENTER" style="-fx-padding: 10;">
 
-        <!-- Speed -->
         <VBox alignment="CENTER" spacing="5"
               style="-fx-background-color: #1E293B; -fx-padding: 5 10;
                  -fx-border-radius: 5; -fx-border-color: #475569;">
@@ -74,7 +69,6 @@
             <Slider fx:id="speedSlider" min="10" max="200" value="100" prefWidth="100"/>
         </VBox>
 
-        <!-- 🔥 Edge Weight Input -->
         <VBox alignment="CENTER" spacing="5"
               style="-fx-background-color: #1E293B; -fx-padding: 5 10;
                  -fx-border-radius: 5; -fx-border-color: #475569;">
@@ -88,7 +82,6 @@
                           -fx-font-weight: bold; -fx-font-size: 14px;"/>
         </VBox>
 
-        <!-- Mode toggles -->
         <HBox spacing="10" alignment="CENTER">
             <fx:define>
                 <ToggleGroup fx:id="modeGroup"/>
