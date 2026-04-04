@@ -296,7 +296,6 @@ public class GraphController {
             steps.add(() -> { highlightNode(curr, "#A78BFA"); });
         }
 
-        // Final print
         String finalPath = resultPath.toString();
         steps.add(() -> { highlightLine(-1); controlsBox.setDisable(false); setStatus("BFS Complete: " + finalPath, false); });
 
@@ -356,7 +355,6 @@ public class GraphController {
             }
         }
 
-        // Final print
         String finalPath = resultPath.toString();
         steps.add(() -> { highlightLine(-1); controlsBox.setDisable(false); setStatus("DFS Complete: " + finalPath, false); });
 
