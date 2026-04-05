@@ -7,7 +7,6 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.stage.Stage;
 
 import java.io.IOException;
 
@@ -21,12 +20,24 @@ public class HomeController {
     }
 
     @FXML
+    private void handleLogout(ActionEvent event) {
+        try {
+            Parent loginRoot = FXMLLoader.load(getClass().getResource("/com/example/dsa_visual_lab/view/auth/login-view.fxml"));
+            Scene scene = ((Node) event.getSource()).getScene();
+            scene.setRoot(loginRoot);
+            scene.getStylesheets().clear();
+        } catch (IOException e) {
+            System.out.println("Error loading Login View:");
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
     private void openSorting(ActionEvent event) {
         try {
             Parent sortingRoot = FXMLLoader.load(getClass().getResource("/com/example/dsa_visual_lab/view/Sorting/sorting-view.fxml"));
             Scene scene = ((Node) event.getSource()).getScene();
             scene.setRoot(sortingRoot);
-
             scene.getStylesheets().clear();
             scene.getStylesheets().add(getClass().getResource(CSS_PATH).toExternalForm());
         } catch (IOException e) {
@@ -40,7 +51,6 @@ public class HomeController {
             Parent homeRoot = FXMLLoader.load(getClass().getResource("/com/example/dsa_visual_lab/view/home/home-view.fxml"));
             Scene scene = ((Node) event.getSource()).getScene();
             scene.setRoot(homeRoot);
-
             scene.getStylesheets().clear();
             scene.getStylesheets().add(getClass().getResource(CSS_PATH).toExternalForm());
         } catch (IOException e) {
@@ -55,7 +65,6 @@ public class HomeController {
             Scene scene = ((Node) event.getSource()).getScene();
             scene.setRoot(linearRoot);
         } catch (IOException e) {
-            System.out.println("Error loading Linear Data Structures View:");
             e.printStackTrace();
         }
     }
@@ -67,7 +76,6 @@ public class HomeController {
             Scene scene = ((Node) event.getSource()).getScene();
             scene.setRoot(bstRoot);
         } catch (IOException e) {
-            System.out.println("Error loading BST View:");
             e.printStackTrace();
         }
     }
@@ -79,7 +87,6 @@ public class HomeController {
             Scene scene = ((Node) event.getSource()).getScene();
             scene.setRoot(dpRoot);
         } catch (IOException e) {
-            System.out.println("Error loading Knapsack View:");
             e.printStackTrace();
         }
     }
@@ -91,7 +98,6 @@ public class HomeController {
             Scene scene = ((Node) event.getSource()).getScene();
             scene.setRoot(graphRoot);
         } catch (IOException e) {
-            System.out.println("Error loading Knapsack View:");
             e.printStackTrace();
         }
     }
@@ -103,7 +109,6 @@ public class HomeController {
             Scene scene = ((Node) event.getSource()).getScene();
             scene.setRoot(root);
         } catch (IOException e) {
-            System.out.println("Error loading Mst View:");
             e.printStackTrace();
         }
     }

@@ -6,6 +6,7 @@
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.FlowPane?>
+<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
@@ -16,20 +17,31 @@
             fx:controller="com.example.dsa_visual_lab.controller.home.HomeController">
 
     <top>
-        <VBox alignment="CENTER" prefHeight="200.0" spacing="10.0"
-              style="-fx-background-color: #1E293B; -fx-border-color: #38BDF8; -fx-border-width: 0 0 2 0;">
-            <Label text="DSA VISUAL LAB" textFill="#38BDF8">
+        <StackPane prefHeight="200.0" style="-fx-background-color: #1E293B; -fx-border-color: #38BDF8; -fx-border-width: 0 0 2 0;">
+            <VBox alignment="CENTER" spacing="10.0">
+                <Label text="DSA VISUAL LAB" textFill="#38BDF8">
+                    <font>
+                        <Font name="System Bold" size="56.0" />
+                    </font>
+                </Label>
+                <Label text="Master Data Structures &amp; Algorithms Through Visualization" textFill="#94A3B8">
+                    <font>
+                        <Font name="System Italic" size="18.0" />
+                    </font>
+                </Label>
+            </VBox>
+
+            <Button text="Logout" onAction="#handleLogout"
+                    style="-fx-background-color: transparent; -fx-text-fill: #F87171; -fx-border-color: #F87171; -fx-border-radius: 5; -fx-padding: 8 15; -fx-cursor: hand;"
+                    StackPane.alignment="TOP_RIGHT">
+                <StackPane.margin>
+                    <Insets top="20.0" right="20.0" />
+                </StackPane.margin>
                 <font>
-                    <Font name="System Bold" size="56.0" />
+                    <Font name="System Bold" size="14.0" />
                 </font>
-<!--                <style>-fx-effect: dropshadow(three-pass-box, #38BDF8, 15, 0.2, 0, 0);</style>-->
-            </Label>
-            <Label text="Master Data Structures &amp; Algorithms Through Visualization" textFill="#94A3B8">
-                <font>
-                    <Font name="System Italic" size="18.0" />
-                </font>
-            </Label>
-        </VBox>
+            </Button>
+        </StackPane>
     </top>
 
     <center>
@@ -57,13 +69,12 @@
                             styleClass="algo-button" style="-fx-border-color: #F472B6;" />
 
                     <Button onAction="#openMST" prefHeight="150.0" prefWidth="280.0"
-                            text="GREEDY &amp; MST" textAlignment="CENTER"
+                            text="GREEDY &amp;&#10;MST" textAlignment="CENTER"
                             styleClass="algo-button" style="-fx-border-color: #FB923C;" />
 
                     <Button onAction="#openDP" prefHeight="150.0" prefWidth="280.0"
                             text="DYNAMIC&#10;PROGRAMMING" textAlignment="CENTER"
                             styleClass="algo-button" style="-fx-border-color: #A78BFA;" />
-
                 </FlowPane>
             </content>
         </ScrollPane>

@@ -17,16 +17,14 @@ module com.example.dsa_visual_lab {
 
     opens com.example.dsa_visual_lab to javafx.fxml;
     opens com.example.dsa_visual_lab.controller.home to javafx.fxml;
-
     opens com.example.dsa_visual_lab.controller.linear to javafx.fxml;
-
     opens com.example.dsa_visual_lab.controller.sorting to javafx.fxml;
-
     opens com.example.dsa_visual_lab.controller.BSTController to javafx.fxml;
+    opens com.example.dsa_visual_lab.controller.graph to javafx.fxml;
+    opens com.example.dsa_visual_lab.controller.mst to javafx.fxml;
+
+    opens com.example.dsa_visual_lab.controller.auth to javafx.fxml;
 
     exports com.example.dsa_visual_lab.controller.dp;
     opens com.example.dsa_visual_lab.controller.dp to javafx.fxml;
-
-    opens com.example.dsa_visual_lab.controller.graph to javafx.fxml;
-    opens com.example.dsa_visual_lab.controller.mst to javafx.fxml;
 }
