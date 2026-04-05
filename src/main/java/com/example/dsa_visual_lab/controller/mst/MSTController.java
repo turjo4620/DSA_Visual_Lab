@@ -24,16 +24,23 @@ import java.util.*;
 
 public class MSTController {
 
-    @FXML private Pane graphPane;
-    @FXML private Label statusLabel;
-    @FXML private Slider speedSlider;
-    @FXML private TextField edgeWeightField;
+    @FXML
+    private Pane graphPane;
+    @FXML
+    private Label statusLabel;
+    @FXML
+    private Slider speedSlider;
+    @FXML
+    private TextField edgeWeightField;
 
-    @FXML private Label line1, line2, line3, line4, line5, line6;
+    @FXML
+    private Label line1, line2, line3, line4, line5, line6;
     private Label[] pseudoLines;
 
-    @FXML private ToggleButton btnAddNode, btnAddEdge, btnSelect;
-    @FXML private ToggleGroup modeGroup;
+    @FXML
+    private ToggleButton btnAddNode, btnAddEdge, btnSelect;
+    @FXML
+    private ToggleGroup modeGroup;
 
     private int nextNodeId = 0;
     private static final double RADIUS = 22;
@@ -75,8 +82,13 @@ public class MSTController {
             });
         }
 
-        double centerX() { return visual.getLayoutX() + RADIUS; }
-        double centerY() { return visual.getLayoutY() + RADIUS; }
+        double centerX() {
+            return visual.getLayoutX() + RADIUS;
+        }
+
+        double centerY() {
+            return visual.getLayoutY() + RADIUS;
+        }
     }
 
     private class GraphEdge {
@@ -91,7 +103,7 @@ public class MSTController {
             this.w = w;
 
             double[] start = borderPoint(u, v);
-            double[] end   = borderPoint(v, u);
+            double[] end = borderPoint(v, u);
 
             line = new Line(start[0], start[1], end[0], end[1]);
             line.setStroke(Color.web("#94A3B8"));
@@ -133,7 +145,12 @@ public class MSTController {
 
     class Edge {
         int u, v, w;
-        Edge(int u, int v, int w) { this.u = u; this.v = v; this.w = w; }
+
+        Edge(int u, int v, int w) {
+            this.u = u;
+            this.v = v;
+            this.w = w;
+        }
     }
 
     @FXML

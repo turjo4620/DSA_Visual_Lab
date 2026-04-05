@@ -275,7 +275,7 @@ public class KnapsackController {
     }
 
     private void setStatus(String messageContent, boolean isErrorState) {
-        statusLabel.setText(messageContent);
+//        statusLabel.setText(messageContent);
         if (isErrorState) {
             statusLabel.setStyle("-fx-text-fill: #F87171; -fx-background-color: #334155; -fx-padding: 10 25; -fx-background-radius: 12; -fx-border-color: #475569; -fx-border-radius: 12;");
         } else {
