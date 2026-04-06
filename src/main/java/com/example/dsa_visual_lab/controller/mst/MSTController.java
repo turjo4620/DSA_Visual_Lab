@@ -196,6 +196,8 @@ public class MSTController {
                 {2, 4}, {2, 5}, {3, 4}, {4, 5}, {0, 5}
         };
 
+
+
         Random rand = new Random();
         for (int[] pair : predefinedEdges) {
             GraphNode u = nodes.get(pair[0]);
@@ -366,6 +368,8 @@ public class MSTController {
         parent[find(a)] = find(b);
     }
 
+
+    // highlighting lines by inline css
     private void highlightPseudo(int activeIndex) {
         for (int i = 0; i < pseudoLines.length; i++) {
             pseudoLines[i].setStyle(i == activeIndex
