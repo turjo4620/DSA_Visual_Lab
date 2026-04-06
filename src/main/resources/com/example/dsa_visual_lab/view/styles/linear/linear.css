@@ -1,0 +1,63 @@
+.back-button {
+    -fx-border-color: #F87171;
+    -fx-background-color: transparent;
+    -fx-text-fill: white;
+    -fx-cursor: hand;
+    -fx-border-width: 2px;
+    -fx-border-radius: 8px;
+    -fx-background-radius: 8px;
+    -fx-font-weight: bold;
+    -fx-padding: 8 20;
+}
+
+.back-button:hover {
+    -fx-background-color: #F87171;
+    -fx-text-fill: #0F172A;
+}
+
+.algo-button {
+    -fx-background-color: #1E293B;
+    -fx-background-radius: 15px;
+    -fx-border-radius: 15px;
+    -fx-border-width: 2px;
+    -fx-text-fill: white;
+    -fx-cursor: hand;
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+}
+
+.algo-button:hover {
+    -fx-background-color: #334155;
+}
+
+.btn-array {
+    -fx-border-color: #F472B6;
+}
+
+.btn-array:hover {
+    -fx-border-color: #F9A8D4;
+}
+
+.btn-queue {
+    -fx-border-color: #34D399;
+}
+
+.btn-queue:hover {
+    -fx-border-color: #6EE7B7;
+}
+
+.btn-stack {
+    -fx-border-color: #A78BFA;
+}
+
+.btn-stack:hover {
+    -fx-border-color: #C4B5FD;
+}
+
+.btn-linkedlist {
+    -fx-border-color: #60A5FA;
+}
+
+.btn-linkedlist:hover {
+    -fx-border-color: #93C5FD;
+}

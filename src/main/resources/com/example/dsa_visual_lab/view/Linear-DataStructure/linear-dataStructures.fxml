@@ -11,7 +11,7 @@
 
 <BorderPane fx:id="linearContainer" prefHeight="700.0" prefWidth="1100.0"
             style="-fx-background-color: #0F172A;"
-            stylesheets="@../styles/linear.css"
+            stylesheets="@../styles/linear/linear.css"
             xmlns="http://javafx.com/javafx/21"
             xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="com.example.dsa_visual_lab.controller.home.LinearDataStructureController">
@@ -26,16 +26,19 @@
                 <Insets top="20" right="40" bottom="20" left="40"/>
             </padding>
 
-            <VBox alignment="CENTER" spacing="10.0" pickOnBounds="false" mouseTransparent="true">
+            <VBox alignment="CENTER" spacing="10.0"
+                  pickOnBounds="false" mouseTransparent="true">
                 <Label text="Linear Structures" textFill="#818CF8">
                     <font>
-                        <Font name="System Bold" size="48.0" />
+                        <Font name="System Bold" size="48.0"/>
                     </font>
-                    <style>-fx-effect: dropshadow(three-pass-box, rgba(129, 140, 248, 0.4), 15, 0.2, 0, 0);</style>
+                    <style>
+                        -fx-effect: dropshadow(three-pass-box, rgba(129, 140, 248, 0.4), 15, 0.2, 0, 0);
+                    </style>
                 </Label>
                 <Label text="Select a structure to visualize" textFill="#94A3B8">
                     <font>
-                        <Font size="18.0" />
+                        <Font size="18.0"/>
                     </font>
                 </Label>
             </VBox>
@@ -43,57 +46,56 @@
             <Button text="← BACK"
                     onAction="#onBackClick"
                     StackPane.alignment="TOP_LEFT"
-                    style="-fx-background-color: transparent; -fx-border-color: #F472B6; -fx-border-radius: 20; -fx-border-width: 2; -fx-text-fill: white; -fx-font-weight: bold; -fx-cursor: hand;">
+                    prefWidth="120" prefHeight="40"
+                    styleClass="back-button">
                 <font>
                     <Font size="14.0"/>
                 </font>
-                <padding>
-                    <Insets top="8" right="20" bottom="8" left="20"/>
-                </padding>
             </Button>
+
         </StackPane>
     </top>
 
     <center>
         <FlowPane alignment="CENTER" hgap="40.0" vgap="40.0">
 
-            <Button fx:id="btnArray" onAction="#onArrayClick"
+            <Button fx:id="btnArray"
+                    onAction="#onArrayClick"
                     text="Dynamic Array"
                     styleClass="algo-button, btn-array"
-                    prefWidth="300.0" prefHeight="180.0"
-                    style="-fx-background-color: #1E293B; -fx-background-radius: 15; -fx-border-color: #F472B6; -fx-border-radius: 15; -fx-border-width: 2; -fx-text-fill: white; -fx-cursor: hand;">
+                    prefWidth="300.0" prefHeight="180.0">
                 <font>
-                    <Font name="System Bold" size="24.0" />
+                    <Font name="System Bold" size="24.0"/>
                 </font>
             </Button>
 
-            <Button fx:id="btnQueue" onAction="#onQueueClick"
+            <Button fx:id="btnQueue"
+                    onAction="#onQueueClick"
                     text="Queue (FIFO)"
                     styleClass="algo-button, btn-queue"
-                    prefWidth="300.0" prefHeight="180.0"
-                    style="-fx-background-color: #1E293B; -fx-background-radius: 15; -fx-border-color: #34D399; -fx-border-radius: 15; -fx-border-width: 2; -fx-text-fill: white; -fx-cursor: hand;">
+                    prefWidth="300.0" prefHeight="180.0">
                 <font>
-                    <Font name="System Bold" size="24.0" />
+                    <Font name="System Bold" size="24.0"/>
                 </font>
             </Button>
 
-            <Button fx:id="btnStack" onAction="#onStackClick"
+            <Button fx:id="btnStack"
+                    onAction="#onStackClick"
                     text="Stack (LIFO)"
                     styleClass="algo-button, btn-stack"
-                    prefWidth="300.0" prefHeight="180.0"
-                    style="-fx-background-color: #1E293B; -fx-background-radius: 15; -fx-border-color: #A78BFA; -fx-border-radius: 15; -fx-border-width: 2; -fx-text-fill: white; -fx-cursor: hand;">
+                    prefWidth="300.0" prefHeight="180.0">
                 <font>
-                    <Font name="System Bold" size="24.0" />
+                    <Font name="System Bold" size="24.0"/>
                 </font>
             </Button>
 
-            <Button fx:id="btnLinkedList" onAction="#onLinkedListClick"
+            <Button fx:id="btnLinkedList"
+                    onAction="#onLinkedListClick"
                     text="Singly Linked List"
                     styleClass="algo-button, btn-linkedlist"
-                    prefWidth="300.0" prefHeight="180.0"
-                    style="-fx-background-color: #1E293B; -fx-background-radius: 15; -fx-border-color: #60A5FA; -fx-border-radius: 15; -fx-border-width: 2; -fx-text-fill: white; -fx-cursor: hand;">
+                    prefWidth="300.0" prefHeight="180.0">
                 <font>
-                    <Font name="System Bold" size="24.0" />
+                    <Font name="System Bold" size="24.0"/>
                 </font>
             </Button>
 

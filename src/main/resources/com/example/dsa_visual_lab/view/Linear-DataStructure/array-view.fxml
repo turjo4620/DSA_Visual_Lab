@@ -3,83 +3,140 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<?import javafx.scene.text.Font?>
 
-<BorderPane fx:id="rootPane" prefHeight="800" prefWidth="1280" style="-fx-background-color: #0F172A;"
-            xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="com.example.dsa_visual_lab.controller.linear.ArrayController">
+<VBox xmlns="http://javafx.com/javafx/21.0.6"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.example.dsa_visual_lab.controller.linear.ArrayController"
+      stylesheets="@../styles/linear/array.css"
+      styleClass="array-root"
+      spacing="20">
 
-    <top>
-        <HBox alignment="CENTER_LEFT" prefHeight="60" spacing="20" style="-fx-background-color: #1E293B; -fx-border-color: #334155; -fx-border-width: 0 0 1 0; -fx-padding: 0 20;">
-            <Button onAction="#onBackClick" text="Back" style="-fx-background-color: #0F172A; -fx-text-fill: #94A3B8; -fx-border-color: #334155; -fx-border-radius: 6; -fx-background-radius: 6; -fx-cursor: hand; -fx-font-size: 15px;"/>
-            <Label text="Dynamic Array Visualization" textFill="#38BDF8" style="-fx-font-weight: bold; -fx-font-size: 26px;" />
-        </HBox>
-    </top>
+    <HBox alignment="CENTER_LEFT" spacing="20">
+        <Button text="← BACK"
+                prefWidth="120" prefHeight="40"
+                onAction="#onBackClick"
+                styleClass="back-button"/>
+        <Label text="Dynamic Array Visualization"
+               styleClass="title-label"/>
+    </HBox>
 
-    <center>
-        <VBox alignment="CENTER" spacing="20">
-            <padding><Insets top="20" right="20" bottom="20" left="20"/></padding>
+    <HBox spacing="20" VBox.vgrow="ALWAYS">
 
-            <Label fx:id="lblSizeCap" text="Size = 0 | Capacity = 8" textFill="#94A3B8" style="-fx-font-weight: bold; -fx-font-size: 18px;"/>
+        <VBox spacing="15" HBox.hgrow="ALWAYS" alignment="CENTER">
 
-            <ScrollPane fitToHeight="true" fitToWidth="true" vbarPolicy="NEVER" style="-fx-background: #0F172A; -fx-background-color: #0F172A; -fx-border-color: transparent;">
+            <Label fx:id="lblSizeCap"
+                   text="Size = 0 | Capacity = 8"
+                   styleClass="size-cap-label"/>
+
+            <ScrollPane fitToHeight="true" fitToWidth="true"
+                        vbarPolicy="NEVER"
+                        styleClass="scroll-pane"
+                        VBox.vgrow="ALWAYS">
                 <content>
-                    <Pane fx:id="visualPane" prefHeight="350" minWidth="1000" style="-fx-background-color: #1E293B; -fx-border-color: #334155; -fx-border-width: 2; -fx-background-radius: 8; -fx-border-radius: 8;"/>
+                    <Pane fx:id="visualPane"
+                          prefHeight="350" minWidth="800"
+                          styleClass="visual-pane"/>
                 </content>
             </ScrollPane>
 
-            <Label fx:id="statusLabel" text="System Ready" textFill="#FCD34D" style="-fx-background-color: #1E293B; -fx-padding: 10 20; -fx-border-color: #334155; -fx-background-radius: 8; -fx-border-radius: 8; -fx-font-size: 18px;"/>
+            <Label fx:id="statusLabel"
+                   text="System Ready"
+                   styleClass="status-label"/>
         </VBox>
-    </center>
 
-    <right>
-        <VBox prefWidth="320" spacing="15" style="-fx-background-color: #1E293B; -fx-border-color: #334155; -fx-border-width: 2; -fx-background-radius: 8; -fx-border-radius: 8;">
-            <padding><Insets top="20" right="15" bottom="20" left="15"/></padding>
-            <BorderPane.margin><Insets top="20" right="20" bottom="20" left="0"/></BorderPane.margin>
+        <VBox prefWidth="320" spacing="15" styleClass="analysis-panel">
+            <VBox.margin>
+                <Insets top="0" right="0" bottom="0" left="0"/>
+            </VBox.margin>
 
-            <Label text="Analysis Panel" textFill="#38BDF8" style="-fx-font-weight: bold; -fx-font-size: 20px;"/>
-            <Pane prefHeight="2" style="-fx-background-color: #334155;" />
+            <Label text="Analysis Panel" styleClass="panel-title"/>
+            <Pane styleClass="panel-divider"/>
 
-            <Label text="Time Complexity" textFill="#60A5FA" style="-fx-font-weight: bold; -fx-font-size: 16px;"/>
-            <Label fx:id="complexityLabel" text="..." textFill="#E2E8F0" wrapText="true" style="-fx-font-size: 15px;"/>
+            <Label text="Time Complexity" styleClass="complexity-title"/>
+            <Label fx:id="complexityLabel"
+                   text="..."
+                   wrapText="true"
+                   styleClass="complexity-label"/>
 
-            <Pane prefHeight="2" style="-fx-background-color: #334155;" />
+            <Pane styleClass="panel-divider"/>
 
-            <Label text="Pseudo-code" textFill="#60A5FA" style="-fx-font-weight: bold; -fx-font-size: 16px;"/>
-            <VBox fx:id="pseudoCodeBox" prefHeight="200" spacing="5" style="-fx-background-color: #0F172A; -fx-padding: 10; -fx-border-color: #334155; -fx-border-radius: 4; -fx-background-radius: 4;">
-                <Label text="// Code will appear here" textFill="#34D399" style="-fx-font-family: 'Consolas'; -fx-font-size: 16px;"/>
+            <Label text="Pseudocode" styleClass="complexity-title"/>
+            <VBox fx:id="pseudoCodeBox"
+                  styleClass="inner-code-box"
+                  VBox.vgrow="ALWAYS"
+                  spacing="5">
+                <Label text="// Code will appear here"
+                       styleClass="pseudocode-line"/>
             </VBox>
         </VBox>
-    </right>
 
-    <bottom>
-        <VBox fx:id="controlsBox" alignment="CENTER" spacing="15" prefHeight="150" style="-fx-background-color: #1E293B; -fx-border-color: #334155; -fx-border-width: 1 0 0 0;">
-            <padding><Insets bottom="15" top="15" /></padding>
+    </HBox>
 
-            <HBox alignment="CENTER" spacing="10">
-                <TextField fx:id="insertValueField" promptText="Value" prefWidth="100" style="-fx-background-color: #0F172A; -fx-text-fill: white; -fx-border-color: #475569; -fx-border-radius: 6; -fx-pref-height: 40; -fx-font-size: 15px;"/>
-                <TextField fx:id="insertIndexField" promptText="Index" prefWidth="100" style="-fx-background-color: #0F172A; -fx-text-fill: white; -fx-border-color: #475569; -fx-border-radius: 6; -fx-pref-height: 40; -fx-font-size: 15px;"/>
+    <VBox fx:id="controlsBox" styleClass="controls-box" spacing="10">
 
-                <Button text="Append" onAction="#btnAppend" prefWidth="125" style="-fx-background-color: #0F172A; -fx-text-fill: #38BDF8; -fx-border-color: #334155; -fx-border-radius: 6; -fx-background-radius: 6; -fx-pref-height: 40; -fx-cursor: hand; -fx-font-size: 15px;"/>
-                <Button text="Insert at Index" onAction="#btnInsertAtIndex" prefWidth="125" style="-fx-background-color: #0F172A; -fx-text-fill: #38BDF8; -fx-border-color: #334155; -fx-border-radius: 6; -fx-background-radius: 6; -fx-pref-height: 40; -fx-cursor: hand; -fx-font-size: 15px;"/>
-                <Button text="Remove Last" onAction="#btnRemoveLast" prefWidth="125" style="-fx-background-color: #0F172A; -fx-text-fill: #38BDF8; -fx-border-color: #334155; -fx-border-radius: 6; -fx-background-radius: 6; -fx-pref-height: 40; -fx-cursor: hand; -fx-font-size: 15px;"/>
-                <Button text="Remove at Index" onAction="#btnRemoveAtIndex" prefWidth="140" style="-fx-background-color: #0F172A; -fx-text-fill: #38BDF8; -fx-border-color: #334155; -fx-border-radius: 6; -fx-background-radius: 6; -fx-pref-height: 40; -fx-cursor: hand; -fx-font-size: 15px;"/>
-            </HBox>
+        <HBox alignment="CENTER" spacing="10">
+            <TextField fx:id="insertValueField"
+                       promptText="Value"
+                       prefWidth="100"
+                       styleClass="text-field"/>
+            <TextField fx:id="insertIndexField"
+                       promptText="Index"
+                       prefWidth="100"
+                       styleClass="text-field"/>
+            <Button text="Append"
+                    onAction="#btnAppend"
+                    prefWidth="120"
+                    styleClass="btn-insert"/>
+            <Button text="Insert at Index"
+                    onAction="#btnInsertAtIndex"
+                    prefWidth="130"
+                    styleClass="btn-insert"/>
+            <Button text="Remove Last"
+                    onAction="#btnRemoveLast"
+                    prefWidth="120"
+                    styleClass="btn-remove"/>
+            <Button text="Remove at Index"
+                    onAction="#btnRemoveAtIndex"
+                    prefWidth="140"
+                    styleClass="btn-remove"/>
+        </HBox>
 
-            <HBox alignment="CENTER" spacing="10">
-                <TextField fx:id="searchValField" promptText="Search Val" prefWidth="100" style="-fx-background-color: #0F172A; -fx-text-fill: white; -fx-border-color: #475569; -fx-border-radius: 6; -fx-pref-height: 40; -fx-font-size: 15px;"/>
-                <Button text="Linear Search" onAction="#btnLinearSearch" prefWidth="125" style="-fx-background-color: #0F172A; -fx-text-fill: #38BDF8; -fx-border-color: #334155; -fx-border-radius: 6; -fx-background-radius: 6; -fx-pref-height: 40; -fx-cursor: hand; -fx-font-size: 15px;"/>
-                <Button text="Find Max" onAction="#btnFindMax" prefWidth="125" style="-fx-background-color: #0F172A; -fx-text-fill: #38BDF8; -fx-border-color: #334155; -fx-border-radius: 6; -fx-background-radius: 6; -fx-pref-height: 40; -fx-cursor: hand; -fx-font-size: 15px;"/>
+        <HBox alignment="CENTER" spacing="10">
+            <TextField fx:id="searchValField"
+                       promptText="Search Val"
+                       prefWidth="110"
+                       styleClass="text-field"/>
+            <Button text="Linear Search"
+                    onAction="#btnLinearSearch"
+                    prefWidth="125"
+                    styleClass="btn-action"/>
+            <Button text="Find Max"
+                    onAction="#btnFindMax"
+                    prefWidth="110"
+                    styleClass="btn-action"/>
 
-                <Region prefWidth="10" />
+            <Pane prefWidth="10"/>
 
-                <TextField fx:id="capacityField" text="8" promptText="Cap" prefWidth="60" style="-fx-background-color: #0F172A; -fx-text-fill: white; -fx-border-color: #475569; -fx-border-radius: 6; -fx-pref-height: 40; -fx-font-size: 15px;"/>
-                <TextField fx:id="initValuesField" promptText="e.g. 5,10,15" prefWidth="150" style="-fx-background-color: #0F172A; -fx-text-fill: white; -fx-border-color: #475569; -fx-border-radius: 6; -fx-pref-height: 40; -fx-font-size: 15px;"/>
-                <Button text="Create Array" onAction="#btnCreateArray" prefWidth="125" style="-fx-background-color: #0F172A; -fx-text-fill: #38BDF8; -fx-border-color: #334155; -fx-border-radius: 6; -fx-background-radius: 6; -fx-pref-height: 40; -fx-cursor: hand; -fx-font-size: 15px;"/>
+            <TextField fx:id="capacityField"
+                       text="8" promptText="Cap"
+                       prefWidth="60"
+                       styleClass="text-field"/>
+            <TextField fx:id="initValuesField"
+                       promptText="e.g. 5, 10, 15"
+                       prefWidth="150"
+                       styleClass="text-field"/>
+            <Button text="Create Array"
+                    onAction="#btnCreateArray"
+                    prefWidth="125"
+                    styleClass="primary-btn"/>
 
-                <Label text="Speed:" textFill="#94A3B8" style="-fx-padding: 0 0 0 10; -fx-font-size: 15px;"/>
-                <Slider fx:id="speedSlider" min="10" max="100" value="50" prefWidth="80" style="-fx-cursor: hand;"/>
-            </HBox>
-        </VBox>
-    </bottom>
-</BorderPane>
+            <VBox styleClass="speed-box">
+                <Label text="Speed" styleClass="speed-label"/>
+                <Slider fx:id="speedSlider"
+                        min="10" max="100" value="50"
+                        prefWidth="80"/>
+            </VBox>
+        </HBox>
+    </VBox>
+
+</VBox>
