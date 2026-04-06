@@ -6,13 +6,13 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.text.Font?>
 
-<BorderPane xmlns="http://javafx.com/javafx/21"
+<BorderPane xmlns="http://javafx.com/javafx/21.0.6"
             xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="com.example.dsa_visual_lab.controller.home.SortingController"
-            prefWidth="1000" prefHeight="650"
-            style="-fx-background-color: #0F172A;">
+            stylesheets="@../styles/sorting/sorting.css"
+            styleClass="sorting-menu-root"
+            prefWidth="1000" prefHeight="650">
 
     <top>
         <VBox spacing="5.0">
@@ -20,28 +20,15 @@
                 <padding>
                     <Insets top="10" left="10" right="10" bottom="0"/>
                 </padding>
-                <children>
-                    <Button text="← BACK" prefWidth="120" prefHeight="40"
-                            onAction="#handleBack"
-                            styleClass="algo-button"
-                            style="-fx-border-color: #F87171;"/>
-                </children>
+                <Button text="← BACK" prefWidth="120" prefHeight="40" onAction="#handleBack" styleClass="back-button"/>
             </HBox>
 
             <VBox alignment="CENTER" spacing="5.0">
                 <padding>
                     <Insets top="5" right="20" bottom="10" left="20"/>
                 </padding>
-                <Label text="Sorting Algorithms" textFill="#818CF8">
-                    <font>
-                        <Font size="48"/>
-                    </font>
-                </Label>
-                <Label text="Select a sorting algorithm to visualize" textFill="#94A3B8">
-                    <font>
-                        <Font size="18"/>
-                    </font>
-                </Label>
+                <Label text="Sorting Algorithms" styleClass="menu-title"/>
+                <Label text="Select a sorting algorithm to visualize" styleClass="menu-subtitle"/>
             </VBox>
         </VBox>
     </top>
@@ -49,32 +36,16 @@
     <center>
         <VBox spacing="30" alignment="CENTER">
             <HBox spacing="30" alignment="CENTER">
-                <Button text="Bubble Sort" prefWidth="250" prefHeight="150"
-                        onAction="#handleBubbleSort"
-                        styleClass="algo-button"
-                        style="-fx-border-color: #38BDF8;"/>
-                <Button text="Selection Sort" prefWidth="250" prefHeight="150"
-                        onAction="#handleSelectionSort"
-                        styleClass="algo-button"
-                        style="-fx-border-color: #818CF8;"/>
+                <Button text="Bubble Sort" prefWidth="250" prefHeight="150" onAction="#handleBubbleSort" styleClass="algo-button" id="bubble-btn"/>
+                <Button text="Selection Sort" prefWidth="250" prefHeight="150" onAction="#handleSelectionSort" styleClass="algo-button" id="selection-btn"/>
             </HBox>
 
             <HBox spacing="30" alignment="CENTER">
-                <Button text="Quick Sort" prefWidth="250" prefHeight="150"
-                        onAction="#handleQuickSort"
-                        styleClass="algo-button"
-                        style="-fx-border-color: #34D399;"/>
-                <Button text="Insertion Sort" prefWidth="250" prefHeight="150"
-                        onAction="#handleInsertionSort"
-                        styleClass="algo-button"
-                        style="-fx-border-color: #FB923C;"/>
+                <Button text="Quick Sort" prefWidth="250" prefHeight="150" onAction="#handleQuickSort" styleClass="algo-button" id="quick-btn"/>
+                <Button text="Insertion Sort" prefWidth="250" prefHeight="150" onAction="#handleInsertionSort" styleClass="algo-button" id="insertion-btn"/>
             </HBox>
 
-            <Button text="Merge Sort" prefWidth="250" prefHeight="150"
-                    onAction="#handleMergeSort"
-                    styleClass="algo-button"
-                    style="-fx-border-color: #A78BFA;"/>
+            <Button text="Merge Sort" prefWidth="250" prefHeight="150" onAction="#handleMergeSort" styleClass="algo-button" id="merge-btn"/>
         </VBox>
     </center>
-
 </BorderPane>
