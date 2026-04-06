@@ -149,8 +149,18 @@ public class ArrayController {
         if (size >= capacity) growArray();
         highlightLine(2);
 
+        // Create the extra box visually first
+        size++;
+        render();
+
+        // Hide the text in the newly created last box so it acts as an empty "hole"
+        StackPane newHole = getVisualNode(size - 1);
+        if (newHole != null && newHole.getChildren().size() > 1) {
+            ((Text) newHole.getChildren().get(1)).setText("");
+        }
+
         PauseTransition delay = new PauseTransition(getStepDuration());
-        delay.setOnFinished(e -> animateShiftRight(size - 1, idx, val));
+        delay.setOnFinished(e -> animateShiftRight(size - 2, idx, val));
         delay.play();
     }
 
@@ -158,7 +168,6 @@ public class ArrayController {
         if (i < targetIndex) {
             highlightLine(4);
             arrayData[targetIndex] = value;
-            size++;
             render();
             updateSizeAndCapacityText();
             highlightNode(targetIndex, Color.web("#4ADE80"));
@@ -176,14 +185,29 @@ public class ArrayController {
         highlightLine(3);
 
         StackPane nodeToMove = getVisualNode(i);
-        if (nodeToMove != null) {
+        StackPane targetNode = getVisualNode(i + 1);
+
+        if (nodeToMove != null && targetNode != null) {
             highlightNode(i, Color.web("#FCD34D"));
+            nodeToMove.toFront(); // Bring moving block to the top layer
+
+            // Erase the text in the destination box to prevent overlap
+            if (targetNode.getChildren().size() > 1) {
+                ((Text) targetNode.getChildren().get(1)).setText("");
+            }
 
             TranslateTransition slide = new TranslateTransition(getStepDuration(), nodeToMove);
             slide.setByX(BOX_SIZE + SPACING);
             slide.setOnFinished(e -> {
                 arrayData[i + 1] = arrayData[i];
                 render();
+
+                // Erase the hole that was just left behind for the next shift
+                StackPane nextHole = getVisualNode(i);
+                if (nextHole != null && nextHole.getChildren().size() > 1) {
+                    ((Text) nextHole.getChildren().get(1)).setText("");
+                }
+
                 animateShiftRight(i - 1, targetIndex, value);
             });
             slide.play();
@@ -257,6 +281,14 @@ public class ArrayController {
         setStatus("Animating Remove...", false);
 
         PauseTransition delay = new PauseTransition(getStepDuration());
+
+        // Visually clear the box being deleted right away so it becomes a "hole"
+        StackPane initialHole = getVisualNode(idx);
+        if (initialHole != null && initialHole.getChildren().size() > 1) {
+            ((Text) initialHole.getChildren().get(1)).setText("");
+            highlightNode(idx, Color.web("#F87171"));
+        }
+
         delay.setOnFinished(e -> animateShiftLeft(idx));
         delay.play();
     }
@@ -282,14 +314,29 @@ public class ArrayController {
         highlightLine(3);
 
         StackPane nodeToMove = getVisualNode(i + 1);
-        if (nodeToMove != null) {
-            highlightNode(i + 1, Color.web("#F87171"));
+        StackPane targetNode = getVisualNode(i);
+
+        if (nodeToMove != null && targetNode != null) {
+            highlightNode(i + 1, Color.web("#FCD34D"));
+            nodeToMove.toFront(); // Bring moving block to top layer
+
+            // Ensure destination text is hidden
+            if (targetNode.getChildren().size() > 1) {
+                ((Text) targetNode.getChildren().get(1)).setText("");
+            }
 
             TranslateTransition slide = new TranslateTransition(getStepDuration(), nodeToMove);
             slide.setByX(-(BOX_SIZE + SPACING));
             slide.setOnFinished(e -> {
                 arrayData[i] = arrayData[i + 1];
                 render();
+
+                // Clear the newly formed hole behind it
+                StackPane nextHole = getVisualNode(i + 1);
+                if (nextHole != null && nextHole.getChildren().size() > 1) {
+                    ((Text) nextHole.getChildren().get(1)).setText("");
+                }
+
                 animateShiftLeft(i + 1);
             });
             slide.play();
@@ -399,7 +446,7 @@ public class ArrayController {
 
         int[] targetData = { arrayData[0], 0 };
         highlightLine(1);
-        highlightNode(0, Color.web("#F472B6"));
+        highlightNode(0, Color.web("#38BDF8"));
 
         PauseTransition delay = new PauseTransition(getStepDuration());
         delay.setOnFinished(e -> animateFindLoop(1, targetData, isMax));
@@ -435,7 +482,7 @@ public class ArrayController {
                 setStatus("New " + (isMax ? "Max" : "Min") + " found: " + targetData[0] + " at index " + i, false);
             }
             render();
-            highlightNode(targetData[1], Color.web("#F472B6"));
+            highlightNode(targetData[1], Color.web("#38BDF8"));
             animateFindLoop(i + 1, targetData, isMax);
         });
         check.play();
