@@ -176,6 +176,35 @@ public class MSTController {
                 edgeStart = null;
             }
         });
+
+        double[][] predefinedPositions = {
+                {400, 100}, {200, 250}, {600, 250},
+                {250, 450}, {550, 450}, {400, 300}
+        };
+
+        for (double[] pos : predefinedPositions) {
+            GraphNode node = new GraphNode(nextNodeId++, pos[0], pos[1]);
+            nodes.put(node.id, node);
+            graphPane.getChildren().add(node.visual);
+        }
+
+        int[][] predefinedEdges = {
+                {0, 1}, {0, 2}, {1, 3}, {1, 5},
+                {2, 4}, {2, 5}, {3, 4}, {4, 5}, {0, 5}
+        };
+
+        Random rand = new Random();
+        for (int[] pair : predefinedEdges) {
+            GraphNode u = nodes.get(pair[0]);
+            GraphNode v = nodes.get(pair[1]);
+            int w = rand.nextInt(20) + 1;
+            GraphEdge e = new GraphEdge(u, v, w);
+            edges.add(e);
+            graphPane.getChildren().add(0, e.line);
+            graphPane.getChildren().add(e.weightLabel);
+        }
+
+        statusLabel.setText("Random Graph Initialized");
     }
 
     private void handleNodeClickForEdge(GraphNode node) {

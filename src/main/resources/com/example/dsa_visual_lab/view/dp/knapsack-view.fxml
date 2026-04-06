@@ -11,68 +11,57 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
-<?import javafx.scene.text.Font?>
 
 <BorderPane fx:id="rootPane" prefHeight="800.0" prefWidth="1280.0"
-            style="-fx-background-color: #0F172A;"
-            xmlns="http://javafx.com/javafx/21"
+            stylesheets="@../styles/dp/dp.css"
+            styleClass="dp-root"
+            xmlns="http://javafx.com/javafx/21.0.6"
             xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="com.example.dsa_visual_lab.controller.dp.KnapsackController">
 
     <top>
-        <StackPane alignment="CENTER_LEFT" prefHeight="80.0">
-            <padding>
-                <Insets bottom="10" left="20" right="20" top="10" />
-            </padding>
-            <Button onAction="#onBackClick" style="-fx-background-color: transparent; -fx-text-fill: #94A3B8; -fx-font-size: 14px; -fx-cursor: hand; -fx-border-color: #94A3B8; -fx-border-radius: 5;" text="← Back" StackPane.alignment="CENTER_LEFT" />
-            <Label text="0/1 Knapsack (Dynamic Programming)" textFill="#F59E0B" StackPane.alignment="CENTER">
-                <font>
-                    <Font name="System Bold" size="28.0" />
-                </font>
-            </Label>
+        <StackPane alignment="CENTER_LEFT" prefHeight="80.0" styleClass="top-pane">
+            <Button onAction="#onBackClick" text="← BACK" prefWidth="120" prefHeight="40" styleClass="back-button" StackPane.alignment="CENTER_LEFT" />
+            <Label text="0/1 Knapsack (Dynamic Programming)" styleClass="title-label" StackPane.alignment="CENTER" />
         </StackPane>
     </top>
 
     <center>
-        <HBox spacing="10" style="-fx-padding: 10;">
-            <ScrollPane fx:id="scrollPane" fitToHeight="true" fitToWidth="true" style="-fx-background-color: #1E293B; -fx-background: #1E293B; -fx-border-color: #334155; -fx-border-width: 2; -fx-background-radius: 10;" HBox.hgrow="ALWAYS">
-                <GridPane fx:id="dpGrid" alignment="CENTER" hgap="5" style="-fx-padding: 20;" vgap="5" />
+        <HBox spacing="10" styleClass="main-content-box">
+            <ScrollPane fx:id="scrollPane" fitToHeight="true" fitToWidth="true" styleClass="dp-scroll-pane" HBox.hgrow="ALWAYS">
+                <GridPane fx:id="dpGrid" alignment="CENTER" hgap="5" vgap="5" styleClass="dp-grid" />
             </ScrollPane>
 
-            <VBox prefWidth="350.0" spacing="15" style="-fx-background-color: #1E293B; -fx-background-radius: 10; -fx-padding: 15;">
-                <Label style="-fx-font-weight: bold; -fx-font-size: 16px;" text="Time &amp; Space Complexity" textFill="#38BDF8" />
-                <Label fx:id="complexityLabel" style="-fx-font-size: 14px; -fx-background-color: #0F172A; -fx-padding: 10; -fx-background-radius: 8; -fx-border-color: #334155; -fx-border-radius: 8;" text="Waiting for action..." textFill="#94A3B8" wrapText="true" />
+            <VBox prefWidth="350.0" spacing="15" styleClass="side-panel">
+                <Label styleClass="section-title-complexity" text="Time &amp; Space Complexity" />
+                <Label fx:id="complexityLabel" styleClass="info-box" text="Waiting for action..." wrapText="true" />
 
-                <Label style="-fx-font-weight: bold; -fx-font-size: 16px;" text="Pseudocode" textFill="#FCD34D">
+                <Label styleClass="section-title-pseudo" text="Pseudocode">
                     <VBox.margin>
                         <Insets top="10" />
                     </VBox.margin>
                 </Label>
-                <VBox fx:id="pseudoCodeBox" spacing="2" style="-fx-background-color: #0F172A; -fx-padding: 10; -fx-background-radius: 8; -fx-border-color: #334155; -fx-border-radius: 8;" VBox.vgrow="ALWAYS" />
+                <VBox fx:id="pseudoCodeBox" spacing="2" styleClass="pseudo-container" VBox.vgrow="ALWAYS" />
             </VBox>
         </HBox>
     </center>
 
     <bottom>
-        <VBox alignment="CENTER" spacing="15" style="-fx-padding: 20;">
-            <Label fx:id="statusLabel" style="-fx-text-fill: #FCD34D; -fx-background-color: #334155; -fx-padding: 10 25; -fx-background-radius: 12; -fx-border-color: #475569; -fx-border-radius: 12;" text="Ready">
-                <font>
-                    <Font size="16.0" />
-                </font>
-            </Label>
+        <VBox alignment="CENTER" spacing="15" styleClass="bottom-panel">
+            <Label fx:id="statusLabel" styleClass="status-label" text="Ready" />
 
             <HBox fx:id="controlsBox" alignment="CENTER" spacing="15">
-                <VBox alignment="CENTER" spacing="5" style="-fx-background-color: #1E293B; -fx-padding: 5 15; -fx-background-radius: 8; -fx-border-color: #334155; -fx-border-radius: 8;">
-                    <Label style="-fx-font-size: 12px;" text="Speed" textFill="#94A3B8" />
+                <VBox alignment="CENTER" spacing="5" styleClass="speed-box">
+                    <Label styleClass="speed-label" text="Speed" />
                     <Slider fx:id="speedSlider" max="200" min="10" prefWidth="100" value="100" />
                 </VBox>
 
-                <TextField fx:id="capacityField" prefWidth="100" promptText="Capacity (W)" style="-fx-background-color: #1E293B; -fx-text-fill: white; -fx-border-color: #475569; -fx-padding: 8; -fx-background-radius: 5;" />
-                <TextField fx:id="weightsField" prefWidth="150" promptText="Weights (e.g. 1,3,4)" style="-fx-background-color: #1E293B; -fx-text-fill: white; -fx-border-color: #475569; -fx-padding: 8; -fx-background-radius: 5;" />
-                <TextField fx:id="valuesField" prefWidth="150" promptText="Values (e.g. 15,20,30)" style="-fx-background-color: #1E293B; -fx-text-fill: white; -fx-border-color: #475569; -fx-padding: 8; -fx-background-radius: 5;" />
+                <TextField fx:id="capacityField" prefWidth="100" promptText="Capacity (W)" styleClass="input-field" />
+                <TextField fx:id="weightsField" prefWidth="150" promptText="Weights (e.g. 1,3,4)" styleClass="input-field" />
+                <TextField fx:id="valuesField" prefWidth="150" promptText="Values (e.g. 15,20,30)" styleClass="input-field" />
 
-                <Button onAction="#onSolve" prefWidth="90" style="-fx-background-color: #F59E0B; -fx-text-fill: #0F172A; -fx-font-weight: bold; -fx-padding: 8; -fx-background-radius: 5; -fx-cursor: hand;" text="Solve DP" />
-                <Button onAction="#onClear" prefWidth="70" style="-fx-background-color: transparent; -fx-text-fill: #F87171; -fx-border-color: #F87171; -fx-padding: 8; -fx-background-radius: 5; -fx-cursor: hand;" text="Clear" />
+                <Button onAction="#onSolve" prefWidth="90" styleClass="solve-btn" text="Solve" />
+                <Button onAction="#onClear" prefWidth="70" styleClass="clear-btn" text="Clear" />
             </HBox>
         </VBox>
     </bottom>

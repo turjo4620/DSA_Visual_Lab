@@ -4,6 +4,7 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.Slider?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.BorderPane?>
@@ -38,7 +39,12 @@
                 <Label text="Pseudocode" styleClass="section-title-pseudo">
                     <VBox.margin><Insets top="10"/></VBox.margin>
                 </Label>
-                <VBox fx:id="pseudoCodeBox" VBox.vgrow="ALWAYS" spacing="2" styleClass="pseudo-container"/>
+
+                <ScrollPane fitToWidth="true" style="-fx-background: transparent; -fx-background-color: transparent;" styleClass="pseudo-container" VBox.vgrow="ALWAYS">
+                    <content>
+                        <VBox fx:id="pseudoCodeBox" spacing="2" style="-fx-background-color: transparent;"/>
+                    </content>
+                </ScrollPane>
             </VBox>
         </HBox>
     </center>
