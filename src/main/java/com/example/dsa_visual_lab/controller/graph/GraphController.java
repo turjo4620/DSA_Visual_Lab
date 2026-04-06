@@ -74,6 +74,7 @@ public class GraphController {
         }
     }
 
+    // graph's edge controlling part
     private class GraphEdge {
         GraphNode source, target;
         Line line;
@@ -83,8 +84,9 @@ public class GraphController {
             this.target = target;
             line = new Line(source.visual.getLayoutX() + RADIUS, source.visual.getLayoutY() + RADIUS,
                     target.visual.getLayoutX() + RADIUS, target.visual.getLayoutY() + RADIUS);
-            line.setStroke(Color.web("#64748B"));
+            line.setStroke(Color.web("#64748B")); // gray color edge
             line.setStrokeWidth(3);
+
 
             line.setOnMouseClicked(e -> handleEdgeClick(this, e));
         }
@@ -105,6 +107,8 @@ public class GraphController {
             }
         });
     }
+
+    //calculating duration based on slider
 
     private Duration getStepDuration() {
         double multiplier = 100.0 / (speedSlider != null ? speedSlider.getValue() : 100.0);
@@ -151,6 +155,7 @@ public class GraphController {
         if (btnSelect.isSelected()) {
             clearSelection();
             selectedItem = edge;
+            //marking red -> selected edge
             edge.line.setStroke(Color.web("#EF4444"));
             setStatus("Selected Edge between " + edge.source.id + " and " + edge.target.id, false);
         }
@@ -209,6 +214,7 @@ public class GraphController {
         selectedItem = null;
     }
 
+    // used in future to remove selection
     private void resetVisuals() {
         for (GraphNode node : nodes.values()) {
             node.circle.setFill(Color.web("#1E293B"));
@@ -356,11 +362,12 @@ public class GraphController {
         }
 
         String finalPath = resultPath.toString();
-        steps.add(() -> { highlightLine(-1); controlsBox.setDisable(false); setStatus("DFS Complete: " + finalPath, false); });
+        steps.add(() -> { highlightLine(-1); controlsBox.setDisable(false); setStatus("DFS Complete: " + finalPath, false); }); // printing the final result
 
         playAnimationSequence(steps, 0);
     }
 
+    // main animation logic
     private void playAnimationSequence(List<Runnable> steps, int index) {
         if (index >= steps.size()) return;
 
@@ -418,6 +425,7 @@ public class GraphController {
         }
     }
 
+    // pseudocode highlighting logic
     private void highlightLine(int index) {
         for (int i = 0; i < pseudoCodeBox.getChildren().size(); i++) {
             Label lbl = (Label) pseudoCodeBox.getChildren().get(i);

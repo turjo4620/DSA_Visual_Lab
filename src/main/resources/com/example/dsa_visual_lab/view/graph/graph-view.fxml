@@ -21,6 +21,7 @@
             xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="com.example.dsa_visual_lab.controller.graph.GraphController">
 
+    //top section
     <top>
         <StackPane alignment="CENTER_LEFT" prefHeight="80.0" styleClass="top-pane">
             <Button text="← BACK" onAction="#onBackClick" prefWidth="120" prefHeight="40"
@@ -29,6 +30,8 @@
         </StackPane>
     </top>
 
+
+    // middle section
     <center>
         <HBox spacing="10" styleClass="main-content-box">
             <Pane fx:id="visualPane" onMouseClicked="#onCanvasClick" styleClass="visual-pane" HBox.hgrow="ALWAYS" />
@@ -47,6 +50,7 @@
         </HBox>
     </center>
 
+    // bottom section
     <bottom>
         <VBox alignment="CENTER" spacing="15" styleClass="bottom-panel">
             <Label fx:id="statusLabel" styleClass="status-label" text="Select a mode to build the graph" />
