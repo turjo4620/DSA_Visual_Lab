@@ -659,7 +659,7 @@ public class BSTController {
             Scene scene = stage.getScene();
             scene.setRoot(root);
             scene.getStylesheets().clear();
-            scene.getStylesheets().add(getClass().getResource("/com/example/dsa_visual_lab/view/styles/home.css").toExternalForm());
+            scene.getStylesheets().add(getClass().getResource("src/main/resources/com/example/dsa_visual_lab/view/styles/home/home.css").toExternalForm());
             stage.show();
         } catch (IOException e) {
             e.printStackTrace();

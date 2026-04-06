@@ -12,7 +12,7 @@ import java.io.IOException;
 
 public class HomeController {
 
-    private final String CSS_PATH = "/com/example/dsa_visual_lab/view/styles/home.css";
+    private final String CSS_PATH = "src/main/resources/com/example/dsa_visual_lab/view/styles/home/home.css";
 
     @FXML
     public void initialize() {
