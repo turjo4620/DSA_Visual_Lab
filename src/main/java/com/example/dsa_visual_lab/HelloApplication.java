@@ -11,7 +11,7 @@ public class HelloApplication extends Application {
 
     @Override
     public void start(Stage stage) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("/com/example/dsa_visual_lab/view/auth/login-view.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("/com/example/dsa_visual_lab/view/home/home-view.fxml"));
         Scene scene = new Scene(fxmlLoader.load(), 1280, 800);
 
         stage.setTitle("DSA Visual Lab");

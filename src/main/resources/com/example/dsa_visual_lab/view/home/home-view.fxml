@@ -8,44 +8,25 @@
 <?import javafx.scene.layout.FlowPane?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
-<?import javafx.scene.text.Font?>
 
 <BorderPane fx:id="mainContainer" prefHeight="650.0" prefWidth="1000.0"
-            style="-fx-background-color: #0F172A;"
+            stylesheets="@../styles/home.css"
+            styleClass="main-container"
             xmlns="http://javafx.com/javafx/21"
             xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="com.example.dsa_visual_lab.controller.home.HomeController">
 
     <top>
-        <StackPane prefHeight="200.0" style="-fx-background-color: #1E293B; -fx-border-color: #38BDF8; -fx-border-width: 0 0 2 0;">
+        <StackPane prefHeight="200.0" styleClass="header-pane">
             <VBox alignment="CENTER" spacing="10.0">
-                <Label text="DSA VISUAL LAB" textFill="#38BDF8">
-                    <font>
-                        <Font name="System Bold" size="56.0" />
-                    </font>
-                </Label>
-                <Label text="Master Data Structures &amp; Algorithms Through Visualization" textFill="#94A3B8">
-                    <font>
-                        <Font name="System Italic" size="18.0" />
-                    </font>
-                </Label>
+                <Label text="DSA VISUAL LAB" styleClass="title-label" />
+                <Label text="Master Data Structures &amp; Algorithms Through Visualization" styleClass="subtitle-label" />
             </VBox>
-
-            <Button text="Logout" onAction="#handleLogout"
-                    style="-fx-background-color: transparent; -fx-text-fill: #F87171; -fx-border-color: #F87171; -fx-border-radius: 5; -fx-padding: 8 15; -fx-cursor: hand;"
-                    StackPane.alignment="TOP_RIGHT">
-                <StackPane.margin>
-                    <Insets top="20.0" right="20.0" />
-                </StackPane.margin>
-                <font>
-                    <Font name="System Bold" size="14.0" />
-                </font>
-            </Button>
         </StackPane>
     </top>
 
     <center>
-        <ScrollPane fitToWidth="true" style="-fx-background-color: transparent; -fx-background: transparent;">
+        <ScrollPane fitToWidth="true" styleClass="main-scroll-pane">
             <content>
                 <FlowPane alignment="CENTER" hgap="30.0" vgap="30.0" prefWrapLength="950.0">
                     <padding>
@@ -54,27 +35,27 @@
 
                     <Button onAction="#openSorting" prefHeight="150.0" prefWidth="280.0"
                             text="SORTING&#10;ALGORITHMS" textAlignment="CENTER"
-                            styleClass="algo-button" style="-fx-border-color: #38BDF8;" />
+                            styleClass="algo-button" id="sorting-btn" />
 
                     <Button onAction="#openDataStructures" prefHeight="150.0" prefWidth="280.0"
                             text="LINEAR&#10;STRUCTURES" textAlignment="CENTER"
-                            styleClass="algo-button" style="-fx-border-color: #818CF8;" />
+                            styleClass="algo-button" id="linear-btn" />
 
                     <Button onAction="#openTrees" prefHeight="150.0" prefWidth="280.0"
                             text="BINARY SEARCH&#10;TREE" textAlignment="CENTER"
-                            styleClass="algo-button" style="-fx-border-color: #34D399;" />
+                            styleClass="algo-button" id="tree-btn" />
 
                     <Button onAction="#openGraphs" prefHeight="150.0" prefWidth="280.0"
                             text="GRAPH&#10;THEORY" textAlignment="CENTER"
-                            styleClass="algo-button" style="-fx-border-color: #F472B6;" />
+                            styleClass="algo-button" id="graph-btn" />
 
                     <Button onAction="#openMST" prefHeight="150.0" prefWidth="280.0"
                             text="GREEDY &amp;&#10;MST" textAlignment="CENTER"
-                            styleClass="algo-button" style="-fx-border-color: #FB923C;" />
+                            styleClass="algo-button" id="mst-btn" />
 
                     <Button onAction="#openDP" prefHeight="150.0" prefWidth="280.0"
                             text="DYNAMIC&#10;PROGRAMMING" textAlignment="CENTER"
-                            styleClass="algo-button" style="-fx-border-color: #A78BFA;" />
+                            styleClass="algo-button" id="dp-btn" />
                 </FlowPane>
             </content>
         </ScrollPane>

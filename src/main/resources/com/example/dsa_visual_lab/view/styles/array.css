@@ -1,14 +1,13 @@
-/* Input Fields */
+
 .input-field {
     -fx-background-color: #1E293B;
     -fx-text-fill: white;
-    -fx-border-color: #F472B6; /* Pink border */
+    -fx-border-color: #F472B6;
     -fx-border-radius: 8;
     -fx-background-radius: 8;
     -fx-prompt-text-fill: #64748B;
 }
 
-/* Primary Action Buttons (Pink) */
 .btn-action {
     -fx-background-color: #F472B6;
     -fx-text-fill: #0F172A;
@@ -20,7 +19,7 @@
     -fx-background-color: #F9A8D4;
 }
 
-/* Secondary Buttons (Blue/Gray) */
+
 .btn-secondary {
     -fx-background-color: transparent;
     -fx-border-color: #60A5FA;
@@ -34,7 +33,7 @@
     -fx-background-color: rgba(96, 165, 250, 0.1);
 }
 
-/* Danger Buttons (Red) */
+
 .btn-danger {
     -fx-background-color: transparent;
     -fx-border-color: #F87171;
@@ -48,7 +47,6 @@
     -fx-background-color: rgba(248, 113, 113, 0.1);
 }
 
-/* List Views (Logs) */
 .list-view .list-cell {
     -fx-text-fill: #CBD5E1;
     -fx-background-color: transparent;

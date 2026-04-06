@@ -19,18 +19,6 @@ public class HomeController {
         System.out.println("Home Page Loaded Successfully!");
     }
 
-    @FXML
-    private void handleLogout(ActionEvent event) {
-        try {
-            Parent loginRoot = FXMLLoader.load(getClass().getResource("/com/example/dsa_visual_lab/view/auth/login-view.fxml"));
-            Scene scene = ((Node) event.getSource()).getScene();
-            scene.setRoot(loginRoot);
-            scene.getStylesheets().clear();
-        } catch (IOException e) {
-            System.out.println("Error loading Login View:");
-            e.printStackTrace();
-        }
-    }
 
     @FXML
     private void openSorting(ActionEvent event) {
