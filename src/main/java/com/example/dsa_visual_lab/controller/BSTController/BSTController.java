@@ -658,9 +658,6 @@ public class BSTController {
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             Scene scene = stage.getScene();
             scene.setRoot(root);
-            scene.getStylesheets().clear();
-            scene.getStylesheets().add(getClass().getResource("src/main/resources/com/example/dsa_visual_lab/view/styles/home/home.css").toExternalForm());
-            stage.show();
         } catch (IOException e) {
             e.printStackTrace();
         }
