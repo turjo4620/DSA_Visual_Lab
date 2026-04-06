@@ -9,6 +9,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
@@ -32,6 +33,8 @@ public class MSTController {
     private Slider speedSlider;
     @FXML
     private TextField edgeWeightField;
+    @FXML
+    private HBox controlsBox;
 
     @FXML
     private Label line1, line2, line3, line4, line5, line6;
@@ -300,6 +303,8 @@ public class MSTController {
             return;
         }
 
+        if (controlsBox != null) controlsBox.setDisable(true);
+
         steps.clear();
         parent = new int[nextNodeId];
         for (int i = 0; i < nextNodeId; i++) parent[i] = i;
@@ -346,6 +351,7 @@ public class MSTController {
         steps.add(() -> {
             statusLabel.setText("✅ MST Complete!");
             highlightPseudo(5);
+            if (controlsBox != null) controlsBox.setDisable(false);
         });
 
         playSteps(0);
@@ -392,6 +398,8 @@ public class MSTController {
         statusLabel.setText("Reset done.");
         for (Label l : pseudoLines)
             l.setStyle("-fx-background-color:transparent; -fx-text-fill:white;");
+
+        if (controlsBox != null) controlsBox.setDisable(false);
     }
 
     @FXML

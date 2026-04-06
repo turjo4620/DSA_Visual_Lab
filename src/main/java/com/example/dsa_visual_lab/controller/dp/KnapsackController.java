@@ -100,6 +100,8 @@ public class KnapsackController {
             };
             setupPseudoCode(dpAlgorithmLines);
 
+            controlsBox.setDisable(true);
+
             drawEmptyGrid();
             setStatus("Building DP Table...", false);
 
@@ -146,7 +148,7 @@ public class KnapsackController {
         if (currentItem > itemCount) {
             highlightCodeLine(8);
             setStatus("Optimal Value: " + dpTable[itemCount][maxCapacity], false);
-            controlsBox.setDisable(true);
+            controlsBox.setDisable(false);
             return;
         }
 
@@ -272,10 +274,11 @@ public class KnapsackController {
         setStatus("Ready", false);
         setupPseudoCode(new String[]{""});
         complexityLabel.setText("Cleared");
+        controlsBox.setDisable(false);
     }
 
     private void setStatus(String messageContent, boolean isErrorState) {
-//        statusLabel.setText(messageContent);
+        statusLabel.setText(messageContent);
         if (isErrorState) {
             statusLabel.setStyle("-fx-text-fill: #F87171; -fx-background-color: #334155; -fx-padding: 10 25; -fx-background-radius: 12; -fx-border-color: #475569; -fx-border-radius: 12;");
         } else {

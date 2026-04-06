@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Slider?>
@@ -51,7 +50,7 @@
         <VBox alignment="CENTER" spacing="15" styleClass="bottom-panel">
             <Label fx:id="statusLabel" text="Select a mode to build the graph" styleClass="status-label"/>
 
-            <HBox alignment="CENTER" spacing="10">
+            <HBox fx:id="controlsBox" alignment="CENTER" spacing="10">
                 <fx:define>
                     <ToggleGroup fx:id="modeGroup"/>
                 </fx:define>
