@@ -204,3 +204,27 @@
     -fx-font-size: 18px;
     -fx-font-weight: bold;
 }
+
+.combo-box-custom {
+    -fx-background-color: #1E293B;
+    -fx-border-color: #A78BFA;
+    -fx-border-radius: 5px;
+    -fx-background-radius: 5px;
+    -fx-pref-height: 40px;
+    -fx-cursor: hand;
+}
+
+.combo-box-custom > .list-cell {
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+}
+
+.combo-box-custom .list-view .list-cell {
+    -fx-text-fill: black;
+    -fx-font-size: 14px;
+}
+
+.combo-box-custom .list-view .list-cell:hover {
+    -fx-background-color: #A78BFA;
+    -fx-text-fill: white;
+}

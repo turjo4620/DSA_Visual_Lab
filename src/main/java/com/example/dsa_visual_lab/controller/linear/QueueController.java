@@ -33,13 +33,20 @@ public class QueueController {
     @FXML private Label statusLabel;
     @FXML private Label complexityLabel;
     @FXML private VBox pseudoCodeBox;
+    @FXML private Node controlsBox;
 
     private final LinkedList<StackPane> visualQueue = new LinkedList<>();
-    private static final double BOX_SIZE = 70; // Slightly larger for better text fitting
+    private static final double BOX_SIZE = 70;
     private static final int MAX_SIZE = 12;
     private static final String CODE_COLOR = "#34D399";
     private static final String HIGHLIGHT_BG = "#334155";
     private static final String HIGHLIGHT_TEXT = "#FCD34D";
+
+    private void setControlsDisabled(boolean disabled) {
+        if (controlsBox != null) {
+            controlsBox.setDisable(disabled);
+        }
+    }
 
     @FXML
     void onEnqueue(ActionEvent event) {
@@ -55,6 +62,8 @@ public class QueueController {
         }
 
         inputField.clear();
+        setControlsDisabled(true);
+
         complexityLabel.setText("O(1) - Constant Time\nEnqueue updates the rear pointer.");
         String[] codeLines = {
                 "enqueue(value):",
@@ -90,7 +99,10 @@ public class QueueController {
         });
 
         PauseTransition step4 = new PauseTransition(Duration.seconds(2.6));
-        step4.setOnFinished(e -> highlightLine(-1));
+        step4.setOnFinished(e -> {
+            highlightLine(-1);
+            setControlsDisabled(false);
+        });
 
         step1.play(); step2.play(); step3.play(); step4.play();
     }
@@ -101,6 +113,8 @@ public class QueueController {
             setStatus("Error: Queue is empty (Underflow)!", true);
             return;
         }
+
+        setControlsDisabled(true);
 
         complexityLabel.setText("O(1) - Constant Time\nDequeue updates the front pointer.");
         String[] codeLines = {
@@ -137,7 +151,10 @@ public class QueueController {
         step4.setOnFinished(e -> highlightLine(4));
 
         PauseTransition step5 = new PauseTransition(Duration.seconds(3.3));
-        step5.setOnFinished(e -> highlightLine(-1));
+        step5.setOnFinished(e -> {
+            highlightLine(-1);
+            setControlsDisabled(false);
+        });
 
         step1.play(); step2.play(); step3.play(); step4.play(); step5.play();
     }
@@ -148,6 +165,8 @@ public class QueueController {
             setStatus("Queue is empty!", true);
             return;
         }
+
+        setControlsDisabled(true);
 
         complexityLabel.setText("O(1) - Constant Time\nDirect access to front pointer.");
         String[] codeLines = {
@@ -170,7 +189,10 @@ public class QueueController {
         });
 
         PauseTransition step3 = new PauseTransition(Duration.seconds(2.2));
-        step3.setOnFinished(e -> highlightLine(-1));
+        step3.setOnFinished(e -> {
+            highlightLine(-1);
+            setControlsDisabled(false);
+        });
 
         step1.play(); step2.play(); step3.play();
     }
@@ -181,6 +203,8 @@ public class QueueController {
             setStatus("Queue is empty!", true);
             return;
         }
+
+        setControlsDisabled(true);
 
         complexityLabel.setText("O(1) - Constant Time\nDirect access to rear pointer.");
         String[] codeLines = {
@@ -203,13 +227,18 @@ public class QueueController {
         });
 
         PauseTransition step3 = new PauseTransition(Duration.seconds(2.2));
-        step3.setOnFinished(e -> highlightLine(-1));
+        step3.setOnFinished(e -> {
+            highlightLine(-1);
+            setControlsDisabled(false);
+        });
 
         step1.play(); step2.play(); step3.play();
     }
 
     @FXML
     void onIsEmpty(ActionEvent event) {
+        setControlsDisabled(true);
+
         complexityLabel.setText("O(1) - Constant Time\nChecks if front > rear or size is 0.");
         String[] codeLines = {
                 "isEmpty():",
@@ -236,7 +265,10 @@ public class QueueController {
         });
 
         PauseTransition step3 = new PauseTransition(Duration.seconds(2.2));
-        step3.setOnFinished(e -> highlightLine(-1));
+        step3.setOnFinished(e -> {
+            highlightLine(-1);
+            setControlsDisabled(false);
+        });
 
         step1.play(); step2.play(); step3.play();
     }

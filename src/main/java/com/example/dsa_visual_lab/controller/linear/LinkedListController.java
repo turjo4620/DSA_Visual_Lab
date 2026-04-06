@@ -30,6 +30,7 @@ public class LinkedListController {
     @FXML private Label statusLabel, complexityLabel;
     @FXML private TextField valueField, indexField, initValuesField;
     @FXML private VBox pseudoCodeBox;
+    @FXML private Node controlsBox;
 
     private final LinkedList<String> listData = new LinkedList<>();
 
@@ -43,10 +44,18 @@ public class LinkedListController {
     private static final String HIGHLIGHT_BG = "#334155";
     private static final String HIGHLIGHT_TEXT = "#FCD34D";
 
+    private void setControlsDisabled(boolean disabled) {
+        if (controlsBox != null) {
+            controlsBox.setDisable(disabled);
+        }
+    }
+
     @FXML
     void onInsertHead(ActionEvent event) {
         String val = valueField.getText().trim();
         if (val.isEmpty()) { setStatus("Enter a value", true); return; }
+
+        setControlsDisabled(true);
 
         complexityLabel.setText("O(1) - Constant Time\nDirectly adjusts the head pointer.");
         String[] codeLines = {
@@ -74,7 +83,10 @@ public class LinkedListController {
         });
 
         PauseTransition step4 = new PauseTransition(Duration.seconds(2.6));
-        step4.setOnFinished(e -> highlightLine(-1));
+        step4.setOnFinished(e -> {
+            highlightLine(-1);
+            setControlsDisabled(false);
+        });
 
         step1.play(); step2.play(); step3.play(); step4.play();
     }
@@ -83,6 +95,8 @@ public class LinkedListController {
     void onInsertTail(ActionEvent event) {
         String val = valueField.getText().trim();
         if (val.isEmpty()) { setStatus("Enter a value", true); return; }
+
+        setControlsDisabled(true);
 
         complexityLabel.setText("O(N) or O(1)\nO(1) if a tail pointer is maintained.");
         String[] codeLines = {
@@ -111,7 +125,10 @@ public class LinkedListController {
         });
 
         PauseTransition step4 = new PauseTransition(Duration.seconds(2.6));
-        step4.setOnFinished(e -> highlightLine(-1));
+        step4.setOnFinished(e -> {
+            highlightLine(-1);
+            setControlsDisabled(false);
+        });
 
         step1.play(); step2.play(); step3.play(); step4.play();
     }
@@ -125,6 +142,8 @@ public class LinkedListController {
                 setStatus("Index out of bounds", true);
                 return;
             }
+
+            setControlsDisabled(true);
 
             complexityLabel.setText("O(N) - Linear Time\nRequires traversal to the specified index.");
             String[] codeLines = {
@@ -153,7 +172,10 @@ public class LinkedListController {
             });
 
             PauseTransition step4 = new PauseTransition(Duration.seconds(2.6));
-            step4.setOnFinished(e -> highlightLine(-1));
+            step4.setOnFinished(e -> {
+                highlightLine(-1);
+                setControlsDisabled(false);
+            });
 
             step1.play(); step2.play(); step3.play(); step4.play();
 
@@ -165,6 +187,8 @@ public class LinkedListController {
     @FXML
     void onDeleteHead(ActionEvent event) {
         if (listData.isEmpty()) { setStatus("List is empty", true); return; }
+
+        setControlsDisabled(true);
 
         complexityLabel.setText("O(1) - Constant Time\nDirectly updates the head pointer.");
         String[] codeLines = {
@@ -192,7 +216,10 @@ public class LinkedListController {
         });
 
         PauseTransition step4 = new PauseTransition(Duration.seconds(2.6));
-        step4.setOnFinished(e -> highlightLine(-1));
+        step4.setOnFinished(e -> {
+            highlightLine(-1);
+            setControlsDisabled(false);
+        });
 
         step1.play(); step2.play(); step3.play(); step4.play();
     }
@@ -200,6 +227,8 @@ public class LinkedListController {
     @FXML
     void onDeleteTail(ActionEvent event) {
         if (listData.isEmpty()) { setStatus("List is empty", true); return; }
+
+        setControlsDisabled(true);
 
         complexityLabel.setText("O(N) - Linear Time\nRequires traversal to the second-to-last node.");
         String[] codeLines = {
@@ -227,7 +256,10 @@ public class LinkedListController {
         });
 
         PauseTransition step4 = new PauseTransition(Duration.seconds(2.6));
-        step4.setOnFinished(e -> highlightLine(-1));
+        step4.setOnFinished(e -> {
+            highlightLine(-1);
+            setControlsDisabled(false);
+        });
 
         step1.play(); step2.play(); step3.play(); step4.play();
     }
@@ -240,6 +272,8 @@ public class LinkedListController {
                 setStatus("Index out of bounds", true);
                 return;
             }
+
+            setControlsDisabled(true);
 
             complexityLabel.setText("O(N) - Linear Time\nRequires traversal to the specified node.");
             String[] codeLines = {
@@ -268,7 +302,10 @@ public class LinkedListController {
             });
 
             PauseTransition step4 = new PauseTransition(Duration.seconds(2.6));
-            step4.setOnFinished(e -> highlightLine(-1));
+            step4.setOnFinished(e -> {
+                highlightLine(-1);
+                setControlsDisabled(false);
+            });
 
             step1.play(); step2.play(); step3.play(); step4.play();
 
@@ -283,6 +320,8 @@ public class LinkedListController {
         if (target.isEmpty()) { setStatus("Enter a value to search", true); return; }
 
         int idx = listData.indexOf(target);
+
+        setControlsDisabled(true);
 
         complexityLabel.setText("O(N) - Linear Time\nMust iterate through nodes to find value.");
         String[] codeLines = {
@@ -312,7 +351,10 @@ public class LinkedListController {
         });
 
         PauseTransition step3 = new PauseTransition(Duration.seconds(3.0));
-        step3.setOnFinished(e -> highlightLine(-1));
+        step3.setOnFinished(e -> {
+            highlightLine(-1);
+            setControlsDisabled(false);
+        });
 
         step1.play(); step2.play(); step3.play();
     }
@@ -353,7 +395,7 @@ public class LinkedListController {
             } else {
                 Text nullText = new Text("NULL");
                 nullText.setFill(Color.web("#94A3B8"));
-                nullText.setStyle("-fx-font-size: 16px;"); // Larger NULL text
+                nullText.setStyle("-fx-font-size: 16px;");
                 nullText.setLayoutX(currentX + NODE_WIDTH + 15);
                 nullText.setLayoutY(START_Y + NODE_HEIGHT / 2 + 5);
                 visualPane.getChildren().add(nullText);
@@ -378,7 +420,7 @@ public class LinkedListController {
 
         Text text = new Text(val);
         text.setFill(Color.WHITE);
-        text.setStyle("-fx-font-weight: bold; -fx-font-size: 18px;"); // Larger node text
+        text.setStyle("-fx-font-weight: bold; -fx-font-size: 18px;");
         text.setTranslateX(-8);
 
         stack.getChildren().addAll(box, separator, text);
@@ -434,7 +476,7 @@ public class LinkedListController {
         for (String line : lines) {
             Label lbl = new Label(line);
             lbl.setTextFill(Color.web(CODE_COLOR));
-            lbl.setFont(Font.font("Consolas", 16)); // Larger pseudo-code text
+            lbl.setFont(Font.font("Consolas", 16));
             lbl.setMaxWidth(Double.MAX_VALUE);
             lbl.setStyle("-fx-padding: 2;");
             pseudoCodeBox.getChildren().add(lbl);

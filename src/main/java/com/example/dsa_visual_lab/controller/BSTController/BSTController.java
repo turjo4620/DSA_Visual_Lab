@@ -74,6 +74,7 @@ public class BSTController {
         }
         setupPseudoCode(new String[]{""});
 
+        // Generating random number
         Random rand = new Random();
         root = insertRec(root, 50);
         for (int i = 0; i < 6; i++) {
@@ -84,6 +85,7 @@ public class BSTController {
         Platform.runLater(this::render);
     }
 
+    //insert
     private TreeNode insertRec(TreeNode node, int value) {
         if (node == null) return new TreeNode(value);
         if (value < node.value) node.left = insertRec(node.left, value);
@@ -92,6 +94,7 @@ public class BSTController {
         return node;
     }
 
+    //slider duration
     private Duration getStepDuration() {
         double multiplier = 100.0 / (speedSlider != null ? speedSlider.getValue() : 100.0);
         return Duration.millis(500 * multiplier);
@@ -268,7 +271,7 @@ public class BSTController {
             if (val == current.value) {
                 highlightLine(3);
                 activeNode = current;
-                activeColor = Color.web("#4ADE80");
+                activeColor = Color.web("#4ADE80"); // found -> green marked
                 render();
                 setStatus("Found " + val + "!", false);
                 delayedFinish();
@@ -355,7 +358,7 @@ public class BSTController {
             } else {
                 highlightLine(1);
                 activeNode = (val < current.value) ? current.left : current.right;
-                activeColor = Color.web("#FCD34D");
+                activeColor = Color.web("#FCD34D"); // marking the active node here
                 render();
                 animateRemoveSearch(current, activeNode, val);
             }
@@ -406,7 +409,7 @@ public class BSTController {
 
     private void findSuccessorAndRemove(TreeNode targetToReplace, TreeNode parentOfCurr, TreeNode curr) {
         activeNode = curr;
-        activeColor = Color.web("#A78BFA");
+        activeColor = Color.web("#A78BFA"); // purple type color for finding the successor
         render();
 
         PauseTransition p = new PauseTransition(getStepDuration());
@@ -518,12 +521,14 @@ public class BSTController {
         pause.play();
     }
 
+    // sheshe wait kore jate user dekhte pare = 1.5x time
     private void delayedFinish() {
         PauseTransition end = new PauseTransition(getStepDuration().multiply(1.5));
         end.setOnFinished(e -> finishAnimation());
         end.play();
     }
 
+    // animation finished
     private void finishAnimation() {
         highlightLine(-1);
         activeNode = null;
@@ -555,6 +560,8 @@ public class BSTController {
             renderRecursive(node.right, x + hGap, y + VERTICAL_GAP, hGap / 2);
         }
 
+        // node gulare color kore -> 4 border ekta circle diye
+
         Circle circle = new Circle(x, y, RADIUS);
         circle.setFill(Color.web("#1E293B"));
 
@@ -575,6 +582,8 @@ public class BSTController {
         nodeStack.setLayoutY(y - RADIUS);
         visualPane.getChildren().add(nodeStack);
 
+
+        // if duplicate founds
         if (node.count > 1) {
             drawBadge(x, y, node.count);
         }
@@ -592,15 +601,19 @@ public class BSTController {
         visualPane.getChildren().add(0, line);
     }
 
+    // marks duplicate -> kono node duibar thakle tar upore red mark kore -> x2
+
     private void drawBadge(double x, double y, int count) {
         Circle badgeCircle = new Circle(x + 15, y - 15, 10);
-        badgeCircle.setFill(Color.web("#EF4444"));
+        badgeCircle.setFill(Color.web("#EF4444")); // red mark
         Text badgeText = new Text(x + 10, y - 12, "x" + count);
         badgeText.setFill(Color.WHITE);
         badgeText.setFont(Font.font("System", FontWeight.BOLD, 10));
         visualPane.getChildren().addAll(badgeCircle, badgeText);
     }
 
+
+    // clearing everything
     @FXML
     public void onClear() {
         root = null;
@@ -621,6 +634,8 @@ public class BSTController {
         }
     }
 
+
+    // pseudocode writing
     private void setupPseudoCode(String[] lines) {
         if (pseudoCodeBox == null) return;
         pseudoCodeBox.getChildren().clear();
@@ -635,6 +650,9 @@ public class BSTController {
             pseudoCodeBox.getChildren().add(lbl);
         }
     }
+
+
+    //pseudocode line highlighting
 
     private void highlightLine(int index) {
         if (pseudoCodeBox == null) return;

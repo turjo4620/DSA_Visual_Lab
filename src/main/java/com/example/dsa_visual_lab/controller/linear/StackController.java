@@ -31,19 +31,28 @@ public class StackController {
     @FXML private Label statusLabel;
     @FXML private Label complexityLabel;
     @FXML private VBox pseudoCodeBox;
+    @FXML private Node controlsBox;
 
     private Stack<Integer> stack = new Stack<>();
-    private static final double RECT_WIDTH = 120; // Made slightly wider for bigger fonts
-    private static final double RECT_HEIGHT = 45; // Taller for bigger fonts
+    private static final double RECT_WIDTH = 120;
+    private static final double RECT_HEIGHT = 45;
     private static final String CODE_COLOR = "#A78BFA";
     private static final String HIGHLIGHT_BG = "#334155";
     private static final String HIGHLIGHT_TEXT = "#FCD34D";
+
+    private void setControlsDisabled(boolean disabled) {
+        if (controlsBox != null) {
+            controlsBox.setDisable(disabled);
+        }
+    }
 
     @FXML
     public void onPush(ActionEvent event) {
         try {
             int value = Integer.parseInt(inputField.getText().trim());
             inputField.clear();
+
+            setControlsDisabled(true);
 
             complexityLabel.setText("O(1) - Constant Time\nPushing only updates the top pointer.");
             String[] codeLines = {
@@ -73,7 +82,10 @@ public class StackController {
             });
 
             PauseTransition step4 = new PauseTransition(Duration.seconds(2.6));
-            step4.setOnFinished(e -> highlightLine(-1));
+            step4.setOnFinished(e -> {
+                highlightLine(-1);
+                setControlsDisabled(false);
+            });
 
             step1.play(); step2.play(); step3.play(); step4.play();
 
@@ -88,6 +100,8 @@ public class StackController {
             setStatus("Error: Stack is empty (Underflow)!", true);
             return;
         }
+
+        setControlsDisabled(true);
 
         complexityLabel.setText("O(1) - Constant Time\nPopping only updates the top pointer.");
         String[] codeLines = {
@@ -118,7 +132,10 @@ public class StackController {
         step4.setOnFinished(e -> highlightLine(4));
 
         PauseTransition step5 = new PauseTransition(Duration.seconds(3.3));
-        step5.setOnFinished(e -> highlightLine(-1));
+        step5.setOnFinished(e -> {
+            highlightLine(-1);
+            setControlsDisabled(false);
+        });
 
         step1.play(); step2.play(); step3.play(); step4.play(); step5.play();
     }
@@ -129,6 +146,8 @@ public class StackController {
             setStatus("Stack is empty", true);
             return;
         }
+
+        setControlsDisabled(true);
 
         complexityLabel.setText("O(1) - Constant Time\nDirect access via top pointer.");
         String[] codeLines = {
@@ -157,13 +176,17 @@ public class StackController {
         });
 
         PauseTransition step3 = new PauseTransition(Duration.seconds(2.2));
-        step3.setOnFinished(e -> highlightLine(-1));
+        step3.setOnFinished(e -> {
+            highlightLine(-1);
+            setControlsDisabled(false);
+        });
 
         step1.play(); step2.play(); step3.play();
     }
 
     @FXML
     public void onIsEmpty(ActionEvent event) {
+        setControlsDisabled(true);
         complexityLabel.setText("O(1) - Constant Time\nChecks if the top pointer is -1 (or size is 0).");
 
         String[] codeLines = {
@@ -191,7 +214,10 @@ public class StackController {
         });
 
         PauseTransition step3 = new PauseTransition(Duration.seconds(2.2));
-        step3.setOnFinished(e -> highlightLine(-1));
+        step3.setOnFinished(e -> {
+            highlightLine(-1);
+            setControlsDisabled(false);
+        });
 
         step1.play(); step2.play(); step3.play();
     }
@@ -259,7 +285,7 @@ public class StackController {
             text.setStyle("-fx-font-weight: bold; -fx-font-size: 18px;");
 
             StackPane itemNode = new StackPane(rect, text);
-            visualPane.getChildren().add(0, itemNode); // Insert at 0 so top of stack shows visually at the top
+            visualPane.getChildren().add(0, itemNode);
         }
     }
 

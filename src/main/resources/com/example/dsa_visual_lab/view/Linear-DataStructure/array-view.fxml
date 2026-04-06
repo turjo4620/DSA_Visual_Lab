@@ -65,7 +65,7 @@
                   styleClass="inner-code-box"
                   VBox.vgrow="ALWAYS"
                   spacing="5">
-                <Label text="// Code will appear here"
+                <Label text="Code will appear here"
                        styleClass="pseudocode-line"/>
             </VBox>
         </VBox>
@@ -110,9 +110,12 @@
                     onAction="#btnLinearSearch"
                     prefWidth="125"
                     styleClass="btn-action"/>
-            <Button text="Find Max"
-                    onAction="#btnFindMax"
-                    prefWidth="110"
+            <ComboBox fx:id="findTypeCombo"
+                      prefWidth="85"
+                      styleClass="combo-box-custom"/>
+            <Button text="Find"
+                    onAction="#btnFindAction"
+                    prefWidth="70"
                     styleClass="btn-action"/>
 
             <Pane prefWidth="10"/>

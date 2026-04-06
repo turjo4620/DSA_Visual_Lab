@@ -58,14 +58,14 @@
                   styleClass="inner-code-box"
                   VBox.vgrow="ALWAYS"
                   spacing="5">
-                <Label text="// Code will appear here"
+                <Label text="Code will appear here"
                        styleClass="pseudocode-line"/>
             </VBox>
 
         </VBox>
     </HBox>
 
-    <HBox styleClass="controls-bottom">
+    <HBox fx:id="controlsBox" styleClass="controls-bottom">
 
         <VBox spacing="8" alignment="CENTER_LEFT">
             <TextField fx:id="valueField"

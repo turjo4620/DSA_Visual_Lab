@@ -8,6 +8,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 import javafx.scene.control.TextField;
@@ -31,6 +32,7 @@ public class ArrayController {
     @FXML private Slider speedSlider;
     @FXML private TextField insertValueField, insertIndexField, searchValField, capacityField, initValuesField;
     @FXML private VBox pseudoCodeBox, controlsBox;
+    @FXML private ComboBox<String> findTypeCombo;
 
     private int[] arrayData;
     private int size = 0;
@@ -47,11 +49,20 @@ public class ArrayController {
         arrayData = new int[capacity];
         render();
         updateSizeAndCapacityText();
+
+        findTypeCombo.getItems().addAll("Max", "Min");
+        findTypeCombo.getSelectionModel().selectFirst();
     }
 
     private Duration getStepDuration() {
         double multiplier = 100.0 / speedSlider.getValue();
         return Duration.millis(500 * multiplier);
+    }
+
+    private void setControlsDisabled(boolean disabled) {
+        if (controlsBox != null) {
+            controlsBox.setDisable(disabled);
+        }
     }
 
     @FXML
@@ -61,6 +72,8 @@ public class ArrayController {
 
         int val = Integer.parseInt(valStr);
         insertValueField.clear();
+
+        setControlsDisabled(true);
 
         complexityLabel.setText("O(1) Amortized\nAppending to end is fast, unless resize is needed (O(N)).");
         String[] codeLines = {
@@ -100,6 +113,7 @@ public class ArrayController {
         PauseTransition step4 = new PauseTransition(getStepDuration().multiply(4));
         step4.setOnFinished(e -> {
             highlightLine(-1);
+            setControlsDisabled(false);
         });
 
         step1.play(); step2.play(); step3.play(); step4.play();
@@ -117,6 +131,8 @@ public class ArrayController {
 
         insertValueField.clear();
         insertIndexField.clear();
+
+        setControlsDisabled(true);
 
         complexityLabel.setText("O(N) - Linear Time\nRequires shifting all subsequent elements right.");
         String[] codeLines = {
@@ -151,6 +167,7 @@ public class ArrayController {
             PauseTransition end = new PauseTransition(getStepDuration());
             end.setOnFinished(ev -> {
                 highlightLine(-1);
+                setControlsDisabled(false);
             });
             end.play();
             return;
@@ -181,6 +198,8 @@ public class ArrayController {
     void btnRemoveLast(ActionEvent event) {
         if (size == 0) { setStatus("Array is empty", true); return; }
 
+        setControlsDisabled(true);
+
         complexityLabel.setText("O(1) - Constant Time\nSimply updates the size counter.");
         String[] codeLines = {
                 "removeLast():",
@@ -207,6 +226,7 @@ public class ArrayController {
         PauseTransition step3 = new PauseTransition(getStepDuration().multiply(3));
         step3.setOnFinished(e -> {
             highlightLine(-1);
+            setControlsDisabled(false);
         });
 
         step1.play(); step2.play(); step3.play();
@@ -221,6 +241,8 @@ public class ArrayController {
         if (idx < 0 || idx >= size) { setStatus("Index out of bounds", true); return; }
 
         insertIndexField.clear();
+
+        setControlsDisabled(true);
 
         complexityLabel.setText("O(N) - Linear Time\nRequires shifting subsequent elements left.");
         String[] codeLines = {
@@ -251,6 +273,7 @@ public class ArrayController {
             PauseTransition end = new PauseTransition(getStepDuration());
             end.setOnFinished(ev -> {
                 highlightLine(-1);
+                setControlsDisabled(false);
             });
             end.play();
             return;
@@ -284,6 +307,8 @@ public class ArrayController {
 
         int target = Integer.parseInt(valStr);
 
+        setControlsDisabled(true);
+
         complexityLabel.setText("O(N) - Linear Time\nChecks every element sequentially.");
         String[] codeLines = {
                 "linearSearch(target):",
@@ -306,6 +331,7 @@ public class ArrayController {
             PauseTransition end = new PauseTransition(getStepDuration());
             end.setOnFinished(e -> {
                 highlightLine(-1);
+                setControlsDisabled(false);
             });
             end.play();
             return;
@@ -324,6 +350,7 @@ public class ArrayController {
                 PauseTransition end = new PauseTransition(getStepDuration());
                 end.setOnFinished(ev -> {
                     highlightLine(-1);
+                    setControlsDisabled(false);
                 });
                 end.play();
             } else {
@@ -335,39 +362,60 @@ public class ArrayController {
     }
 
     @FXML
-    void btnFindMax(ActionEvent event) {
+    void btnFindAction(ActionEvent event) {
         if (size == 0) { setStatus("Array is empty", true); return; }
 
-        complexityLabel.setText("O(N) - Linear Time\nMust check every element to find maximum.");
-        String[] codeLines = {
-                "findMax():",
-                "  maxVal = array[0]",
-                "  for i = 1 to size - 1:",
-                "    if array[i] > maxVal:",
-                "      maxVal = array[i]",
-                "  return maxVal"
-        };
-        setupPseudoCode(codeLines);
-        setStatus("Finding Max...", false);
+        String selection = findTypeCombo.getValue();
+        boolean isMax = "Max".equals(selection);
 
-        int[] maxData = { arrayData[0], 0 };
+        setControlsDisabled(true);
+
+        complexityLabel.setText("O(N) - Linear Time\nMust check every element to find " + (isMax ? "maximum." : "minimum."));
+
+        String[] codeLines;
+        if (isMax) {
+            codeLines = new String[]{
+                    "findMax():",
+                    "  maxVal = array[0]",
+                    "  for i = 1 to size - 1:",
+                    "    if array[i] > maxVal:",
+                    "      maxVal = array[i]",
+                    "  return maxVal"
+            };
+            setStatus("Finding Max. Current Max: " + arrayData[0], false);
+        } else {
+            codeLines = new String[]{
+                    "findMin():",
+                    "  minVal = array[0]",
+                    "  for i = 1 to size - 1:",
+                    "    if array[i] < minVal:",
+                    "      minVal = array[i]",
+                    "  return minVal"
+            };
+            setStatus("Finding Min. Current Min: " + arrayData[0], false);
+        }
+
+        setupPseudoCode(codeLines);
+
+        int[] targetData = { arrayData[0], 0 };
         highlightLine(1);
-        highlightNode(0, Color.web("#A78BFA"));
+        highlightNode(0, Color.web("#F472B6"));
 
         PauseTransition delay = new PauseTransition(getStepDuration());
-        delay.setOnFinished(e -> animateMaxLoop(1, maxData));
+        delay.setOnFinished(e -> animateFindLoop(1, targetData, isMax));
         delay.play();
     }
 
-    private void animateMaxLoop(int i, int[] maxData) {
+    private void animateFindLoop(int i, int[] targetData, boolean isMax) {
         if (i >= size) {
             highlightLine(5);
-            highlightNode(maxData[1], Color.web("#38BDF8"));
-            setStatus("Maximum value is " + maxData[0] + " at index " + maxData[1], false);
+            highlightNode(targetData[1], Color.web("#4ADE80"));
+            setStatus((isMax ? "Maximum" : "Minimum") + " value is " + targetData[0] + " at index " + targetData[1], false);
 
             PauseTransition end = new PauseTransition(getStepDuration());
             end.setOnFinished(e -> {
                 highlightLine(-1);
+                setControlsDisabled(false);
             });
             end.play();
             return;
@@ -378,14 +426,17 @@ public class ArrayController {
 
         PauseTransition check = new PauseTransition(getStepDuration());
         check.setOnFinished(e -> {
-            if (arrayData[i] > maxData[0]) {
+            boolean conditionMet = isMax ? (arrayData[i] > targetData[0]) : (arrayData[i] < targetData[0]);
+
+            if (conditionMet) {
                 highlightLine(4);
-                maxData[0] = arrayData[i];
-                maxData[1] = i;
+                targetData[0] = arrayData[i];
+                targetData[1] = i;
+                setStatus("New " + (isMax ? "Max" : "Min") + " found: " + targetData[0] + " at index " + i, false);
             }
             render();
-            highlightNode(maxData[1], Color.web("#A78BFA"));
-            animateMaxLoop(i + 1, maxData);
+            highlightNode(targetData[1], Color.web("#F472B6"));
+            animateFindLoop(i + 1, targetData, isMax);
         });
         check.play();
     }

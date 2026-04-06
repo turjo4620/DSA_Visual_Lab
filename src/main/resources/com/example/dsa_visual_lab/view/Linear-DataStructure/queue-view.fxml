@@ -64,14 +64,14 @@
                   styleClass="inner-code-box"
                   VBox.vgrow="ALWAYS"
                   spacing="5">
-                <Label text="// Code will appear here"
+                <Label text="Code will appear here"
                        styleClass="pseudocode-line"/>
             </VBox>
 
         </VBox>
     </HBox>
 
-    <HBox styleClass="controls-bottom">
+    <HBox fx:id="controlsBox" styleClass="controls-bottom">
 
         <TextField fx:id="inputField"
                    promptText="Value"
