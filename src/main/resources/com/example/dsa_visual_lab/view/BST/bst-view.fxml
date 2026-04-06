@@ -4,6 +4,7 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.Slider?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.BorderPane?>
@@ -11,78 +12,63 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
-<?import javafx.scene.text.Font?>
 
 <BorderPane fx:id="rootPane" prefHeight="800.0" prefWidth="1280.0"
-            style="-fx-background-color: #0F172A;"
-            xmlns="http://javafx.com/javafx/21"
+            stylesheets="@../styles/bst/bst.css"
+            styleClass="bst-root"
+            xmlns="http://javafx.com/javafx/21.0.6"
             xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="com.example.dsa_visual_lab.controller.BSTController.BSTController">
 
     <top>
-        <StackPane alignment="CENTER_LEFT" prefHeight="80.0">
-            <padding><Insets left="20" right="20" top="10" bottom="10"/></padding>
-            <Button text="← Back" onAction="#onBackClick"
-                    style="-fx-background-color: transparent; -fx-text-fill: #94A3B8; -fx-font-size: 14px; -fx-cursor: hand; -fx-border-color: #94A3B8; -fx-border-radius: 5;"
-                    StackPane.alignment="CENTER_LEFT"/>
-            <Label text="Binary Search Tree" textFill="#F59E0B" StackPane.alignment="CENTER">
-                <font><Font name="System Bold" size="28.0" /></font>
-            </Label>
+        <StackPane alignment="CENTER_LEFT" prefHeight="80.0" styleClass="top-pane">
+            <Button text="← BACK" onAction="#onBackClick" prefWidth="120" prefHeight="40"
+                    styleClass="back-button" StackPane.alignment="CENTER_LEFT"/>
+            <Label text="Binary Search Tree" styleClass="title-label" StackPane.alignment="CENTER"/>
         </StackPane>
     </top>
 
     <center>
-        <HBox spacing="10" style="-fx-padding: 10;">
-            <Pane fx:id="visualPane" HBox.hgrow="ALWAYS"
-                  style="-fx-background-color: #1E293B; -fx-background-radius: 10; -fx-border-color: #334155; -fx-border-width: 2;"/>
+        <HBox spacing="10" styleClass="main-content-box">
+            <Pane fx:id="visualPane" HBox.hgrow="ALWAYS" styleClass="visual-pane"/>
 
-            <VBox prefWidth="350.0" spacing="15" style="-fx-background-color: #1E293B; -fx-background-radius: 10; -fx-padding: 15;">
+            <VBox prefWidth="350.0" spacing="15" styleClass="side-panel">
+                <Label text="Time Complexity" styleClass="section-title-complexity"/>
+                <Label fx:id="complexityLabel" text="Waiting for action..." wrapText="true" styleClass="info-box"/>
 
-                <Label text="Time Complexity" textFill="#38BDF8" style="-fx-font-weight: bold; -fx-font-size: 16px;"/>
-                <Label fx:id="complexityLabel" text="Waiting for action..." textFill="#94A3B8" wrapText="true" style="-fx-font-size: 14px; -fx-background-color: #0F172A; -fx-padding: 10; -fx-background-radius: 8; -fx-border-color: #334155; -fx-border-radius: 8;"/>
-
-                <Label text="Pseudocode" textFill="#FCD34D" style="-fx-font-weight: bold; -fx-font-size: 16px;">
+                <Label text="Pseudocode" styleClass="section-title-pseudo">
                     <VBox.margin><Insets top="10"/></VBox.margin>
                 </Label>
-                <VBox fx:id="pseudoCodeBox" VBox.vgrow="ALWAYS" spacing="2"
-                      style="-fx-background-color: #0F172A; -fx-padding: 10; -fx-background-radius: 8; -fx-border-color: #334155; -fx-border-radius: 8;"/>
+
+                <ScrollPane fitToWidth="true" style="-fx-background: transparent; -fx-background-color: transparent;" styleClass="pseudo-container" VBox.vgrow="ALWAYS">
+                    <content>
+                        <VBox fx:id="pseudoCodeBox" spacing="2" style="-fx-background-color: transparent;"/>
+                    </content>
+                </ScrollPane>
             </VBox>
         </HBox>
     </center>
 
     <bottom>
-        <VBox spacing="15" alignment="CENTER" style="-fx-padding: 20;">
-            <Label fx:id="statusLabel" text="Ready" style="-fx-text-fill: #FCD34D; -fx-background-color: #334155; -fx-padding: 10 25; -fx-background-radius: 12; -fx-border-color: #475569; -fx-border-radius: 12;">
-                <font><Font size="16.0"/></font>
-            </Label>
+        <VBox spacing="15" alignment="CENTER" styleClass="bottom-panel">
+            <Label fx:id="statusLabel" text="Ready" styleClass="status-label"/>
 
             <HBox fx:id="controlsBox" spacing="10" alignment="CENTER">
-
-                <VBox alignment="CENTER" spacing="5" style="-fx-background-color: #1E293B; -fx-padding: 5 10; -fx-background-radius: 8; -fx-border-color: #334155; -fx-border-radius: 8;">
-                    <Label text="Speed" textFill="#94A3B8" style="-fx-font-size: 10px;"/>
+                <VBox alignment="CENTER" spacing="5" styleClass="speed-box">
+                    <Label text="Speed" styleClass="speed-label"/>
                     <Slider fx:id="speedSlider" min="10" max="200" value="100" prefWidth="80" />
                 </VBox>
 
-                <TextField fx:id="valueField" promptText="Enter Value" prefWidth="90"
-                           style="-fx-background-color: #1E293B; -fx-text-fill: white; -fx-border-color: #475569; -fx-padding: 8; -fx-background-radius: 5;"/>
+                <TextField fx:id="valueField" promptText="Enter Value" prefWidth="90" styleClass="input-field"/>
 
-                <Button text="Insert" onAction="#onInsert" prefWidth="70"
-                        style="-fx-background-color: #34D399; -fx-text-fill: #0F172A; -fx-font-weight: bold; -fx-padding: 8; -fx-background-radius: 5; -fx-cursor: hand;"/>
+                <Button text="Insert" onAction="#onInsert" prefWidth="70" styleClass="action-btn" id="insert-btn"/>
+                <Button text="Search" onAction="#onSearch" prefWidth="70" styleClass="action-btn" id="search-btn"/>
+                <Button text="Remove" onAction="#onRemove" prefWidth="75" styleClass="action-btn" id="remove-btn"/>
 
-                <Button text="Search" onAction="#onSearch" prefWidth="70"
-                        style="-fx-background-color: #60A5FA; -fx-text-fill: #0F172A; -fx-font-weight: bold; -fx-padding: 8; -fx-background-radius: 5; -fx-cursor: hand;"/>
+                <ComboBox fx:id="traversalDropdown" promptText="Algorithm" prefWidth="100" styleClass="traversal-dropdown"/>
 
-                <Button text="Remove" onAction="#onRemove" prefWidth="75"
-                        style="-fx-background-color: #F87171; -fx-text-fill: #0F172A; -fx-font-weight: bold; -fx-padding: 8; -fx-background-radius: 5; -fx-cursor: hand;"/>
-
-                <ComboBox fx:id="traversalDropdown" promptText="Algorithm" prefWidth="100"
-                          style="-fx-background-color: #FFFFFF; -fx-text-fill: #0F172A; -fx-border-color: #475569; -fx-background-radius: 5; -fx-cursor: hand;"/>
-
-                <Button text="Traverse" onAction="#onTraverse" prefWidth="85"
-                        style="-fx-background-color: #A78BFA; -fx-text-fill: #0F172A; -fx-font-weight: bold; -fx-padding: 8; -fx-background-radius: 5; -fx-cursor: hand;"/>
-
-                <Button text="Clear" onAction="#onClear" prefWidth="60"
-                        style="-fx-background-color: transparent; -fx-text-fill: #F87171; -fx-border-color: #F87171; -fx-padding: 8; -fx-background-radius: 5; -fx-cursor: hand;"/>
+                <Button text="Traverse" onAction="#onTraverse" prefWidth="85" styleClass="action-btn" id="traverse-btn"/>
+                <Button text="Clear" onAction="#onClear" prefWidth="60" styleClass="action-btn" id="clear-btn"/>
             </HBox>
         </VBox>
     </bottom>

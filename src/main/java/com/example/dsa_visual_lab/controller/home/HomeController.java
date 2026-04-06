@@ -12,22 +12,18 @@ import java.io.IOException;
 
 public class HomeController {
 
-    private final String CSS_PATH = "/com/example/dsa_visual_lab/view/styles/home.css";
-
     @FXML
     public void initialize() {
         System.out.println("Home Page Loaded Successfully!");
     }
-
 
     @FXML
     private void openSorting(ActionEvent event) {
         try {
             Parent sortingRoot = FXMLLoader.load(getClass().getResource("/com/example/dsa_visual_lab/view/Sorting/sorting-view.fxml"));
             Scene scene = ((Node) event.getSource()).getScene();
+            // The FXML handles its own CSS now, just set the root!
             scene.setRoot(sortingRoot);
-            scene.getStylesheets().clear();
-            scene.getStylesheets().add(getClass().getResource(CSS_PATH).toExternalForm());
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -39,8 +35,6 @@ public class HomeController {
             Parent homeRoot = FXMLLoader.load(getClass().getResource("/com/example/dsa_visual_lab/view/home/home-view.fxml"));
             Scene scene = ((Node) event.getSource()).getScene();
             scene.setRoot(homeRoot);
-            scene.getStylesheets().clear();
-            scene.getStylesheets().add(getClass().getResource(CSS_PATH).toExternalForm());
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -101,11 +95,11 @@ public class HomeController {
         }
     }
 
-    private void showFeatureAlert(String featureName) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Feature Selected");
-        alert.setHeaderText(null);
-        alert.setContentText("You clicked: " + featureName + "\n\n(We will build this feature next!)");
-        alert.showAndWait();
-    }
+//    private void showFeatureAlert(String featureName) {
+//        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+//        alert.setTitle("Feature Selected");
+//        alert.setHeaderText(null);
+//        alert.setContentText("You clicked: " + featureName + "\n\n(We will build this feature next!)");
+//        alert.showAndWait();
+//    }
 }

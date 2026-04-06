@@ -9,6 +9,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
@@ -32,6 +33,8 @@ public class MSTController {
     private Slider speedSlider;
     @FXML
     private TextField edgeWeightField;
+    @FXML
+    private HBox controlsBox;
 
     @FXML
     private Label line1, line2, line3, line4, line5, line6;
@@ -176,6 +179,35 @@ public class MSTController {
                 edgeStart = null;
             }
         });
+
+        double[][] predefinedPositions = {
+                {400, 100}, {200, 250}, {600, 250},
+                {250, 450}, {550, 450}, {400, 300}
+        };
+
+        for (double[] pos : predefinedPositions) {
+            GraphNode node = new GraphNode(nextNodeId++, pos[0], pos[1]);
+            nodes.put(node.id, node);
+            graphPane.getChildren().add(node.visual);
+        }
+
+        int[][] predefinedEdges = {
+                {0, 1}, {0, 2}, {1, 3}, {1, 5},
+                {2, 4}, {2, 5}, {3, 4}, {4, 5}, {0, 5}
+        };
+
+        Random rand = new Random();
+        for (int[] pair : predefinedEdges) {
+            GraphNode u = nodes.get(pair[0]);
+            GraphNode v = nodes.get(pair[1]);
+            int w = rand.nextInt(20) + 1;
+            GraphEdge e = new GraphEdge(u, v, w);
+            edges.add(e);
+            graphPane.getChildren().add(0, e.line);
+            graphPane.getChildren().add(e.weightLabel);
+        }
+
+        statusLabel.setText("Random Graph Initialized");
     }
 
     private void handleNodeClickForEdge(GraphNode node) {
@@ -271,6 +303,8 @@ public class MSTController {
             return;
         }
 
+        if (controlsBox != null) controlsBox.setDisable(true);
+
         steps.clear();
         parent = new int[nextNodeId];
         for (int i = 0; i < nextNodeId; i++) parent[i] = i;
@@ -317,6 +351,7 @@ public class MSTController {
         steps.add(() -> {
             statusLabel.setText("✅ MST Complete!");
             highlightPseudo(5);
+            if (controlsBox != null) controlsBox.setDisable(false);
         });
 
         playSteps(0);
@@ -363,6 +398,8 @@ public class MSTController {
         statusLabel.setText("Reset done.");
         for (Label l : pseudoLines)
             l.setStyle("-fx-background-color:transparent; -fx-text-fill:white;");
+
+        if (controlsBox != null) controlsBox.setDisable(false);
     }
 
     @FXML

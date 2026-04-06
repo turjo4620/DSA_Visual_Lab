@@ -1,6 +1,7 @@
 package com.example.dsa_visual_lab.controller.BSTController;
 
 import javafx.animation.PauseTransition;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -27,6 +28,7 @@ import javafx.util.Duration;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class BSTController {
 
@@ -71,6 +73,23 @@ public class BSTController {
             traversalDropdown.getSelectionModel().selectFirst();
         }
         setupPseudoCode(new String[]{""});
+
+        Random rand = new Random();
+        root = insertRec(root, 50);
+        for (int i = 0; i < 6; i++) {
+            root = insertRec(root, rand.nextInt(90) + 10);
+        }
+
+        setStatus("Random BST Initialized", false);
+        Platform.runLater(this::render);
+    }
+
+    private TreeNode insertRec(TreeNode node, int value) {
+        if (node == null) return new TreeNode(value);
+        if (value < node.value) node.left = insertRec(node.left, value);
+        else if (value > node.value) node.right = insertRec(node.right, value);
+        else node.count++;
+        return node;
     }
 
     private Duration getStepDuration() {
@@ -289,10 +308,13 @@ public class BSTController {
             String[] codeLines = {
                     "remove(val):",
                     "  node = search(val)",
-                    "  if node not found: return",
-                    "  if node is leaf: remove link",
-                    "  if node has 1 child: replace with child",
-                    "  if node has 2 children: replace with successor"
+                    "  if not found: return",
+                    "  if node has 2 children:",
+                    "    succ = min(node.right)",
+                    "    node.val = succ.val",
+                    "    remove(succ)",
+                    "  if node has 0 or 1 child:",
+                    "    replace node with child"
             };
             setupPseudoCode(codeLines);
 
@@ -302,14 +324,14 @@ public class BSTController {
             activeNode = root;
             activeColor = Color.web("#FCD34D");
             render();
-            animateRemoveSearch(root, val);
+            animateRemoveSearch(null, root, val);
 
         } catch (NumberFormatException e) {
             setStatus("Invalid input!", true);
         }
     }
 
-    private void animateRemoveSearch(TreeNode current, int val) {
+    private void animateRemoveSearch(TreeNode parent, TreeNode current, int val) {
         if (current == null) {
             highlightLine(2);
             setStatus("Value " + val + " not found for removal.", true);
@@ -320,63 +342,109 @@ public class BSTController {
         PauseTransition checkStep = new PauseTransition(getStepDuration());
         checkStep.setOnFinished(e -> {
             if (val == current.value) {
-                highlightLine(3);
+                highlightLine(1);
                 activeNode = current;
                 activeColor = Color.web("#EF4444");
                 render();
-                setStatus("Found " + val + ". Removing...", false);
+                setStatus("Found " + val + " to remove.", false);
 
-                PauseTransition executeRemove = new PauseTransition(getStepDuration().multiply(2));
-                executeRemove.setOnFinished(ev -> {
-                    root = deleteRec(root, val);
-                    setStatus("Removed " + val, false);
-                    finishAnimation();
-                });
-                executeRemove.play();
+                PauseTransition proceed = new PauseTransition(getStepDuration().multiply(1.5));
+                proceed.setOnFinished(ev -> animateNodeRemoval(parent, current));
+                proceed.play();
 
             } else {
                 highlightLine(1);
-                PauseTransition move = new PauseTransition(getStepDuration());
-                move.setOnFinished(ev -> {
-                    activeNode = (val < current.value) ? current.left : current.right;
-                    render();
-                    animateRemoveSearch(activeNode, val);
-                });
-                move.play();
+                activeNode = (val < current.value) ? current.left : current.right;
+                activeColor = Color.web("#FCD34D");
+                render();
+                animateRemoveSearch(current, activeNode, val);
             }
         });
         checkStep.play();
     }
 
-    private TreeNode deleteRec(TreeNode root, int key) {
-        if (root == null) return root;
-
-        if (key < root.value) {
-            root.left = deleteRec(root.left, key);
-        } else if (key > root.value) {
-            root.right = deleteRec(root.right, key);
-        } else {
-            if (root.count > 1) {
-                root.count--;
-                return root;
-            }
-            if (root.left == null) return root.right;
-            else if (root.right == null) return root.left;
-
-            root.value = minValue(root.right);
-            root.count = 1;
-            root.right = deleteRec(root.right, root.value);
+    private void animateNodeRemoval(TreeNode parent, TreeNode target) {
+        if (target.count > 1) {
+            target.count--;
+            setStatus("Decremented count for " + target.value, false);
+            finishAnimation();
+            return;
         }
-        return root;
+
+        if (target.left != null && target.right != null) {
+            highlightLine(3);
+            setStatus("Node has 2 children. Finding inorder successor...", false);
+
+            PauseTransition p = new PauseTransition(getStepDuration().multiply(1.5));
+            p.setOnFinished(e -> {
+                highlightLine(4);
+                findSuccessorAndRemove(target, target, target.right);
+            });
+            p.play();
+
+        } else {
+            highlightLine(7);
+            setStatus("Node has 0 or 1 child. Replacing...", false);
+
+            PauseTransition p = new PauseTransition(getStepDuration().multiply(1.5));
+            p.setOnFinished(e -> {
+                highlightLine(8);
+                TreeNode child = (target.left != null) ? target.left : target.right;
+                if (parent == null) {
+                    root = child;
+                } else if (parent.left == target) {
+                    parent.left = child;
+                } else {
+                    parent.right = child;
+                }
+                setStatus("Node removed.", false);
+                finishAnimation();
+            });
+            p.play();
+        }
     }
 
-    private int minValue(TreeNode root) {
-        int minv = root.value;
-        while (root.left != null) {
-            minv = root.left.value;
-            root = root.left;
-        }
-        return minv;
+    private void findSuccessorAndRemove(TreeNode targetToReplace, TreeNode parentOfCurr, TreeNode curr) {
+        activeNode = curr;
+        activeColor = Color.web("#A78BFA");
+        render();
+
+        PauseTransition p = new PauseTransition(getStepDuration());
+        p.setOnFinished(e -> {
+            if (curr.left != null) {
+                findSuccessorAndRemove(targetToReplace, curr, curr.left);
+            } else {
+                setStatus("Found successor: " + curr.value, false);
+                highlightLine(5);
+
+                PauseTransition copyP = new PauseTransition(getStepDuration().multiply(1.5));
+                copyP.setOnFinished(ev -> {
+                    targetToReplace.value = curr.value;
+                    targetToReplace.count = curr.count;
+                    setStatus("Copied successor value " + curr.value + " to target node.", false);
+
+                    activeNode = targetToReplace;
+                    activeColor = Color.web("#34D399");
+                    render();
+
+                    PauseTransition removeP = new PauseTransition(getStepDuration().multiply(1.5));
+                    removeP.setOnFinished(ev2 -> {
+                        highlightLine(6);
+                        TreeNode child = curr.right;
+                        if (parentOfCurr.left == curr) {
+                            parentOfCurr.left = child;
+                        } else {
+                            parentOfCurr.right = child;
+                        }
+                        setStatus("Successor node removed.", false);
+                        finishAnimation();
+                    });
+                    removeP.play();
+                });
+                copyP.play();
+            }
+        });
+        p.play();
     }
 
     @FXML
@@ -466,20 +534,24 @@ public class BSTController {
     private void render() {
         visualPane.getChildren().clear();
         if (root != null) {
-            double startX = visualPane.getWidth() / 2;
-            if (startX <= 0) startX = 400;
-            double hGap = startX / 2;
-            renderRecursive(root, startX, 50, hGap);
+            double paneWidth = visualPane.getWidth();
+            if (paneWidth < 100) paneWidth = 900;
+
+            double startX = paneWidth / 2;
+            double initialHGap = 200;
+            renderRecursive(root, startX, 50, initialHGap);
         }
     }
 
     private void renderRecursive(TreeNode node, double x, double y, double hGap) {
         if (node.left != null) {
-            drawEdge(x, y, x - hGap, y + VERTICAL_GAP);
+            boolean highlightEdge = (node.left == activeNode);
+            drawEdge(x, y, x - hGap, y + VERTICAL_GAP, highlightEdge);
             renderRecursive(node.left, x - hGap, y + VERTICAL_GAP, hGap / 2);
         }
         if (node.right != null) {
-            drawEdge(x, y, x + hGap, y + VERTICAL_GAP);
+            boolean highlightEdge = (node.right == activeNode);
+            drawEdge(x, y, x + hGap, y + VERTICAL_GAP, highlightEdge);
             renderRecursive(node.right, x + hGap, y + VERTICAL_GAP, hGap / 2);
         }
 
@@ -508,11 +580,16 @@ public class BSTController {
         }
     }
 
-    private void drawEdge(double x1, double y1, double x2, double y2) {
+    private void drawEdge(double x1, double y1, double x2, double y2, boolean highlight) {
         Line line = new Line(x1, y1, x2, y2);
-        line.setStroke(Color.web("#64748B"));
-        line.setStrokeWidth(2);
-        visualPane.getChildren().add(line);
+        if (highlight) {
+            line.setStroke(activeColor);
+            line.setStrokeWidth(4);
+        } else {
+            line.setStroke(Color.web("#64748B"));
+            line.setStrokeWidth(2);
+        }
+        visualPane.getChildren().add(0, line);
     }
 
     private void drawBadge(double x, double y, int count) {
@@ -552,6 +629,8 @@ public class BSTController {
             lbl.setTextFill(Color.web(CODE_COLOR));
             lbl.setFont(Font.font("Consolas", 14));
             lbl.setMaxWidth(Double.MAX_VALUE);
+            lbl.setWrapText(true);
+            lbl.setMinHeight(javafx.scene.layout.Region.USE_PREF_SIZE);
             lbl.setStyle("-fx-padding: 4; -fx-background-radius: 4;");
             pseudoCodeBox.getChildren().add(lbl);
         }
@@ -579,9 +658,6 @@ public class BSTController {
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             Scene scene = stage.getScene();
             scene.setRoot(root);
-            scene.getStylesheets().clear();
-            scene.getStylesheets().add(getClass().getResource("/com/example/dsa_visual_lab/view/styles/home.css").toExternalForm());
-            stage.show();
         } catch (IOException e) {
             e.printStackTrace();
         }
