@@ -11,6 +11,7 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 import javafx.scene.control.TextField;
+import javafx.scene.effect.DropShadow;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
@@ -489,6 +490,12 @@ public class BSTController {
         if (node == activeNode) {
             circle.setStroke(activeColor);
             circle.setStrokeWidth(4);
+
+            DropShadow glow = new DropShadow();
+            glow.setColor(activeColor);
+            glow.setRadius(20);
+            glow.setSpread(0.6);
+            circle.setEffect(glow);
         } else {
             circle.setStroke(Color.web("#34D399"));
             circle.setStrokeWidth(2);

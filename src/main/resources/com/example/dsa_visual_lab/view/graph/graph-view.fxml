@@ -13,80 +13,70 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
-<?import javafx.scene.text.Font?>
 
 <BorderPane fx:id="rootPane" prefHeight="800.0" prefWidth="1280.0"
-            style="-fx-background-color: #0F172A;"
-            xmlns="http://javafx.com/javafx/21"
+            stylesheets="@../styles/graph/graph.css"
+            styleClass="graph-root"
+            xmlns="http://javafx.com/javafx/21.0.6"
             xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="com.example.dsa_visual_lab.controller.graph.GraphController">
 
     <top>
-        <StackPane alignment="CENTER_LEFT" prefHeight="80.0">
-            <padding>
-                <Insets bottom="10" left="20" right="20" top="10" />
-            </padding>
-            <Button onAction="#onBackClick" style="-fx-background-color: transparent; -fx-text-fill: #94A3B8; -fx-font-size: 14px; -fx-cursor: hand; -fx-border-color: #94A3B8; -fx-border-radius: 5;" text="← Back" StackPane.alignment="CENTER_LEFT" />
-            <Label text="Graph Traversals (BFS &amp; DFS)" textFill="#F59E0B" StackPane.alignment="CENTER">
-                <font>
-                    <Font name="System Bold" size="28.0" />
-                </font>
-            </Label>
+        <StackPane alignment="CENTER_LEFT" prefHeight="80.0" styleClass="top-pane">
+            <Button text="← BACK" onAction="#onBackClick" prefWidth="120" prefHeight="40"
+                    styleClass="back-button" StackPane.alignment="CENTER_LEFT" />
+            <Label text="Graph Traversals (BFS &amp; DFS)" styleClass="title-label" StackPane.alignment="CENTER" />
         </StackPane>
     </top>
 
     <center>
-        <HBox spacing="10" style="-fx-padding: 10;">
-            <Pane fx:id="visualPane" onMouseClicked="#onCanvasClick" style="-fx-background-color: #1E293B; -fx-background-radius: 10; -fx-border-color: #334155; -fx-border-width: 2;" HBox.hgrow="ALWAYS" />
+        <HBox spacing="10" styleClass="main-content-box">
+            <Pane fx:id="visualPane" onMouseClicked="#onCanvasClick" styleClass="visual-pane" HBox.hgrow="ALWAYS" />
 
-            <VBox prefWidth="350.0" spacing="15" style="-fx-background-color: #1E293B; -fx-background-radius: 10; -fx-padding: 15;">
-                <Label style="-fx-font-weight: bold; -fx-font-size: 16px;" text="Time &amp; Space Complexity" textFill="#38BDF8" />
-                <Label fx:id="complexityLabel" style="-fx-font-size: 14px; -fx-background-color: #0F172A; -fx-padding: 10; -fx-background-radius: 8; -fx-border-color: #334155; -fx-border-radius: 8;" text="Waiting for action..." textFill="#94A3B8" wrapText="true" />
+            <VBox prefWidth="350.0" spacing="15" styleClass="side-panel">
+                <Label styleClass="section-title-complexity" text="Time &amp; Space Complexity" />
+                <Label fx:id="complexityLabel" styleClass="info-box" text="Waiting for action..." wrapText="true" />
 
-                <Label style="-fx-font-weight: bold; -fx-font-size: 16px;" text="Pseudocode" textFill="#FCD34D">
+                <Label styleClass="section-title-pseudo" text="Pseudocode">
                     <VBox.margin>
                         <Insets top="10" />
                     </VBox.margin>
                 </Label>
-                <VBox fx:id="pseudoCodeBox" spacing="2" style="-fx-background-color: #0F172A; -fx-padding: 10; -fx-background-radius: 8; -fx-border-color: #334155; -fx-border-radius: 8;" VBox.vgrow="ALWAYS" />
+                <VBox fx:id="pseudoCodeBox" spacing="2" styleClass="pseudo-container" VBox.vgrow="ALWAYS" />
             </VBox>
         </HBox>
     </center>
 
     <bottom>
-        <VBox alignment="CENTER" spacing="15" style="-fx-padding: 20;">
-            <Label fx:id="statusLabel" style="-fx-text-fill: #FCD34D; -fx-background-color: #334155; -fx-padding: 10 25; -fx-background-radius: 12; -fx-border-color: #475569; -fx-border-radius: 12;" text="Select a mode to build the graph">
-                <font>
-                    <Font size="16.0" />
-                </font>
-            </Label>
+        <VBox alignment="CENTER" spacing="15" styleClass="bottom-panel">
+            <Label fx:id="statusLabel" styleClass="status-label" text="Select a mode to build the graph" />
 
             <HBox fx:id="controlsBox" alignment="CENTER" spacing="10">
                 <fx:define>
                     <ToggleGroup fx:id="modeGroup"/>
                 </fx:define>
-                <HBox spacing="5" style="-fx-background-color: #1E293B; -fx-padding: 5; -fx-background-radius: 8; -fx-border-color: #334155; -fx-border-radius: 8;">
-                    <ToggleButton fx:id="btnAddVertex" text="Add Vertex" toggleGroup="$modeGroup" style="-fx-cursor: hand; -fx-text-fill: white; -fx-base: #334155;"/>
-                    <ToggleButton fx:id="btnAddEdge" text="Add Edge" toggleGroup="$modeGroup" style="-fx-cursor: hand; -fx-text-fill: white; -fx-base: #334155;"/>
-                    <ToggleButton fx:id="btnSelect" text="Select" toggleGroup="$modeGroup" style="-fx-cursor: hand; -fx-text-fill: white; -fx-base: #334155;"/>
+                <HBox spacing="5" styleClass="toggle-box">
+                    <ToggleButton fx:id="btnAddVertex" text="Add Vertex" toggleGroup="$modeGroup" styleClass="mode-toggle"/>
+                    <ToggleButton fx:id="btnAddEdge" text="Add Edge" toggleGroup="$modeGroup" styleClass="mode-toggle"/>
+                    <ToggleButton fx:id="btnSelect" text="Select" toggleGroup="$modeGroup" styleClass="mode-toggle"/>
                 </HBox>
 
-                <Button onAction="#onDeleteSelected" style="-fx-background-color: transparent; -fx-text-fill: #F87171; -fx-border-color: #F87171; -fx-padding: 5 10; -fx-background-radius: 5; -fx-cursor: hand;" text="Delete Selected" />
+                <Button onAction="#onDeleteSelected" styleClass="delete-btn" text="Delete Selected" />
 
                 <Pane prefWidth="15" />
 
-                <VBox alignment="CENTER" spacing="5" style="-fx-background-color: #1E293B; -fx-padding: 5 10; -fx-background-radius: 8; -fx-border-color: #334155; -fx-border-radius: 8;">
-                    <Label style="-fx-font-size: 10px;" text="Speed" textFill="#94A3B8" />
+                <VBox alignment="CENTER" spacing="5" styleClass="speed-box">
+                    <Label styleClass="speed-label" text="Speed" />
                     <Slider fx:id="speedSlider" max="200" min="10" prefWidth="80" value="100" />
                 </VBox>
 
-                <TextField fx:id="startNodeField" prefWidth="70" promptText="Start Node" style="-fx-background-color: #1E293B; -fx-text-fill: white; -fx-border-color: #475569; -fx-padding: 8; -fx-background-radius: 5;" />
+                <TextField fx:id="startNodeField" prefWidth="70" promptText="Start Node" styleClass="input-field" />
 
-                <ComboBox fx:id="traversalDropdown" prefWidth="100" promptText="Algorithm" style="-fx-background-color: #FFFFFF; -fx-text-fill: #0F172A; -fx-border-color: #475569; -fx-background-radius: 5; -fx-cursor: hand;" />
+                <ComboBox fx:id="traversalDropdown" prefWidth="100" promptText="Algorithm" styleClass="traversal-dropdown" />
 
-                <Button onAction="#onTraverse" prefWidth="85" style="-fx-background-color: #A78BFA; -fx-text-fill: #0F172A; -fx-font-weight: bold; -fx-padding: 8; -fx-background-radius: 5; -fx-cursor: hand;" text="Traverse" />
+                <Button onAction="#onTraverse" prefWidth="85" styleClass="traverse-btn" text="Traverse" />
 
-                <Button onAction="#onClear" prefWidth="60" style="-fx-background-color: transparent; -fx-text-fill: #F87171; -fx-border-color: #F87171; -fx-padding: 8; -fx-background-radius: 5; -fx-cursor: hand;" text="Clear" />
+                <Button onAction="#onClear" prefWidth="60" styleClass="clear-btn" text="Clear" />
             </HBox>
         </VBox>
     </bottom>
