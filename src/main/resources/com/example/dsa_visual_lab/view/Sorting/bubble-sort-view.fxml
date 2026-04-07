@@ -19,6 +19,7 @@
         <Label text="Bubble Sort" styleClass="title-label"/>
     </HBox>
 
+
     <VBox spacing="15" VBox.vgrow="ALWAYS">
         <HBox spacing="30" HBox.hgrow="ALWAYS">
             <StackPane alignment="CENTER" HBox.hgrow="ALWAYS">
