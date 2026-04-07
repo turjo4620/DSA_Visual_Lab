@@ -143,3 +143,9 @@
     -fx-background-radius: 5px;
     -fx-cursor: hand;
 }
+
+.input-label {
+    -fx-text-fill: #94A3B8;
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+}

@@ -146,6 +146,7 @@ public class KnapsackController {
 
     private void processCell() {
         if (currentItem > itemCount) {
+            applyCellBorder(visualCells[itemCount][maxCapacity], "#22C55E"); // green()
             highlightCodeLine(8);
             setStatus("Optimal Value: " + dpTable[itemCount][maxCapacity], false);
             controlsBox.setDisable(false);

@@ -50,18 +50,33 @@
         <VBox alignment="CENTER" spacing="15" styleClass="bottom-panel">
             <Label fx:id="statusLabel" styleClass="status-label" text="Ready" />
 
-            <HBox fx:id="controlsBox" alignment="CENTER" spacing="15">
+            <HBox fx:id="controlsBox" alignment="BOTTOM_CENTER" spacing="15">
+
                 <VBox alignment="CENTER" spacing="5" styleClass="speed-box">
                     <Label styleClass="speed-label" text="Speed" />
                     <Slider fx:id="speedSlider" max="200" min="10" prefWidth="100" value="100" />
                 </VBox>
 
-                <TextField fx:id="capacityField" prefWidth="100" promptText="Capacity (W)" styleClass="input-field" />
-                <TextField fx:id="weightsField" prefWidth="150" promptText="Weights (e.g. 1,3,4)" styleClass="input-field" />
-                <TextField fx:id="valuesField" prefWidth="150" promptText="Values (e.g. 15,20,30)" styleClass="input-field" />
+                <VBox alignment="CENTER_LEFT" spacing="5">
+                    <Label text="Capacity (W)" styleClass="input-label" />
+                    <TextField fx:id="capacityField" prefWidth="100" promptText="e.g. 5" styleClass="input-field" />
+                </VBox>
 
-                <Button onAction="#onSolve" prefWidth="90" styleClass="solve-btn" text="Solve" />
-                <Button onAction="#onClear" prefWidth="70" styleClass="clear-btn" text="Clear" />
+                <VBox alignment="CENTER_LEFT" spacing="5">
+                    <Label text="Weights" styleClass="input-label" />
+                    <TextField fx:id="weightsField" prefWidth="150" promptText="e.g. 1, 3, 4" styleClass="input-field" />
+                </VBox>
+
+                <VBox alignment="CENTER_LEFT" spacing="5">
+                    <Label text="Values" styleClass="input-label" />
+                    <TextField fx:id="valuesField" prefWidth="150" promptText="e.g. 15, 20, 30" styleClass="input-field" />
+                </VBox>
+
+                <HBox alignment="BOTTOM_CENTER" spacing="10">
+                    <Button onAction="#onSolve" prefWidth="90" styleClass="solve-btn" text="Solve" />
+                    <Button onAction="#onClear" prefWidth="70" styleClass="clear-btn" text="Clear" />
+                </HBox>
+
             </HBox>
         </VBox>
     </bottom>
